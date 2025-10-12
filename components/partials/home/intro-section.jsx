@@ -15,7 +15,7 @@ function IntroSection( props ) {
             <div className="banner banner-fixed intro-slide1" style={ { backgroundColor: "#46b2e8" } }>
                 <figure>
                     <LazyLoadImage
-                        src="./images/home/slides/slide1.jpg"
+                        src="/images/home/slides/slide1.jpg"
                         alt="Intro Slider"
                         effect="opacity"
                         width="auto"
@@ -40,7 +40,7 @@ function IntroSection( props ) {
 
                             <h3 className="font-weight-normal lh-1 ls-l text-white">Collection</h3>
 
-                            <p className="text-white ls-s mb-7">Get Free Shipping on all orders over $99.00</p>
+                            <p className="text-white ls-s mb-7">Get Free Shipping on all orders with Aurora Pro</p>
                         </Reveal>
 
                         <Reveal keyframes={ fadeInUpShorter } delay={ 1800 } duration={ 1000 }>
