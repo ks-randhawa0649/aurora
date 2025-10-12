@@ -1,6 +1,6 @@
 # Aurora - GenZ AI Fashion
 
-![image](https://user-images.githubusercontent.com/95362611/185815861-dd6dfe93-4388-45ae-a4f6-d37ae740ff26.png)
+![image](https://github.com/ks-randhawa0649/aurora/blob/main/public/images/readme_banner.jpeg)
 
 
 ## Getting Started
