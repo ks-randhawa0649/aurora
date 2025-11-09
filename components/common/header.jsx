@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 
 import ALink from '~/components/features/custom-link';
@@ -7,11 +7,13 @@ import CartMenu from '~/components/common/partials/cart-menu';
 import MainMenu from '~/components/common/partials/main-menu';
 import SearchBox from '~/components/common/partials/search-box';
 import LoginModal from '~/components/features/modals/login-modal';
+import { UserContext } from '../../pages/_app'
 
 import { headerBorderRemoveList } from '~/utils/data/menu'
 
 export default function Header( props ) {
     const router = useRouter();
+    const { user, setUser } = useContext(UserContext)
 
     useEffect( () => {
         let header = document.querySelector( 'header' );
@@ -25,38 +27,33 @@ export default function Header( props ) {
         document.querySelector( 'body' ).classList.add( 'mmenu-active' );
     }
 
+    async function handleLogout(e) {
+        e.preventDefault()
+        await fetch('/api/auth/logout', { method: 'POST' })
+        setUser(null)
+        window.location.href = '/'
+    }
+
     return (
         <header className="header header-border">
             <div className="header-top">
                 <div className="container">
-                    <div className="header-left">
-                        <p className="welcome-msg">Welcome to Riode store message or remove it!</p>
-                    </div>
                     <div className="header-right">
-                        <div className="dropdown">
-                            <ALink href="#">USD</ALink>
-                            <ul className="dropdown-box">
-                                <li><ALink href="#">USD</ALink></li>
-                                <li><ALink href="#">EUR</ALink></li>
-                            </ul>
-                        </div>
-
-                        <div className="dropdown ml-5">
-                            <ALink href="#">ENG</ALink>
-                            <ul className="dropdown-box">
-                                <li>
-                                    <ALink href="#">ENG</ALink>
-                                </li>
-                                <li>
-                                    <ALink href="#">FRH</ALink>
-                                </li>
-                            </ul>
-                        </div>
 
                         <span className="divider"></span>
                         <ALink href="/pages/contact-us" className="contact d-lg-show"><i className="d-icon-map"></i>Contact</ALink>
-                        <ALink href="#" className="help d-lg-show"><i className="d-icon-info"></i> Need Help</ALink>
-                        <LoginModal />
+                        <div className="header-user" style={{ display: 'flex', gap: '10px' }}>
+                        {user ? (
+                            <span style={{ display: 'flex', gap: '10px' }}>
+                        <span>
+                            {user.username || user.email}{' '}
+                        </span>
+                        <span><a href="#" onClick={handleLogout}>Logout</a></span>
+                        </span>
+                        ) : (
+                         <LoginModal />
+                        )}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -69,7 +66,7 @@ export default function Header( props ) {
                         </ALink>
 
                         <ALink href="/" className="logo">
-                            <img src='/images/logo.png' alt="logo" width="600" height="150" />
+                            <img src='/images/logo.png' alt="logo" width="1200" height="300" />
                         </ALink>
 
                         <SearchBox />
@@ -100,11 +97,6 @@ export default function Header( props ) {
                 <div className="container">
                     <div className="header-left">
                         <MainMenu />
-                    </div>
-
-                    <div className="header-right">
-                        <ALink href="#"><i className="d-icon-card"></i>Special Offers</ALink>
-                        <a href="https://d-themes.com/buynow/riodereact" className="ml-6">Buy Riode!</a>
                     </div>
                 </div>
             </div>

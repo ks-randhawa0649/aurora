@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
+import { useRouter } from 'next/router';
 
 import Collapse from 'react-bootstrap/Collapse';
 
@@ -14,7 +15,12 @@ import { toDecimal, getTotalPrice } from '~/utils';
 function Checkout( props ) {
     const { cartList } = props;
     const [ isFirst, setFirst ] = useState( false );
-
+    const router = useRouter();
+    const onSubmit = e => {
+        e.preventDefault();
+        // Router push to payment gateway
+        router.push('/pages/payment');
+    }
     return (
         <main className="main checkout">
             <Helmet>
@@ -31,7 +37,7 @@ function Checkout( props ) {
                 </div>
                 <div className="container mt-7">
                     {
-                        cartList.length > 0 ?
+                        cartList.length === 0 ?
                             <>
                                 <div className="card accordion">
                                     <Card type="parse" title="<div class='alert alert-light alert-primary alert-icon mb-4 card-header'>
@@ -87,22 +93,22 @@ function Checkout( props ) {
                                         </div>
                                     </Card>
                                 </div>
-                                <form action="#" className="form">
+                                <form action="#" className="form" onSubmit={onSubmit}>
                                     <div className="row">
                                         <div className="col-lg-7 mb-6 mb-lg-0 pr-lg-4">
                                             <h3 className="title title-simple text-left text-uppercase">Billing Details</h3>
                                             <div className="row">
                                                 <div className="col-xs-6">
                                                     <label>First Name *</label>
-                                                    <input type="text" className="form-control" name="first-name" required />
+                                                    <input type="text" className="form-control" name="first-name"  />
                                                 </div>
                                                 <div className="col-xs-6">
                                                     <label>Last Name *</label>
-                                                    <input type="text" className="form-control" name="last-name" required />
+                                                    <input type="text" className="form-control" name="last-name"  />
                                                 </div>
                                             </div>
                                             <label>Company Name (Optional)</label>
-                                            <input type="text" className="form-control" name="company-name" required />
+                                            <input type="text" className="form-control" name="company-name"  />
                                             <label>Country / Region *</label>
                                             <div className="select-box">
                                                 <select name="country" className="form-control" defaultValue="us">
@@ -113,32 +119,32 @@ function Checkout( props ) {
                                                 </select>
                                             </div>
                                             <label>Street Address *</label>
-                                            <input type="text" className="form-control" name="address1" required
+                                            <input type="text" className="form-control" name="address1" 
                                                 placeholder="House number and street name" />
-                                            <input type="text" className="form-control" name="address2" required
+                                            <input type="text" className="form-control" name="address2" 
                                                 placeholder="Apartment, suite, unit, etc. (optional)" />
                                             <div className="row">
                                                 <div className="col-xs-6">
                                                     <label>Town / City *</label>
-                                                    <input type="text" className="form-control" name="city" required />
+                                                    <input type="text" className="form-control" name="city"  />
                                                 </div>
                                                 <div className="col-xs-6">
                                                     <label>State *</label>
-                                                    <input type="text" className="form-control" name="state" required />
+                                                    <input type="text" className="form-control" name="state"  />
                                                 </div>
                                             </div>
                                             <div className="row">
                                                 <div className="col-xs-6">
                                                     <label>ZIP *</label>
-                                                    <input type="text" className="form-control" name="zip" required />
+                                                    <input type="text" className="form-control" name="zip"  />
                                                 </div>
                                                 <div className="col-xs-6">
                                                     <label>Phone *</label>
-                                                    <input type="text" className="form-control" name="phone" required />
+                                                    <input type="text" className="form-control" name="phone"  />
                                                 </div>
                                             </div>
                                             <label>Email Address *</label>
-                                            <input type="text" className="form-control" name="email-address" required />
+                                            <input type="text" className="form-control" name="email-address"  />
 
                                             <SlideToggle duration={ 300 } collapsed >
                                                 { ( { onToggle, setCollapsibleElement } ) => (
@@ -148,13 +154,13 @@ function Checkout( props ) {
 
                                                         <div ref={ setCollapsibleElement } style={ { overflow: 'hidden' } }>
                                                             <label htmlFor="account_username" className="pt-4">Account username&nbsp;
-                                                                    <abbr className="required" title="required">*</abbr>
+                                                                    <abbr className="" title="">*</abbr>
                                                             </label>
 
                                                             <input type="text" className="form-control" name="account_username" id="account_username" placeholder="Username" rows="5" />
 
                                                             <label htmlFor="account_password">Create account password&nbsp;
-                                                                    <abbr className="required" title="required">*</abbr>
+                                                                    <abbr className="" title="">*</abbr>
                                                             </label>
 
                                                             <input type="password" className="form-control mb-3" name="account_password" id="account_password" placeholder="Password" rows="5" />
@@ -173,15 +179,15 @@ function Checkout( props ) {
                                                             <div className="row pt-4">
                                                                 <div className="col-xs-6">
                                                                     <label>First Name *</label>
-                                                                    <input type="text" className="form-control" name="first-name" required />
+                                                                    <input type="text" className="form-control" name="first-name"  />
                                                                 </div>
                                                                 <div className="col-xs-6">
                                                                     <label>Last Name *</label>
-                                                                    <input type="text" className="form-control" name="last-name" required />
+                                                                    <input type="text" className="form-control" name="last-name"  />
                                                                 </div>
                                                             </div>
                                                             <label>Company Name (Optional)</label>
-                                                            <input type="text" className="form-control" name="company-name" required />
+                                                            <input type="text" className="form-control" name="company-name"  />
                                                             <label>Country / Region *</label>
                                                             <div className="select-box">
                                                                 <select name="country" className="form-control" defaultValue="us">
@@ -192,28 +198,28 @@ function Checkout( props ) {
                                                                 </select>
                                                             </div>
                                                             <label>Street Address *</label>
-                                                            <input type="text" className="form-control" name="address1" required
+                                                            <input type="text" className="form-control" name="address1" 
                                                                 placeholder="House number and street name" />
-                                                            <input type="text" className="form-control" name="address2" required
+                                                            <input type="text" className="form-control" name="address2" 
                                                                 placeholder="Apartment, suite, unit, etc. (optional)" />
                                                             <div className="row">
                                                                 <div className="col-xs-6">
                                                                     <label>Town / City *</label>
-                                                                    <input type="text" className="form-control" name="city" required />
+                                                                    <input type="text" className="form-control" name="city"  />
                                                                 </div>
                                                                 <div className="col-xs-6">
                                                                     <label>State *</label>
-                                                                    <input type="text" className="form-control" name="state" required />
+                                                                    <input type="text" className="form-control" name="state"  />
                                                                 </div>
                                                             </div>
                                                             <div className="row">
                                                                 <div className="col-xs-6">
                                                                     <label>ZIP *</label>
-                                                                    <input type="text" className="form-control" name="zip" required />
+                                                                    <input type="text" className="form-control" name="zip"  />
                                                                 </div>
                                                                 <div className="col-xs-6">
                                                                     <label>Phone *</label>
-                                                                    <input type="text" className="form-control" name="phone" required />
+                                                                    <input type="text" className="form-control" name="phone"  />
                                                                 </div>
                                                             </div>
                                                         </div>

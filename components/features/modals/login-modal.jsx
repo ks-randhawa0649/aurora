@@ -33,6 +33,40 @@ function LoginModal() {
         setOpen( true );
     }
 
+        const [submitting, setSubmitting] = useState(false);
+
+    async function onLogin(e) {
+        e.preventDefault();
+        setSubmitting(true);
+        const fd = new FormData(e.currentTarget);
+        const email = fd.get('singin-email');
+        const password = fd.get('singin-password');
+        const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        setSubmitting(false);
+        if (res.ok) window.location.href = '/';
+        else alert('Invalid email or password');
+    }
+
+    async function onRegister(e) {
+        e.preventDefault();
+        setSubmitting(true);
+        const fd = new FormData(e.currentTarget);
+        const email = fd.get('register-email');
+        const password = fd.get('register-password');
+        const res = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        setSubmitting(false);
+        if (res.ok) window.location.href = '/';
+        else alert('Registration failed');
+    }
+
     return (
         <>
             <a className="login-link d-lg-show" href="#" onClick={ openModal }>
@@ -67,7 +101,7 @@ function LoginModal() {
 
                                     <div className="tab-content">
                                         <TabPanel className="tab-pane">
-                                            <form action="#">
+                                            <form onSubmit={onLogin}>
                                                 <div className="form-group mb-3">
                                                     <input type="text" className="form-control" id="singin-email" name="singin-email" placeholder="Username or Email Address *" required />
                                                 </div>
@@ -83,18 +117,10 @@ function LoginModal() {
                                                 </div>
                                                 <button className="btn btn-dark btn-block btn-rounded" type="submit">Login</button>
                                             </form>
-                                            <div className="form-choice text-center">
-                                                <label className="ls-m">or Login With</label>
-                                                <div className="social-links">
-                                                    <ALink href="#" className="social-link social-google fab fa-google border-no"></ALink>
-                                                    <ALink href="#" className="social-link social-facebook fab fa-facebook-f border-no"></ALink>
-                                                    <ALink href="#" className="social-link social-twitter fab fa-twitter border-no"></ALink>
-                                                </div>
-                                            </div>
                                         </TabPanel>
 
                                         <TabPanel className="tab-pane">
-                                            <form action="#">
+                                            <form onSubmit={onRegister}>
                                                 <div className="form-group">
                                                     <label htmlFor="singin-email">Your email address:</label>
                                                     <input type="email" className="form-control" id="register-email" name="register-email" placeholder="Your Email address *" required />
@@ -112,14 +138,6 @@ function LoginModal() {
                                                 </div>
                                                 <button className="btn btn-dark btn-block btn-rounded" type="submit">Register</button>
                                             </form>
-                                            <div className="form-choice text-center">
-                                                <label className="ls-m">or Register With</label>
-                                                <div className="social-links">
-                                                    <ALink href="#" className="social-link social-google fab fa-google border-no"></ALink>
-                                                    <ALink href="#" className="social-link social-facebook fab fa-facebook-f border-no"></ALink>
-                                                    <ALink href="#" className="social-link social-twitter fab fa-twitter border-no"></ALink>
-                                                </div>
-                                            </div>
                                         </TabPanel>
                                     </div>
                                 </Tabs>
