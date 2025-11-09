@@ -181,7 +181,7 @@ function MainMenu() {
                 </li>
 
                 <li>
-                    <ALink href="/pages/about-us">About Us</ALink>
+                    <ALink href="/pages/contact-us">About Us</ALink>
                 </li>
             </ul>
         </nav>

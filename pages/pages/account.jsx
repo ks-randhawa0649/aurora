@@ -1,10 +1,45 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import Helmet from 'react-helmet';
 import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
 
 import ALink from '~/components/features/custom-link';
+import { UserContext } from '../_app';
 
 function Account() {
+    const { user, setUser } = useContext(UserContext);
+    const router = useRouter();
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        // Redirect to login if not authenticated
+        if (!user && !loading) {
+            router.push('/pages/login');
+        }
+        setLoading(false);
+    }, [user, loading, router]);
+
+    async function handleLogout(e) {
+        e.preventDefault();
+        setLoading(true);
+        await fetch('/api/auth/logout', { method: 'POST' });
+        setUser(null);
+        router.push('/');
+    }
+
+    if (loading || !user) {
+        return (
+            <div className="loading-overlay">
+                <div className="bounce-loader">
+                    <div className="bounce1"></div>
+                    <div className="bounce2"></div>
+                    <div className="bounce3"></div>
+                    <div className="bounce4"></div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <main className="main account">
             <Helmet>
@@ -26,7 +61,7 @@ function Account() {
                 <div className="container">
                     <h2 className="title title-center mb-10">My Account</h2>
 
-                    <Tabs selectedTabClassName="show" selectedTabPanelClassName="active" defaultIndex={ 0 } className="tab tab-vertical gutter-lg">
+                    <Tabs selectedTabClassName="show" selectedTabPanelClassName="active" defaultIndex={0} className="tab tab-vertical gutter-lg">
                         <TabList className="nav nav-tabs mb-4 col-lg-3 col-md-4" role="tablist">
                             <Tab className="nav-item">
                                 <a className="nav-link">Dashboard</a>
@@ -44,18 +79,18 @@ function Account() {
                                 <a className="nav-link">Account details</a>
                             </Tab>
                             <Tab className="nav-item">
-                                <ALink className="nav-link" href="/">Logout</ALink>
+                                <a className="nav-link" onClick={handleLogout} style={{ cursor: 'pointer' }}>Logout</a>
                             </Tab>
                         </TabList>
                         <div className="tab-content col-lg-9 col-md-8">
                             <TabPanel className="tab-pane dashboard">
                                 <p className="mb-0">
-                                    Hello <span>User</span> (not <span>User</span>? <ALink href="/" className="text-primary">Log out</ALink>)
-								</p>
+                                    Hello <span>{user.username || user.email}</span> (not <span>{user.username || user.email}</span>? <a href="#" onClick={handleLogout} className="text-primary" style={{ cursor: 'pointer' }}>Log out</a>)
+                                </p>
                                 <p className="mb-8">
                                     From your account dashboard you can view your <ALink href="#" className="link-to-tab text-primary">recent orders</ALink>, manage your shipping and billing
-										addresses,<br />and edit your password and account details.
-								</p>
+                                    addresses,<br />and edit your password and account details.
+                                </p>
                                 <ALink href="/shop" className="btn btn-dark btn-rounded">Go To Shop<i className="d-icon-arrow-right"></i></ALink>
                             </TabPanel>
                             <TabPanel className="tab-pane">
@@ -121,7 +156,7 @@ function Account() {
                             </TabPanel>
                             <TabPanel className="tab-pane">
                                 <p className="mb-2">The following addresses will be used on the checkout page by default.
-								</p>
+                                </p>
                                 <div className="row">
                                     <div className="col-sm-6 mb-4">
                                         <div className="card card-address">
@@ -129,9 +164,9 @@ function Account() {
                                                 <h5 className="card-title text-uppercase">Billing Address</h5>
                                                 <p>John Doe<br />
                                                     Riode Company<br />
-                                                        Steven street<br />
-                                                            El Carjon, CA 92020
-												</p>
+                                                    Steven street<br />
+                                                    El Carjon, CA 92020
+                                                </p>
                                                 <ALink href="#" className="btn btn-link btn-secondary btn-underline">Edit <i className="far fa-edit"></i></ALink>
                                             </div>
                                         </div>
@@ -161,12 +196,12 @@ function Account() {
                                     </div>
 
                                     <label>Display Name *</label>
-                                    <input type="text" className="form-control mb-0" name="display_name" required />
+                                    <input type="text" className="form-control mb-0" name="display_name" defaultValue={user.username || ''} required />
                                     <small className="d-block form-text mb-7">This will be how your name will be displayed
-										in the account section and in reviews</small>
+                                        in the account section and in reviews</small>
 
                                     <label>Email Address *</label>
-                                    <input type="email" className="form-control" name="email" required />
+                                    <input type="email" className="form-control" name="email" defaultValue={user.email || ''} required />
                                     <fieldset>
                                         <legend>Password Change</legend>
                                         <label>Current password (leave blank to leave unchanged)</label>
@@ -182,14 +217,12 @@ function Account() {
                                     <button type="submit" className="btn btn-primary">SAVE CHANGES</button>
                                 </form>
                             </TabPanel>
-                            <TabPanel className="tab-pane"></TabPanel>
                         </div>
                     </Tabs>
                 </div>
             </div>
         </main >
     )
-
 }
 
-export default React.memo( Account );
+export default React.memo(Account);
