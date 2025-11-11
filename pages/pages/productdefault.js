@@ -14,7 +14,7 @@ function ProductDefault() {
     const [product, setProduct] = useState(null);
     const [related, setRelated] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [loaded, setLoadingState] = useState(true); // Changed to true by default
+    const [loaded, setLoadingState] = useState(false);
 
     useEffect(() => {
         if (slug) {
@@ -24,32 +24,25 @@ function ProductDefault() {
 
     useEffect(() => {
         if (!loading && product) {
-            // Use setTimeout to ensure DOM is ready
-            setTimeout(() => {
-                const mainElement = document.querySelector('.main');
-                if (mainElement) {
-                    imagesLoaded(mainElement, function () {
-                        setLoadingState(true);
-                    });
-                } else {
-                    setLoadingState(true);
-                }
-            }, 100);
+            imagesLoaded('main').on('done', function () {
+                setLoadingState(true);
+            }).on('progress', function () {
+                setLoadingState(false);
+            });
+        }
+        if (loading) {
+            setLoadingState(false);
         }
     }, [loading, product]);
 
     const fetchProduct = async () => {
         try {
-            console.log('Fetching product with slug:', slug);
-            const response = await fetch(`/api/product_json?slug=${slug}`);
+            const response = await fetch(`/api/product/${slug}`);
             const data = await response.json();
-            
-            console.log('Product detail data received:', data);
             
             if (data.product) {
                 setProduct(data.product.data);
                 setRelated(data.product.related || []);
-                setLoadingState(true); // Set loaded to true immediately after getting data
             }
         } catch (error) {
             console.error('Error fetching product:', error);
@@ -75,7 +68,6 @@ function ProductDefault() {
             <main className="main">
                 <div className="container text-center mt-10 mb-10">
                     <h2>Product not found</h2>
-                    <p>The product you're looking for doesn't exist.</p>
                 </div>
             </main>
         );
@@ -89,25 +81,26 @@ function ProductDefault() {
 
             <h1 className="d-none">SmartStyle - {product.name}</h1>
 
-            <div className="page-content mb-10 pb-6">
-                <div className="container vertical">
-                    <div className="product product-single row mb-7">
-                        <div className="col-md-6 sticky-sidebar-wrapper">
-                            <MediaOne product={product} />
+            {
+                product !== undefined ?
+                    <div className={`page-content mb-10 pb-6 ${loaded ? '' : 'd-none'}`}>
+                        <div className="container vertical">
+                            <div className="product product-single row mb-7">
+                                <div className="col-md-6 sticky-sidebar-wrapper">
+                                    <MediaOne product={product} />
+                                </div>
+
+                                <div className="col-md-6">
+                                    <DetailOne data={{ product: { data: product } }} />
+                                </div>
+                            </div>
+
+                            <DescOne product={product} />
+
+                            <RelatedProducts products={related} />
                         </div>
-
-                        <div className="col-md-6">
-                            <DetailOne data={{ product: { data: product } }} />
-                        </div>
-                    </div>
-
-                    <DescOne product={product} />
-
-                    {related && related.length > 0 && (
-                        <RelatedProducts products={related} />
-                    )}
-                </div>
-            </div>
+                    </div> : ''
+            }
         </main>
     );
 }
