@@ -60,6 +60,7 @@
 			middle: (
 				padding-top: 2.7rem,
                 padding-bottom: 2.7rem,
+                max-height: 10rem,
 				color: #222,
 				background: #fff,
 				border-bottom: false,
@@ -232,6 +233,7 @@
 
 .header-border {
     border-bottom: 1px solid $border-color;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 .has-center {
     .header-left,

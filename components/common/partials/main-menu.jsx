@@ -67,7 +67,7 @@ function MainMenu() {
                 </li>
 
                 <li className={ `submenu  ${ pathname.includes( '/product' ) && !pathname.includes( '/elements' ) ? 'active' : '' }` }>
-                    <ALink href="/product/default/fashionable-leather-satchel">Products</ALink>
+                    <ALink href="/pages/shop">Products</ALink>
 
                     <div className="megamenu">
                         <div className="row">

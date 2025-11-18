@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_OPTIONS=--openssl-legacy-provider next",
+    "dev": "cross-env NODE_OPTIONS=--openssl-legacy-provider next",
     "build": "SET NODE_OPTIONS=--openssl-legacy-provider && next build",
     "start": "SET NODE_OPTIONS=--openssl-legacy-provider && next start"
   },
@@ -29,7 +29,7 @@
     "mysql2": "^3.15.3",
     "next": "^10.2.3",
     "next-apollo": "^5.0.4",
-    "next-auth": "4.24.13",
+    "next-auth": "^3.29.10",
     "next-redux-saga": "^4.1.2",
     "next-redux-wrapper": "^7.0.5",
     "node-fetch": "^3.0.0",
@@ -58,5 +58,8 @@
     "sass": "^1.42.1",
     "stripe": "^19.2.0",
     "supports-color": "^9.0.2"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0"
   }
 }

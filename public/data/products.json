@@ -107,6 +107,708 @@
           "slug": "smartstyle"
         }
       ]
+    },
+    {
+      "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+      "slug": "fashionable-leather-satchel",
+      "name": "Fashionable Leather Satchel",
+      "brand": "SmartStyle",
+      "sku": "SKU-SATCHEL-001",
+      "category": "accessories",
+      "description": "Premium leather satchel designed for style and functionality. Perfect for work or travel.",
+      "short_description": "Premium leather satchel",
+      "price": [89.99, 69.99],
+      "discount": 22,
+      "ratings": 4.5,
+      "reviews": 24,
+      "stock": 15,
+      "is_new": true,
+      "is_top": true,
+      "is_featured": true,
+      "variants": [
+        {
+          "variant_id": "g58bd11c-59dd-4373-b678-1f03c3d4e580",
+          "sku": "SKU-SATCHEL-001",
+          "color": { "name": "Brown", "color": "#8B4513" },
+          "size": { "name": "One Size", "size": "One Size" },
+          "price": 89.99,
+          "sale_price": 69.99
+        }
+      ],
+      "pictures": [
+        {
+          "url": "/images/curated/accessories/satchel-1.jpg",
+          "width": 800,
+          "height": 800
+        }
+      ],
+      "small_pictures": [
+        {
+          "url": "/images/curated/accessories/satchel-1.jpg",
+          "width": 300,
+          "height": 300
+        }
+      ],
+      "categories": [
+        {
+          "name": "Accessories",
+          "slug": "accessories"
+        }
+      ],
+      "brands": [
+        {
+          "name": "SmartStyle",
+          "slug": "smartstyle"
+        }
+      ]
+    },
+    {
+      "id": "a1b2c3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p5",
+      "slug": "premium-running-shoes",
+      "name": "Premium Running Shoes",
+      "brand": "SmartStyle",
+      "sku": "SKU-SHOES-001",
+      "category": "shoes",
+      "description": "High-performance running shoes with advanced cushioning technology and breathable mesh.",
+      "short_description": "Professional running shoes",
+      "price": [120.00, 95.00],
+      "discount": 21,
+      "ratings": 4.8,
+      "reviews": 45,
+      "stock": 30,
+      "is_new": true,
+      "is_top": true,
+      "is_featured": false,
+      "variants": [
+        {
+          "variant_id": "v1a2b3c4-d5e6-4f7g-h8i9-j0k1l2m3n4o5",
+          "sku": "SKU-SHOES-001-BLK",
+          "color": { "name": "Black", "color": "#000000" },
+          "size": { "name": "10", "size": "10" },
+          "price": 120.00,
+          "sale_price": 95.00
+        }
+      ],
+      "pictures": [
+        {
+          "url": "/images/curated/shoes/running-1.jpg",
+          "width": 800,
+          "height": 800
+        }
+      ],
+      "small_pictures": [
+        {
+          "url": "/images/curated/shoes/running-1.jpg",
+          "width": 300,
+          "height": 300
+        }
+      ],
+      "categories": [
+        {
+          "name": "Shoes",
+          "slug": "shoes"
+        }
+      ],
+      "brands": [
+        {
+          "name": "SmartStyle",
+          "slug": "smartstyle"
+        }
+      ]
+    },
+    {
+      "id": "b2c3d4e5-f6g7-4h8i-j9k0-l1m2n3o4p5q6",
+      "slug": "summer-cotton-shirt",
+      "name": "Summer Cotton Shirt",
+      "brand": "SmartStyle",
+      "sku": "SKU-SHIRT-001",
+      "category": "tops",
+      "description": "Lightweight cotton shirt perfect for summer wear. Available in multiple colors.",
+      "short_description": "Light summer shirt",
+      "price": [35.00, 28.00],
+      "discount": 20,
+      "ratings": 4.2,
+      "reviews": 18,
+      "stock": 40,
+      "is_new": false,
+      "is_top": false,
+      "is_featured": true,
+      "variants": [
+        {
+          "variant_id": "v2b3c4d5-e6f7-4g8h-i9j0-k1l2m3n4o5p6",
+          "sku": "SKU-SHIRT-001-WHT",
+          "color": { "name": "White", "color": "#FFFFFF" },
+          "size": { "name": "M", "size": "M" },
+          "price": 35.00,
+          "sale_price": 28.00
+        }
+      ],
+      "pictures": [
+        {
+          "url": "/images/curated/tshirts/summer-1.jpg",
+          "width": 800,
+          "height": 800
+        }
+      ],
+      "small_pictures": [
+        {
+          "url": "/images/curated/tshirts/summer-1.jpg",
+          "width": 300,
+          "height": 300
+        }
+      ],
+      "categories": [
+        {
+          "name": "Tops",
+          "slug": "tops"
+        }
+      ],
+      "brands": [
+        {
+          "name": "SmartStyle",
+          "slug": "smartstyle"
+        }
+      ]
+    },
+    {
+      "id": "c3d4e5f6-g7h8-4i9j-k0l1-m2n3o4p5q6r7",
+      "slug": "denim-jeans-blue",
+      "name": "Classic Denim Jeans",
+      "brand": "SmartStyle",
+      "sku": "SKU-JEANS-001",
+      "category": "pants",
+      "description": "Timeless denim jeans with superior fit and durability. A wardrobe essential.",
+      "short_description": "Classic denim jeans",
+      "price": [59.99, 44.99],
+      "discount": 25,
+      "ratings": 4.6,
+      "reviews": 52,
+      "stock": 35,
+      "is_new": false,
+      "is_top": true,
+      "is_featured": true,
+      "variants": [
+        {
+          "variant_id": "v3c4d5e6-f7g8-4h9i-j0k1-l2m3n4o5p6q7",
+          "sku": "SKU-JEANS-001-BLU",
+          "color": { "name": "Blue", "color": "#0047AB" },
+          "size": { "name": "32", "size": "32" },
+          "price": 59.99,
+          "sale_price": 44.99
+        }
+      ],
+      "pictures": [
+        {
+          "url": "/images/curated/pants/jeans-1.jpg",
+          "width": 800,
+          "height": 800
+        }
+      ],
+      "small_pictures": [
+        {
+          "url": "/images/curated/pants/jeans-1.jpg",
+          "width": 300,
+          "height": 300
+        }
+      ],
+      "categories": [
+        {
+          "name": "Pants",
+          "slug": "pants"
+        }
+      ],
+      "brands": [
+        {
+          "name": "SmartStyle",
+          "slug": "smartstyle"
+        }
+      ]
+    },
+    {
+      "id": "d4e5f6g7-h8i9-4j0k-l1m2-n3o4p5q6r7s8",
+      "slug": "wool-winter-coat",
+      "name": "Wool Winter Coat",
+      "brand": "SmartStyle",
+      "sku": "SKU-COAT-001",
+      "category": "outerwear",
+      "description": "Luxurious wool winter coat with warm lining. Perfect for cold weather.",
+      "short_description": "Warm winter coat",
+      "price": [199.99, 149.99],
+      "discount": 25,
+      "ratings": 4.9,
+      "reviews": 38,
+      "stock": 12,
+      "is_new": false,
+      "is_top": true,
+      "is_featured": false,
+      "variants": [
+        {
+          "variant_id": "v4d5e6f7-g8h9-4i0j-k1l2-m3n4o5p6q7r8",
+          "sku": "SKU-COAT-001-BLK",
+          "color": { "name": "Black", "color": "#000000" },
+          "size": { "name": "M", "size": "M" },
+          "price": 199.99,
+          "sale_price": 149.99
+        }
+      ],
+      "pictures": [
+        {
+          "url": "/images/curated/outerwear/coat-1.jpg",
+          "width": 800,
+          "height": 800
+        }
+      ],
+      "small_pictures": [
+        {
+          "url": "/images/curated/outerwear/coat-1.jpg",
+          "width": 300,
+          "height": 300
+        }
+      ],
+      "categories": [
+        {
+          "name": "Outerwear",
+          "slug": "outerwear"
+        }
+      ],
+      "brands": [
+        {
+          "name": "SmartStyle",
+          "slug": "smartstyle"
+        }
+      ]
+    },
+    {
+      "id": "e5f6g7h8-i9j0-4k1l-m2n3-o4p5q6r7s8t9",
+      "slug": "sports-cap",
+      "name": "Sports Cap",
+      "brand": "SmartStyle",
+      "sku": "SKU-CAP-001",
+      "category": "accessories",
+      "description": "Adjustable sports cap made with moisture-wicking fabric. Great for outdoor activities.",
+      "short_description": "Sports cap",
+      "price": [25.00, 18.00],
+      "discount": 28,
+      "ratings": 4.3,
+      "reviews": 15,
+      "stock": 60,
+      "is_new": true,
+      "is_top": false,
+      "is_featured": false,
+      "variants": [
+        {
+          "variant_id": "v5e6f7g8-h9i0-4j1k-l2m3-n4o5p6q7r8s9",
+          "sku": "SKU-CAP-001-BLK",
+          "color": { "name": "Black", "color": "#000000" },
+          "size": { "name": "One Size", "size": "One Size" },
+          "price": 25.00,
+          "sale_price": 18.00
+        }
+      ],
+      "pictures": [
+        {
+          "url": "/images/curated/accessories/cap-1.jpg",
+          "width": 800,
+          "height": 800
+        }
+      ],
+      "small_pictures": [
+        {
+          "url": "/images/curated/accessories/cap-1.jpg",
+          "width": 300,
+          "height": 300
+        }
+      ],
+      "categories": [
+        {
+          "name": "Accessories",
+          "slug": "accessories"
+        }
+      ],
+      "brands": [
+        {
+          "name": "SmartStyle",
+          "slug": "smartstyle"
+        }
+      ]
+    },
+    {
+      "id": "f6g7h8i9-j0k1-4l2m-n3o4-p5q6r7s8t9u0",
+      "slug": "casual-sneakers",
+      "name": "Casual Sneakers",
+      "brand": "SmartStyle",
+      "sku": "SKU-SNKR-001",
+      "category": "shoes",
+      "description": "Comfortable casual sneakers with orthopedic support. Perfect for everyday wear.",
+      "short_description": "Casual sneakers",
+      "price": [75.00, 55.00],
+      "discount": 27,
+      "ratings": 4.4,
+      "reviews": 33,
+      "stock": 50,
+      "is_new": false,
+      "is_top": false,
+      "is_featured": true,
+      "variants": [
+        {
+          "variant_id": "v6f7g8h9-i0j1-4k2l-m3n4-o5p6q7r8s9t0",
+          "sku": "SKU-SNKR-001-WHT",
+          "color": { "name": "White", "color": "#FFFFFF" },
+          "size": { "name": "9", "size": "9" },
+          "price": 75.00,
+          "sale_price": 55.00
+        }
+      ],
+      "pictures": [
+        {
+          "url": "/images/curated/shoes/sneakers-1.jpg",
+          "width": 800,
+          "height": 800
+        }
+      ],
+      "small_pictures": [
+        {
+          "url": "/images/curated/shoes/sneakers-1.jpg",
+          "width": 300,
+          "height": 300
+        }
+      ],
+      "categories": [
+        {
+          "name": "Shoes",
+          "slug": "shoes"
+        }
+      ],
+      "brands": [
+        {
+          "name": "SmartStyle",
+          "slug": "smartstyle"
+        }
+      ]
+    },
+    {
+      "id": "g7h8i9j0-k1l2-4m3n-o4p5-q6r7s8t9u0v1",
+      "slug": "vintage-sunglasses",
+      "name": "Vintage Sunglasses",
+      "brand": "SmartStyle",
+      "sku": "SKU-SNGLS-001",
+      "category": "accessories",
+      "description": "Classic vintage-style sunglasses with UV protection. A timeless accessory.",
+      "short_description": "Vintage sunglasses",
+      "price": [45.00, 34.50],
+      "discount": 23,
+      "ratings": 4.7,
+      "reviews": 28,
+      "stock": 20,
+      "is_new": false,
+      "is_top": true,
+      "is_featured": false,
+      "variants": [
+        {
+          "variant_id": "v7g8h9i0-j1k2-4l3m-n4o5-p6q7r8s9t0u1",
+          "sku": "SKU-SNGLS-001-BLK",
+          "color": { "name": "Black", "color": "#000000" },
+          "size": { "name": "One Size", "size": "One Size" },
+          "price": 45.00,
+          "sale_price": 34.50
+        }
+      ],
+      "pictures": [
+        {
+          "url": "/images/curated/accessories/sunglasses-1.jpg",
+          "width": 800,
+          "height": 800
+        }
+      ],
+      "small_pictures": [
+        {
+          "url": "/images/curated/accessories/sunglasses-1.jpg",
+          "width": 300,
+          "height": 300
+        }
+      ],
+      "categories": [
+        {
+          "name": "Accessories",
+          "slug": "accessories"
+        }
+      ],
+      "brands": [
+        {
+          "name": "SmartStyle",
+          "slug": "smartstyle"
+        }
+      ]
+    },
+    {
+      "id": "h8i9j0k1-l2m3-4n4o-p5q6-r7s8t9u0v1w2",
+      "slug": "crew-neck-sweater",
+      "name": "Crew Neck Sweater",
+      "brand": "SmartStyle",
+      "sku": "SKU-SWTR-001",
+      "category": "tops",
+      "description": "Cozy crew neck sweater made from premium cotton blend. Perfect for layering.",
+      "short_description": "Crew neck sweater",
+      "price": [65.00, 49.00],
+      "discount": 25,
+      "ratings": 4.5,
+      "reviews": 22,
+      "stock": 28,
+      "is_new": false,
+      "is_top": false,
+      "is_featured": true,
+      "variants": [
+        {
+          "variant_id": "v8h9i0j1-k2l3-4m4n-o5p6-q7r8s9t0u1v2",
+          "sku": "SKU-SWTR-001-GRY",
+          "color": { "name": "Gray", "color": "#808080" },
+          "size": { "name": "M", "size": "M" },
+          "price": 65.00,
+          "sale_price": 49.00
+        }
+      ],
+      "pictures": [
+        {
+          "url": "/images/curated/tshirts/sweater-1.jpg",
+          "width": 800,
+          "height": 800
+        }
+      ],
+      "small_pictures": [
+        {
+          "url": "/images/curated/tshirts/sweater-1.jpg",
+          "width": 300,
+          "height": 300
+        }
+      ],
+      "categories": [
+        {
+          "name": "Tops",
+          "slug": "tops"
+        }
+      ],
+      "brands": [
+        {
+          "name": "SmartStyle",
+          "slug": "smartstyle"
+        }
+      ]
+    },
+    {
+      "id": "i9j0k1l2-m3n4-4o5p-q6r7-s8t9u0v1w2x3",
+      "slug": "khaki-chinos",
+      "name": "Khaki Chinos",
+      "brand": "SmartStyle",
+      "sku": "SKU-CHNO-001",
+      "category": "pants",
+      "description": "Versatile khaki chinos perfect for casual or business casual wear.",
+      "short_description": "Khaki chinos",
+      "price": [55.00, 41.25],
+      "discount": 25,
+      "ratings": 4.3,
+      "reviews": 19,
+      "stock": 32,
+      "is_new": true,
+      "is_top": false,
+      "is_featured": false,
+      "variants": [
+        {
+          "variant_id": "v9i0j1k2-l3m4-4n5o-p6q7-r8s9t0u1v2w3",
+          "sku": "SKU-CHNO-001-KHK",
+          "color": { "name": "Khaki", "color": "#C3B091" },
+          "size": { "name": "32", "size": "32" },
+          "price": 55.00,
+          "sale_price": 41.25
+        }
+      ],
+      "pictures": [
+        {
+          "url": "/images/curated/pants/chinos-1.jpg",
+          "width": 800,
+          "height": 800
+        }
+      ],
+      "small_pictures": [
+        {
+          "url": "/images/curated/pants/chinos-1.jpg",
+          "width": 300,
+          "height": 300
+        }
+      ],
+      "categories": [
+        {
+          "name": "Pants",
+          "slug": "pants"
+        }
+      ],
+      "brands": [
+        {
+          "name": "SmartStyle",
+          "slug": "smartstyle"
+        }
+      ]
+    },
+    {
+      "id": "j0k1l2m3-n4o5-4p6q-r7s8-t9u0v1w2x3y4",
+      "slug": "leather-belt",
+      "name": "Leather Belt",
+      "brand": "SmartStyle",
+      "sku": "SKU-BLT-001",
+      "category": "accessories",
+      "description": "Premium genuine leather belt with polished metal buckle. A classic essential.",
+      "short_description": "Leather belt",
+      "price": [39.99, 29.99],
+      "discount": 25,
+      "ratings": 4.6,
+      "reviews": 41,
+      "stock": 45,
+      "is_new": false,
+      "is_top": true,
+      "is_featured": true,
+      "variants": [
+        {
+          "variant_id": "v0j1k2l3-m4n5-4o6p-q7r8-s9t0u1v2w3x4",
+          "sku": "SKU-BLT-001-BRN",
+          "color": { "name": "Brown", "color": "#8B4513" },
+          "size": { "name": "34", "size": "34" },
+          "price": 39.99,
+          "sale_price": 29.99
+        }
+      ],
+      "pictures": [
+        {
+          "url": "/images/curated/accessories/belt-1.jpg",
+          "width": 800,
+          "height": 800
+        }
+      ],
+      "small_pictures": [
+        {
+          "url": "/images/curated/accessories/belt-1.jpg",
+          "width": 300,
+          "height": 300
+        }
+      ],
+      "categories": [
+        {
+          "name": "Accessories",
+          "slug": "accessories"
+        }
+      ],
+      "brands": [
+        {
+          "name": "SmartStyle",
+          "slug": "smartstyle"
+        }
+      ]
+    },
+    {
+      "id": "k1l2m3n4-o5p6-4q7r-s8t9-u0v1w2x3y4z5",
+      "slug": "slim-fit-polo",
+      "name": "Slim Fit Polo",
+      "brand": "SmartStyle",
+      "sku": "SKU-POLO-001",
+      "category": "tops",
+      "description": "Contemporary slim fit polo shirt. Ideal for smart casual occasions.",
+      "short_description": "Slim fit polo",
+      "price": [49.99, 37.49],
+      "discount": 25,
+      "ratings": 4.4,
+      "reviews": 26,
+      "stock": 35,
+      "is_new": true,
+      "is_top": false,
+      "is_featured": false,
+      "variants": [
+        {
+          "variant_id": "v1k2l3m4-n5o6-4p7q-r8s9-t0u1v2w3x4y5",
+          "sku": "SKU-POLO-001-BLU",
+          "color": { "name": "Navy Blue", "color": "#000080" },
+          "size": { "name": "M", "size": "M" },
+          "price": 49.99,
+          "sale_price": 37.49
+        }
+      ],
+      "pictures": [
+        {
+          "url": "/images/curated/tshirts/polo-1.jpg",
+          "width": 800,
+          "height": 800
+        }
+      ],
+      "small_pictures": [
+        {
+          "url": "/images/curated/tshirts/polo-1.jpg",
+          "width": 300,
+          "height": 300
+        }
+      ],
+      "categories": [
+        {
+          "name": "Tops",
+          "slug": "tops"
+        }
+      ],
+      "brands": [
+        {
+          "name": "SmartStyle",
+          "slug": "smartstyle"
+        }
+      ]
+    },
+    {
+      "id": "l2m3n4o5-p6q7-4r8s-t9u0-v1w2x3y4z5a6",
+      "slug": "oxford-dress-shoes",
+      "name": "Oxford Dress Shoes",
+      "brand": "SmartStyle",
+      "sku": "SKU-OXFD-001",
+      "category": "shoes",
+      "description": "Elegant oxford dress shoes perfect for formal events. Premium leather construction.",
+      "short_description": "Formal dress shoes",
+      "price": [129.99, 97.49],
+      "discount": 25,
+      "ratings": 4.8,
+      "reviews": 37,
+      "stock": 18,
+      "is_new": false,
+      "is_top": true,
+      "is_featured": true,
+      "variants": [
+        {
+          "variant_id": "v2l3m4n5-o6p7-4q8r-s9t0-u1v2w3x4y5z6",
+          "sku": "SKU-OXFD-001-BLK",
+          "color": { "name": "Black", "color": "#000000" },
+          "size": { "name": "10", "size": "10" },
+          "price": 129.99,
+          "sale_price": 97.49
+        }
+      ],
+      "pictures": [
+        {
+          "url": "/images/curated/shoes/oxford-1.jpg",
+          "width": 800,
+          "height": 800
+        }
+      ],
+      "small_pictures": [
+        {
+          "url": "/images/curated/shoes/oxford-1.jpg",
+          "width": 300,
+          "height": 300
+        }
+      ],
+      "categories": [
+        {
+          "name": "Shoes",
+          "slug": "shoes"
+        }
+      ],
+      "brands": [
+        {
+          "name": "SmartStyle",
+          "slug": "smartstyle"
+        }
+      ]
     }
   ]
 }
