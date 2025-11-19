@@ -14,6 +14,7 @@ import StickyFooter from '~/components/common/sticky-footer';
 import Quickview from '~/components/features/product/common/quickview-modal';
 import VideoModal from '~/components/features/modals/video-modal';
 import MobileMenu from '~/components/common/partials/mobile-menu';
+import ChatWidget from '~/components/ChatWidget';
 
 import { modalActions } from '~/store/modal';
 
@@ -87,6 +88,8 @@ function Layout( { children, closeQuickview } ) {
             <Quickview />
 
             <VideoModal />
+
+            <ChatWidget />
         </>
     )
 }
