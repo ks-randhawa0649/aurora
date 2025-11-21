@@ -2,12 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([
-    { 
-      role: 'assistant', 
-      content: 'Hi! 👋 Welcome to Aurora! How can I help you find the perfect outfit today?' 
-    }
-  ]);
+ const [messages, setMessages] = useState([
+  { 
+    role: 'assistant', 
+    content: "Hi! 👋 I’m your personal style assistant. Nice to meet you! Tell me one item you want to style, like “beige pants” or “white sneakers”, and I’ll suggest colours and outfit ideas that would look great with it." 
+  }
+]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
