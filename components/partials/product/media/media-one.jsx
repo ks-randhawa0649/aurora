@@ -32,7 +32,7 @@ function MediaOne( props ) {
                         cursorStyleActive="crosshair"
                         className="product-single-image"
                         style={{
-                            maxWidth: '100%',
+                            maxWidth: '70%',
                             height: 'auto'
                         }}
                     />

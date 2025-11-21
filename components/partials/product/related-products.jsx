@@ -3,11 +3,11 @@ import { useRouter } from 'next/router';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import OwlCarousel from '~/components/features/owl-carousel';
 import ALink from '~/components/features/custom-link';
-
-import { mainSlider17 } from '~/utils/data/carousel';
 
 export default function RelatedProducts( props ) {
     const { products, adClass = "" } = props;
@@ -17,14 +17,17 @@ export default function RelatedProducts( props ) {
         return null;
     }
 
+    // Duplicate products for infinite scroll effect
+    const infiniteProducts = [...products, ...products, ...products];
+
     const renderStars = (rating) => {
         return (
             <div className="stars-display">
                 {[1, 2, 3, 4, 5].map((star) => (
                     star <= Math.floor(rating) ? (
-                        <StarIcon key={star} sx={{ fontSize: 16, color: '#FFB800' }} />
+                        <StarIcon key={star} sx={{ fontSize: 18, color: '#FFB800' }} />
                     ) : (
-                        <StarBorderIcon key={star} sx={{ fontSize: 16, color: '#FFB800' }} />
+                        <StarBorderIcon key={star} sx={{ fontSize: 18, color: '#FFB800' }} />
                     )
                 ))}
             </div>
@@ -33,58 +36,88 @@ export default function RelatedProducts( props ) {
 
     return (
         <>
-        <section className={ `related-products-modern ${ adClass }` }>
-            <OwlCarousel adClass="owl-carousel owl-theme owl-nav-modern" options={ mainSlider17 }>
+        <section className={ `related-products-section ${ adClass }` }>
+            <div className="infinite-scroll-container">
+                <div className="infinite-scroll-track">
                 {
-                    products.map( ( product, index ) => {
+                    infiniteProducts.map( ( product, index ) => {
                         const imageUrl = product.pictures?.[0]?.url || '/images/placeholder.jpg';
                         const price = Array.isArray(product.price) ? product.price : [0, 0];
                         const hasDiscount = price[0] !== price[1] && price[1] > 0;
                         
                         return (
-                            <div key={`related-${index}`} className="related-product-card">
-                                <div className="card-image-wrapper">
+                            <div key={`related-${index}`} className="product-card-premium">
+                                <div className="image-container">
                                     <ALink href={`/product/default/${product.slug}`}>
-                                        <img 
-                                            src={imageUrl} 
-                                            alt={product.name}
-                                            className="card-image"
-                                        />
+                                        <div className="image-wrapper">
+                                            <img 
+                                                src={imageUrl} 
+                                                alt={product.name}
+                                                className="product-image"
+                                            />
+                                            <div className="image-overlay">
+                                                <div className="overlay-content">
+                                                    <RemoveRedEyeIcon sx={{ fontSize: 24, color: 'white' }} />
+                                                    <span className="view-text">Quick View</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </ALink>
-                                    {product.is_new && (
-                                        <span className="badge-new">NEW</span>
-                                    )}
-                                    {hasDiscount && (
-                                        <span className="badge-sale">
-                                            -{Math.round(((price[1] - price[0]) / price[1]) * 100)}%
-                                        </span>
-                                    )}
-                                    <div className="card-actions">
-                                        <button className="action-btn" title="Add to Wishlist">
-                                            <FavoriteBorderIcon sx={{ fontSize: 20 }} />
+                                    
+                                    <div className="badges-container">
+                                        {product.is_new && (
+                                            <span className="badge-premium badge-new">
+                                                <span className="badge-icon">✨</span>
+                                                NEW
+                                            </span>
+                                        )}
+                                        {hasDiscount && (
+                                            <span className="badge-premium badge-sale">
+                                                <span className="badge-icon">🔥</span>
+                                                -{Math.round(((price[1] - price[0]) / price[1]) * 100)}%
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    <div className="quick-actions">
+                                        <button className="quick-action-btn wishlist-btn" title="Add to Wishlist">
+                                            <FavoriteBorderIcon sx={{ fontSize: 22 }} />
                                         </button>
-                                        <button className="action-btn" title="Quick Add">
-                                            <ShoppingCartIcon sx={{ fontSize: 20 }} />
+                                        <button className="quick-action-btn cart-btn" title="Add to Cart">
+                                            <ShoppingCartIcon sx={{ fontSize: 22 }} />
                                         </button>
                                     </div>
                                 </div>
-                                <div className="card-content">
+
+                                <div className="product-info">
                                     {product.categories?.[0] && (
-                                        <span className="card-category">{product.categories[0].name}</span>
+                                        <div className="category-wrapper">
+                                            <span className="category-badge">{product.categories[0].name}</span>
+                                        </div>
                                     )}
-                                    <h3 className="card-title">
+                                    
+                                    <h3 className="product-title">
                                         <ALink href={`/product/default/${product.slug}`}>
                                             {product.name}
                                         </ALink>
                                     </h3>
-                                    <div className="card-rating">
+                                    
+                                    <div className="rating-row">
                                         {renderStars(product.ratings || 4)}
-                                        <span className="rating-count">({product.reviews || 0})</span>
+                                        <span className="review-count">({product.reviews || 0} reviews)</span>
                                     </div>
-                                    <div className="card-price">
-                                        <span className="price-current">${price[0].toFixed(2)}</span>
+                                    
+                                    <div className="price-row">
+                                        <div className="price-main">
+                                            <span className="current-price">${price[0].toFixed(2)}</span>
+                                            {hasDiscount && (
+                                                <span className="original-price">${price[1].toFixed(2)}</span>
+                                            )}
+                                        </div>
                                         {hasDiscount && (
-                                            <span className="price-old">${price[1].toFixed(2)}</span>
+                                            <span className="savings-badge">
+                                                Save ${(price[1] - price[0]).toFixed(2)}
+                                            </span>
                                         )}
                                     </div>
                                 </div>
@@ -92,91 +125,194 @@ export default function RelatedProducts( props ) {
                         );
                     })
                 }
-            </OwlCarousel>
+                </div>
+            </div>
         </section>
 
         <style jsx>{`
-            .related-products-modern {
+            .related-products-section {
                 padding: 0;
-            }
-
-            .related-product-card {
-                background: white;
-                border-radius: 16px;
                 overflow: hidden;
-                transition: all 0.3s ease;
-                margin: 0 10px;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+                position: relative;
             }
 
-            .related-product-card:hover {
-                transform: translateY(-8px);
-                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            .infinite-scroll-container {
+                width: 100%;
+                overflow: hidden;
+                position: relative;
             }
 
-            .card-image-wrapper {
+            .infinite-scroll-track {
+                display: flex;
+                gap: 24px;
+                animation: infiniteScroll 60s linear infinite;
+                width: fit-content;
+            }
+
+            .infinite-scroll-track:hover {
+                animation-play-state: paused;
+            }
+
+            @keyframes infiniteScroll {
+                0% {
+                    transform: translateX(0);
+                }
+                100% {
+                    transform: translateX(-33.333%);
+                }
+            }
+
+            .product-card-premium {
+                background: white;
+                border-radius: 20px;
+                overflow: hidden;
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+                border: 2px solid transparent;
+                flex-shrink: 0;
+                width: 320px;
+            }
+
+            .product-card-premium:hover {
+                transform: translateY(-12px);
+                box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+                border-color: rgba(38, 0, 204, 0.2);
+            }
+
+            .image-container {
                 position: relative;
                 overflow: hidden;
-                background: #f8f9fa;
-                height: 280px;
             }
 
-            .card-image {
+            .image-wrapper {
+                position: relative;
+                height: 320px;
+                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+                overflow: hidden;
+            }
+
+            .product-image {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
+                transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .product-card-premium:hover .product-image {
+                transform: scale(1.15);
+            }
+
+            .image-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0;
+                transition: opacity 0.4s ease;
+            }
+
+            .product-card-premium:hover .image-overlay {
+                opacity: 1;
+            }
+
+            .overlay-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+                transform: translateY(20px);
                 transition: transform 0.4s ease;
             }
 
-            .related-product-card:hover .card-image {
-                transform: scale(1.08);
-            }
-
-            .badge-new,
-            .badge-sale {
-                position: absolute;
-                top: 12px;
-                left: 12px;
-                padding: 6px 12px;
-                border-radius: 20px;
-                font-size: 11px;
-                font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-                z-index: 2;
-            }
-
-            .badge-new {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-            }
-
-            .badge-sale {
-                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-                color: white;
-                left: auto;
-                right: 12px;
-            }
-
-            .card-actions {
-                position: absolute;
-                bottom: 12px;
-                right: 12px;
-                display: flex;
-                gap: 8px;
-                opacity: 0;
-                transform: translateY(10px);
-                transition: all 0.3s ease;
-            }
-
-            .related-product-card:hover .card-actions {
-                opacity: 1;
+            .product-card-premium:hover .overlay-content {
                 transform: translateY(0);
             }
 
-            .action-btn {
-                width: 40px;
-                height: 40px;
+            .view-text {
+                color: white;
+                font-size: 14px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+
+            .badges-container {
+                position: absolute;
+                top: 16px;
+                left: 0;
+                right: 0;
+                display: flex;
+                justify-content: space-between;
+                padding: 0 16px;
+                z-index: 3;
+            }
+
+            .badge-premium {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 8px 16px;
+                border-radius: 24px;
+                font-size: 12px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                backdrop-filter: blur(10px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                animation: badgePulse 2s ease-in-out infinite;
+            }
+
+            @keyframes badgePulse {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+            }
+
+            .badge-icon {
+                font-size: 14px;
+                animation: iconSpin 3s linear infinite;
+            }
+
+            @keyframes iconSpin {
+                0%, 90%, 100% { transform: rotate(0deg); }
+                95% { transform: rotate(15deg); }
+            }
+
+            .badge-new {
+                background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%);
+                color: white;
+            }
+
+            .badge-sale {
+                background: linear-gradient(135deg, rgba(240, 147, 251, 0.95) 0%, rgba(245, 87, 108, 0.95) 100%);
+                color: white;
+            }
+
+            .quick-actions {
+                position: absolute;
+                top: 50%;
+                right: 16px;
+                transform: translateY(-50%) translateX(60px);
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                opacity: 0;
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 4;
+            }
+
+            .product-card-premium:hover .quick-actions {
+                transform: translateY(-50%) translateX(0);
+                opacity: 1;
+            }
+
+            .quick-action-btn {
+                width: 48px;
+                height: 48px;
                 border-radius: 50%;
                 background: white;
                 border: none;
@@ -185,137 +321,229 @@ export default function RelatedProducts( props ) {
                 justify-content: center;
                 cursor: pointer;
                 transition: all 0.3s ease;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
                 color: #666;
+                position: relative;
+                overflow: hidden;
             }
 
-            .action-btn:hover {
-                background: #26c;
-                color: white;
-                transform: scale(1.1);
+            .quick-action-btn::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                transform: scale(0);
+                transition: transform 0.3s ease;
+                border-radius: 50%;
             }
 
-            .card-content {
-                padding: 20px;
+            .quick-action-btn:hover::before {
+                transform: scale(1);
             }
 
-            .card-category {
-                display: inline-block;
-                color: #26c;
-                font-size: 12px;
-                font-weight: 600;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-                margin-bottom: 8px;
-            }
-
-            .card-title {
-                margin: 0 0 12px 0;
-                font-size: 16px;
-                font-weight: 600;
-                line-height: 1.4;
-            }
-
-            .card-title a {
-                color: #333;
-                text-decoration: none;
+            .quick-action-btn :global(svg) {
+                position: relative;
+                z-index: 1;
                 transition: color 0.3s ease;
             }
 
-            .card-title a:hover {
-                color: #26c;
+            .quick-action-btn:hover :global(svg) {
+                color: white;
             }
 
-            .card-rating {
+            .quick-action-btn:hover {
+                transform: scale(1.15);
+                box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            }
+
+            .product-info {
+                padding: 24px;
+            }
+
+            .category-wrapper {
+                margin-bottom: 12px;
+            }
+
+            .category-badge {
+                display: inline-flex;
+                align-items: center;
+                background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+                color: #26c;
+                padding: 6px 14px;
+                border-radius: 16px;
+                font-size: 11px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.8px;
+                border: 1px solid rgba(38, 0, 204, 0.2);
+            }
+
+            .product-title {
+                margin: 0 0 14px 0;
+                font-size: 17px;
+                font-weight: 700;
+                line-height: 1.4;
+                min-height: 48px;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
+            .product-title a {
+                color: #222;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                background: linear-gradient(to right, #26c, #667eea);
+                background-size: 0% 2px;
+                background-repeat: no-repeat;
+                background-position: left bottom;
+            }
+
+            .product-title a:hover {
+                color: #26c;
+                background-size: 100% 2px;
+            }
+
+            .rating-row {
                 display: flex;
                 align-items: center;
-                gap: 8px;
-                margin-bottom: 12px;
+                gap: 10px;
+                margin-bottom: 16px;
+                padding-bottom: 14px;
+                border-bottom: 2px solid #f0f0f0;
             }
 
             .stars-display {
                 display: flex;
-                gap: 2px;
+                gap: 3px;
             }
 
-            .rating-count {
+            .review-count {
                 font-size: 13px;
                 color: #999;
+                font-weight: 500;
             }
 
-            .card-price {
+            .price-row {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .price-main {
                 display: flex;
                 align-items: baseline;
                 gap: 10px;
             }
 
-            .price-current {
-                font-size: 22px;
-                font-weight: 700;
-                color: #26c;
+            .current-price {
+                font-size: 26px;
+                font-weight: 800;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
             }
 
-            .price-old {
+            .original-price {
                 font-size: 16px;
                 color: #999;
                 text-decoration: line-through;
+                font-weight: 500;
             }
 
-            :global(.owl-nav-modern .owl-nav) {
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                width: 100%;
-                display: flex;
-                justify-content: space-between;
-                pointer-events: none;
-                padding: 0 -15px;
-            }
-
-            :global(.owl-nav-modern .owl-nav button) {
-                background: white !important;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                pointer-events: all;
-                border: 2px solid #26c;
-                transition: all 0.3s ease;
-            }
-
-            :global(.owl-nav-modern .owl-nav button:hover) {
-                background: #26c !important;
-                transform: scale(1.1);
-            }
-
-            :global(.owl-nav-modern .owl-nav button span) {
-                color: #26c;
-                font-size: 24px;
-                font-weight: bold;
-            }
-
-            :global(.owl-nav-modern .owl-nav button:hover span) {
+            .savings-badge {
+                background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
                 color: white;
+                padding: 4px 12px;
+                border-radius: 12px;
+                font-size: 12px;
+                font-weight: 700;
+                box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
+            }
+
+            @media (max-width: 992px) {
+                .product-card-premium {
+                    width: 280px;
+                }
+
+                .image-wrapper {
+                    height: 280px;
+                }
             }
 
             @media (max-width: 768px) {
-                .card-image-wrapper {
-                    height: 240px;
+                .product-card-premium {
+                    width: 260px;
                 }
 
-                .card-content {
-                    padding: 16px;
+                .infinite-scroll-track {
+                    gap: 16px;
                 }
 
-                .card-title {
-                    font-size: 14px;
+                .image-wrapper {
+                    height: 260px;
                 }
 
-                .price-current {
-                    font-size: 18px;
+                .product-info {
+                    padding: 20px;
+                }
+
+                .product-title {
+                    font-size: 15px;
+                    min-height: 42px;
+                }
+
+                .current-price {
+                    font-size: 22px;
+                }
+
+                .quick-actions {
+                    position: static;
+                    transform: none;
+                    opacity: 1;
+                    flex-direction: row;
+                    justify-content: center;
+                    padding: 12px 0;
+                    background: #f8f9fa;
+                }
+
+                .product-card-premium:hover .quick-actions {
+                    transform: none;
+                }
+            }
+
+            @media (max-width: 576px) {
+                .product-card-premium {
+                    width: 240px;
+                }
+
+                .infinite-scroll-track {
+                    gap: 12px;
+                }
+
+                .image-wrapper {
+                    height: 220px;
+                }
+
+                .badges-container {
+                    padding: 0 12px;
+                }
+
+                .badge-premium {
+                    padding: 6px 12px;
+                    font-size: 10px;
+                }
+
+                .quick-action-btn {
+                    width: 42px;
+                    height: 42px;
                 }
             }
         `}</style>
