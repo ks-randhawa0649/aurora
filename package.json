@@ -61,5 +61,8 @@
     "sass": "^1.42.1",
     "stripe": "^19.2.0",
     "supports-color": "^9.0.2"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0"
   }
 }
