@@ -1,82 +1,111 @@
 import { persistReducer } from "redux-persist";
 import storage from 'redux-persist/lib/storage';
+import { takeEvery } from "redux-saga/effects";
 import { toast } from 'react-toastify';
-import { takeEvery } from 'redux-saga/effects';
 
-import CartPopup from '~/components/features/product/common/cart-popup';
-
-const actionTypes = {
+export const actionTypes = {
     ADD_TO_CART: 'ADD_TO_CART',
     REMOVE_FROM_CART: 'REMOVE_FROM_CART',
     UPDATE_CART: 'UPDATE_CART',
-    REFRESH_STORE: 'REFRESH_STORE'
-}
+    CLEAR_CART: 'CLEAR_CART'
+};
 
 const initialState = {
     data: []
-}
+};
 
-function cartReducer( state = initialState, action ) {
+const cartReducer = ( state = initialState, action ) => {
     switch ( action.type ) {
         case actionTypes.ADD_TO_CART:
-            let tmpProduct = { ...action.payload.product };
+            const productId = action.payload.product.id;
+            const variant = action.payload.product.variant || '';
+            
+            // Find if product with same variant exists
+            const existingIndex = state.data.findIndex( item => 
+                item.id === productId && (item.variant || '') === variant
+            );
 
-            if ( state.data.findIndex( item => item.name === action.payload.product.name ) > -1 ) {
-                let tmpData = state.data.reduce( ( acc, cur ) => {
-                    if ( cur.name === tmpProduct.name ) {
-                        acc.push( {
-                            ...cur,
-                            qty: parseInt( cur.qty ) + parseInt( tmpProduct.qty )
-                        } );
-                    } else {
-                        acc.push( cur );
-                    }
+            if ( existingIndex > -1 ) {
+                // Update quantity of existing item
+                const newData = [ ...state.data ];
+                newData[ existingIndex ] = {
+                    ...newData[ existingIndex ],
+                    qty: newData[ existingIndex ].qty + action.payload.product.qty,
+                    sum: (newData[ existingIndex ].qty + action.payload.product.qty) * newData[ existingIndex ].price
+                };
 
-                    return acc;
-                }, [] )
+                console.log('Updated existing cart item:', newData[ existingIndex ]);
 
-                return { ...state, data: tmpData };
-            } else {
-                return { ...state, data: [ ...state.data, tmpProduct ] };
+                return {
+                    data: newData
+                };
             }
 
-        case actionTypes.REMOVE_FROM_CART:
-            let cart = state.data.reduce( ( cartAcc, product ) => {
-                if ( product.name !== action.payload.product.name ) {
-                    cartAcc.push( product );
-                }
-                return cartAcc;
-            }, [] );
+            // Add new item with price
+            const newProduct = {
+                ...action.payload.product,
+                price: action.payload.product.price || 0,
+                sum: (action.payload.product.price || 0) * action.payload.product.qty
+            };
 
-            return { ...state, data: cart };
+            console.log('Adding new cart item:', newProduct);
+
+            return {
+                data: [
+                    ...state.data,
+                    newProduct
+                ]
+            };
+
+        case actionTypes.REMOVE_FROM_CART:
+            return {
+                data: state.data.filter( item => {
+                    if ( item.id !== action.payload.product.id ) return true;
+                    if ( item.variant && item.variant !== action.payload.product.variant ) return true;
+                    return false;
+                } )
+            };
 
         case actionTypes.UPDATE_CART:
-            return { ...state, data: action.payload.products };
+            return {
+                data: state.data.map( item => {
+                    if ( item.id === action.payload.product.id && 
+                         ( !item.variant || item.variant === action.payload.product.variant ) ) {
+                        return {
+                            ...item,
+                            qty: action.payload.qty,
+                            sum: item.price * action.payload.qty
+                        };
+                    }
+                    return item;
+                } )
+            };
 
-        case actionTypes.REFRESH_STORE:
+        case actionTypes.CLEAR_CART:
             return initialState;
 
         default:
             return state;
     }
-}
+};
 
 export const cartActions = {
-    addToCart: product => ( { type: actionTypes.ADD_TO_CART, payload: { product } } ),
-    removeFromCart: product => ( { type: actionTypes.REMOVE_FROM_CART, payload: { product } } ),
-    updateCart: products => ( { type: actionTypes.UPDATE_CART, payload: { products } } )
+    addToCart: ( product ) => ( { type: actionTypes.ADD_TO_CART, payload: { product } } ),
+    removeFromCart: ( product ) => ( { type: actionTypes.REMOVE_FROM_CART, payload: { product } } ),
+    updateCart: ( product, qty ) => ( { type: actionTypes.UPDATE_CART, payload: { product, qty } } ),
+    clearCart: () => ( { type: actionTypes.CLEAR_CART } )
 };
 
 export function* cartSaga() {
     yield takeEvery( actionTypes.ADD_TO_CART, function* saga( e ) {
-        toast( <CartPopup product={ e.payload.product } /> );
-    } )
+        toast.success( "Product added to cart" );
+    } );
 }
 
 const persistConfig = {
     keyPrefix: "riode-",
     key: "cart",
     storage
-}
+};
 
 export default persistReducer( persistConfig, cartReducer );

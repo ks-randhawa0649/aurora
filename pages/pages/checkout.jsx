@@ -15,6 +15,23 @@ function Checkout( props ) {
     const { user } = useContext(UserContext);
     const [loading, setLoading] = useState(true);
     const { cartList } = props;
+    const shippingPrice = 4.99;
+
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        address: '',
+        city: '',
+        state: '',
+        zipCode: '',
+        country: 'United States',
+        notes: ''
+    });
+
+    const [errors, setErrors] = useState({});
+    const [isProcessing, setIsProcessing] = useState(false);
 
     useEffect(() => {
         // Check authentication
@@ -25,7 +42,139 @@ function Checkout( props ) {
         } else {
             setLoading(false);
         }
-    }, [user, loading, router]);
+
+        // Redirect to cart if empty
+        if (!cartList || cartList.length === 0) {
+            router.push('/pages/cart');
+        }
+    }, [user, loading, router, cartList]);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+        
+        if (errors[name]) {
+            setErrors(prev => ({
+                ...prev,
+                [name]: ''
+            }));
+        }
+    };
+
+    const validateForm = () => {
+        const newErrors = {};
+
+        if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
+        if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
+        if (!formData.email.trim()) {
+            newErrors.email = 'Email is required';
+        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            newErrors.email = 'Email is invalid';
+        }
+        if (!formData.phone.trim()) newErrors.phone = 'Phone is required';
+        if (!formData.address.trim()) newErrors.address = 'Address is required';
+        if (!formData.city.trim()) newErrors.city = 'City is required';
+        if (!formData.state.trim()) newErrors.state = 'State is required';
+        if (!formData.zipCode.trim()) newErrors.zipCode = 'Zip code is required';
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const getPrice = (product) => {
+        if (typeof product.price === 'number' && product.price > 0) {
+            return product.price;
+        }
+        if (Array.isArray(product.price) && product.price.length > 0) {
+            return product.price[0] || 0;
+        }
+        return 0;
+    };
+
+    const calculateSubtotal = () => {
+        let total = 0;
+        cartList.forEach(item => {
+            const price = getPrice(item);
+            total += price * item.qty;
+        });
+        return total;
+    };
+
+    const calculateShipping = () => {
+        return 10.00;
+    };
+
+    const calculateTax = () => {
+        return calculateSubtotal() * 0.08;
+    };
+
+    const calculateTotal = () => {
+        return calculateSubtotal() + calculateShipping() + calculateTax();
+    };
+
+    const handlePlaceOrder = async (e) => {
+        e.preventDefault();
+
+        if (!validateForm()) {
+            return;
+        }
+
+        setIsProcessing(true);
+
+        try {
+            // Prepare order data for Stripe
+            const orderData = {
+                customer: {
+                    firstName: formData.firstName,
+                    lastName: formData.lastName,
+                    email: formData.email,
+                    phone: formData.phone,
+                    address: {
+                        street: formData.address,
+                        city: formData.city,
+                        state: formData.state,
+                        zipCode: formData.zipCode,
+                        country: formData.country
+                    }
+                },
+                items: cartList.map(item => ({
+                    product_id: item.id,
+                    name: item.name,
+                    slug: item.slug,
+                    variant: item.variant || null,
+                    quantity: item.qty,
+                    price: getPrice(item),
+                    subtotal: getPrice(item) * item.qty,
+                    image: item.pictures?.[0]?.url || item.small_pictures?.[0]?.url || null
+                })),
+                pricing: {
+                    subtotal: calculateSubtotal(),
+                    shipping: calculateShipping(),
+                    tax: calculateTax(),
+                    total: calculateTotal()
+                },
+                notes: formData.notes
+            };
+
+            // Store order data in sessionStorage to retrieve after payment
+            sessionStorage.setItem('pendingOrder', JSON.stringify(orderData));
+
+            // Redirect to payment page
+        router.push({
+            pathname: '/pages/payment',
+            query: {
+                amount: calculateTotal().toFixed(2)
+            }
+        });
+        } catch (error) {
+            console.error('Error preparing order:', error);
+            alert('Error preparing order. Please try again.');
+            setIsProcessing(false);
+        }
+    };
 
     if (loading || !user) {
         return (
@@ -38,6 +187,10 @@ function Checkout( props ) {
                 </div>
             </div>
         );
+    }
+
+    if (!cartList || cartList.length === 0) {
+        return null;
     }
 
     return (
@@ -83,7 +236,7 @@ function Checkout( props ) {
                         </Card>
                     </div>
 
-                    <form action="#" className="form">
+                    <form onSubmit={handlePlaceOrder} className="form">
                         <div className="row">
                             <div className="col-lg-7 mb-6 mb-lg-0 pr-lg-4">
                                 <h3 className="title title-simple text-left text-uppercase">Billing Details</h3>
@@ -91,60 +244,132 @@ function Checkout( props ) {
                                 <div className="row">
                                     <div className="col-xs-6">
                                         <label>First Name *</label>
-                                        <input type="text" className="form-control" name="first-name" required />
+                                        <input 
+                                            type="text" 
+                                            className={`form-control ${errors.firstName ? 'is-invalid' : ''}`}
+                                            name="firstName"
+                                            value={formData.firstName}
+                                            onChange={handleInputChange}
+                                            required 
+                                        />
+                                        {errors.firstName && <div className="invalid-feedback d-block">{errors.firstName}</div>}
                                     </div>
                                     <div className="col-xs-6">
                                         <label>Last Name *</label>
-                                        <input type="text" className="form-control" name="last-name" required />
-                                    </div>
-                                </div>
-
-                                <label>Company Name (Optional)</label>
-                                <input type="text" className="form-control" name="company-name" />
-
-                                <label>Country / Region *</label>
-                                <div className="select-box">
-                                    <select name="country" className="form-control">
-                                        <option value="us" defaultValue>United States (US)</option>
-                                        <option value="uk">United Kingdom</option>
-                                        <option value="ca">Canada</option>
-                                        <option value="au">Australia</option>
-                                    </select>
-                                </div>
-
-                                <label>Street Address *</label>
-                                <input type="text" className="form-control" name="address1" required placeholder="House number and street name" />
-                                <input type="text" className="form-control" name="address2" required placeholder="Apartment, suite, unit, etc. (optional)" />
-
-                                <div className="row">
-                                    <div className="col-xs-6">
-                                        <label>Town / City *</label>
-                                        <input type="text" className="form-control" name="city" required />
-                                    </div>
-                                    <div className="col-xs-6">
-                                        <label>State *</label>
-                                        <input type="text" className="form-control" name="state" required />
-                                    </div>
-                                </div>
-
-                                <div className="row">
-                                    <div className="col-xs-6">
-                                        <label>ZIP *</label>
-                                        <input type="text" className="form-control" name="zip" required />
-                                    </div>
-                                    <div className="col-xs-6">
-                                        <label>Phone *</label>
-                                        <input type="text" className="form-control" name="phone" required />
+                                        <input 
+                                            type="text" 
+                                            className={`form-control ${errors.lastName ? 'is-invalid' : ''}`}
+                                            name="lastName"
+                                            value={formData.lastName}
+                                            onChange={handleInputChange}
+                                            required 
+                                        />
+                                        {errors.lastName && <div className="invalid-feedback d-block">{errors.lastName}</div>}
                                     </div>
                                 </div>
 
                                 <label>Email Address *</label>
-                                <input type="email" className="form-control" name="email-address" required defaultValue={user?.email || ''} />
+                                <input 
+                                    type="email" 
+                                    className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                    required 
+                                />
+                                {errors.email && <div className="invalid-feedback d-block">{errors.email}</div>}
 
-                                <h2 className="title title-simple text-uppercase text-left">Additional Information</h2>
+                                <label>Phone *</label>
+                                <input 
+                                    type="tel" 
+                                    className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleInputChange}
+                                    required 
+                                />
+                                {errors.phone && <div className="invalid-feedback d-block">{errors.phone}</div>}
+
+                                <label>Street Address *</label>
+                                <input 
+                                    type="text" 
+                                    className={`form-control ${errors.address ? 'is-invalid' : ''}`}
+                                    name="address"
+                                    placeholder="House number and street name"
+                                    value={formData.address}
+                                    onChange={handleInputChange}
+                                    required 
+                                />
+                                {errors.address && <div className="invalid-feedback d-block">{errors.address}</div>}
+
+                                <div className="row">
+                                    <div className="col-xs-6">
+                                        <label>Town / City *</label>
+                                        <input 
+                                            type="text" 
+                                            className={`form-control ${errors.city ? 'is-invalid' : ''}`}
+                                            name="city"
+                                            value={formData.city}
+                                            onChange={handleInputChange}
+                                            required 
+                                        />
+                                        {errors.city && <div className="invalid-feedback d-block">{errors.city}</div>}
+                                    </div>
+                                    <div className="col-xs-6">
+                                        <label>State *</label>
+                                        <input 
+                                            type="text" 
+                                            className={`form-control ${errors.state ? 'is-invalid' : ''}`}
+                                            name="state"
+                                            value={formData.state}
+                                            onChange={handleInputChange}
+                                            required 
+                                        />
+                                        {errors.state && <div className="invalid-feedback d-block">{errors.state}</div>}
+                                    </div>
+                                </div>
+
+                                <div className="row">
+                                    <div className="col-xs-6">
+                                        <label>Zip Code *</label>
+                                        <input 
+                                            type="text" 
+                                            className={`form-control ${errors.zipCode ? 'is-invalid' : ''}`}
+                                            name="zipCode"
+                                            value={formData.zipCode}
+                                            onChange={handleInputChange}
+                                            required 
+                                        />
+                                        {errors.zipCode && <div className="invalid-feedback d-block">{errors.zipCode}</div>}
+                                    </div>
+                                    <div className="col-xs-6">
+                                        <label>Country *</label>
+                                        <select 
+                                            className="form-control"
+                                            name="country"
+                                            value={formData.country}
+                                            onChange={handleInputChange}
+                                        >
+                                            <option value="United States">United States</option>
+                                            <option value="Canada">Canada</option>
+                                            <option value="United Kingdom">United Kingdom</option>
+                                            <option value="Australia">Australia</option>
+                                        </select>
+                                    </div>
+                                </div>
+
                                 <label>Order Notes (Optional)</label>
-                                <textarea className="form-control pb-2 pt-2 mb-0" cols="30" rows="5" placeholder="Notes about your order, e.g. special notes for delivery"></textarea>
+                                <textarea 
+                                    className="form-control pb-2 pt-2 mb-0" 
+                                    cols="30" 
+                                    rows="5"
+                                    name="notes"
+                                    value={formData.notes}
+                                    onChange={handleInputChange}
+                                    placeholder="Notes about your order, e.g. special notes for delivery"
+                                ></textarea>
                             </div>
+
                             <aside className="col-lg-5 sticky-sidebar-wrapper">
                                 <div className="sticky-sidebar mt-1" data-sticky-options="{'bottom': 50}">
                                     <div className="summary pt-5">
@@ -157,113 +382,64 @@ function Checkout( props ) {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {
-                                                    cartList.map( ( item, index ) => (
-                                                        <tr key={ 'checkout-item-' + index }>
-                                                            <td className="product-name">{ item.name } <span className="product-quantity">×&nbsp;{ item.qty }</span></td>
-                                                            <td className="product-total text-body">${ toDecimal( item.qty * item.price ) }</td>
+                                                {cartList.map((item, index) => {
+                                                    const price = getPrice(item);
+                                                    const subtotal = price * item.qty;
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td className="product-name">
+                                                                {item.name} 
+                                                                {item.variant && <span className="product-quantity"> ({item.variant})</span>}
+                                                                <span className="product-quantity"> × {item.qty}</span>
+                                                            </td>
+                                                            <td className="product-total text-body">${toDecimal(subtotal)}</td>
                                                         </tr>
-                                                    ) )
-                                                }
-
+                                                    );
+                                                })}
                                                 <tr className="summary-subtotal">
                                                     <td>
                                                         <h4 className="summary-subtitle">Subtotal</h4>
                                                     </td>
-                                                    <td className="summary-subtotal-price pb-0 pt-0">${ toDecimal( cartList.reduce( ( acc, item ) => {
-                                                        return acc + item.price * item.qty;
-                                                    }, 0 ) ) }
+                                                    <td className="summary-subtotal-price pb-0 pt-0">
+                                                        ${toDecimal(calculateSubtotal())}
                                                     </td>
                                                 </tr>
-                                                <tr className="summary-shipping shipping-row-last">
+                                                <tr className="summary-subtotal">
                                                     <td>
-                                                        <h4 className="summary-subtitle pb-2 pt-4">Shipping</h4>
+                                                        <h4 className="summary-subtitle">Shipping</h4>
                                                     </td>
-                                                            <td className="summary-subtotal-price pb-0 pt-0">$4.99</td>
-
-                                                            {/* <li>
-                                                                <div className="custom-radio">
-                                                                    <input type="radio" id="free-shipping" name="shipping" className="custom-control-input" />
-                                                                    <label className="custom-control-label" htmlFor="free-shipping">Free shipping</label>
-                                                                </div>
-                                                            </li>
-
-                                                            <li>
-                                                                <div className="custom-radio">
-                                                                    <input type="radio" id="local_pickup" name="shipping" className="custom-control-input" />
-                                                                    <label className="custom-control-label" htmlFor="local_pickup">Local pickup</label>
-                                                                </div>
-                                                            </li> */}
+                                                    <td className="summary-subtotal-price pb-0 pt-0">
+                                                        ${toDecimal(calculateShipping())}
+                                                    </td>
+                                                </tr>
+                                                <tr className="summary-subtotal">
+                                                    <td>
+                                                        <h4 className="summary-subtitle">Tax</h4>
+                                                    </td>
+                                                    <td className="summary-subtotal-price pb-0 pt-0">
+                                                        ${toDecimal(calculateTax())}
+                                                    </td>
                                                 </tr>
                                                 <tr className="summary-total">
                                                     <td className="pb-0">
                                                         <h4 className="summary-subtitle">Total</h4>
                                                     </td>
-                                                    <td className=" pt-0 pb-0">
-                                                        <p className="summary-total-price ls-s text-primary">${ toDecimal( cartList.reduce( ( acc, item ) => {
-                                                            return acc + item.price * item.qty;
-                                                        }, 0 ) ) }</p>
+                                                    <td className="pt-0 pb-0">
+                                                        <p className="summary-total-price ls-s text-primary">
+                                                            ${toDecimal(calculateTotal())}
+                                                        </p>
                                                     </td>
                                                 </tr>
                                             </tbody>
                                         </table>
 
-                                        {/* <div className="payment accordion radio-type">
-                                            <h4 className="summary-subtitle ls-m pb-3">Payment Methods</h4>
-
-                                            <div className="card">
-                                                <div className="card-header">
-                                                    <a href="#collapse1" className="expand">Direct bank transfer</a>
-                                                </div>
-                                                <div id="collapse1" className="expanded" style={ { display: 'block' } }>
-                                                    <div className="card-body ls-m">
-                                                        Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="card p-relative">
-                                                <div className="card-header">
-                                                    <a href="#collapse2" className="collapse">Check payments</a>
-                                                </div>
-                                                <div id="collapse2" className="collapsed">
-                                                    <div className="card-body ls-m">
-                                                        Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="card p-relative">
-                                                <div className="card-header">
-                                                    <a href="#collapse3" className="collapse">Cash on delivery</a>
-                                                </div>
-                                                <div id="collapse3" className="collapsed">
-                                                    <div className="card-body ls-m">
-                                                        Pay with cash upon delivery.
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="card p-relative">
-                                                <div className="card-header">
-                                                    <a href="#collapse4" className="collapse">PayPal</a>
-                                                </div>
-                                                <div id="collapse4" className="collapsed">
-                                                    <div className="card-body ls-m">
-                                                        Pay via PayPal; you can pay with your credit card if you don't have a PayPal account.
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div> */}
-
-                                        <div className="form-checkbox mt-4 mb-5">
-                                            <input type="checkbox" className="custom-checkbox" id="terms-condition" name="terms-condition" />
-                                            <label className="form-control-label" htmlFor="terms-condition">
-                                                I have read and agree to the website <a href="#">terms and conditions </a>*
-                                            </label>
-                                        </div>
-
-                                        <button type="submit" className="btn btn-dark btn-rounded btn-order">Place Order</button>
+                                        <button 
+                                            type="submit" 
+                                            className="btn btn-dark btn-rounded btn-order"
+                                            disabled={isProcessing}
+                                        >
+                                            {isProcessing ? 'Processing...' : 'Proceed to Payment'}
+                                        </button>
                                     </div>
                                 </div>
                             </aside>

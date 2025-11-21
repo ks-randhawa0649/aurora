@@ -1,215 +1,132 @@
-import { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
-export default function ThumbOne( props ) {
-    const { index, product } = props;
-    const [ pos, setPos ] = useState( 0 );
-    const [ term, setTerm ] = useState( 4 );
+function ThumbOne( props ) {
+    const { product } = props;
 
     useEffect( () => {
-        window.addEventListener( 'resize', initCarouselHanlder );
-
-        setTimeout( () => {
-            let productThumb = document.querySelector( '.product-thumb' );
-            let wrapperHeight = document.querySelector( '.product-thumbs-one' ).offsetHeight;
-            let thumbSpace = parseInt( window.getComputedStyle( productThumb ).getPropertyValue( "margin-bottom" ) );
-            let transformUnit = productThumb.offsetHeight + thumbSpace;
-            // newTerm = Math.ceil( ( ( document.querySelector( '.product-gallery.pg-vertical' ).offsetHeight + thumbSpace ) ) / transformUnit );
-            let newTerm = ( ( document.querySelector( '.product-gallery.pg-vertical' ).offsetHeight + thumbSpace ) );
-            newTerm = parseInt( newTerm / transformUnit );
-            if ( newTerm !== term ) {
-                setTerm( newTerm );
-            }
-        }, 300 );
-
-        return () => {
-            window.removeEventListener( 'resize', initCarouselHanlder );
-        }
-    }, [] )
-
-    // initial settings
-    useEffect( () => {
-        let productThumbs = document.querySelector( '.product-thumbs-one' );
-
-        if ( window.innerWidth < 992 ) {
-            document.querySelector( '.product-thumbs-one' ).style.display = 'none';
-            document.querySelector( '.product-thumbs-two' ).style.display = 'block';
-            window.jQuery( '.owl-carousel' ).trigger( 'refresh.owl.carousel' );
-        } else {
-            document.querySelector( '.product-thumbs-one' ).style.display = 'block';
-            document.querySelector( '.product-thumbs-two' ).style.display = 'none';
+        if ( !product || !product.small_pictures || product.small_pictures.length === 0 ) {
+            return;
         }
 
-        setPos( 0 );
-
-        if ( term < product.pictures.length ) {
-            productThumbs.querySelector( '.thumb-down' ).classList.remove( 'disabled' );
-        } else {
-            productThumbs.querySelector( '.thumb-down' ).classList.add( 'disabled' );
-        }
-
-        if ( document.querySelector( '.product-thumbs' ) ) {
-            activeItem( 0 );
-            productThumbs.querySelector( '.thumb-up' ).classList.add( 'disabled' );
-            document.querySelector( '.product-thumbs' ).style.top = 0;
-        }
-    }, [ product ] )
-
-    // change the pos and top when the media carousel is translated 
-    useEffect( () => {
-        if ( pos + term - 1 < index ) {
-            moveThumb( "down" );
-            setPos( pos + 1 );
-        }
-
-        if ( index < pos ) {
-            moveThumb( "up" );
-            setPos( pos - 1 );
-        }
-
-        activeItem( index );
-    }, [ index ] )
-
-    useEffect( () => {
-        let productThumbs = document.querySelector( '.product-thumbs-one' );
-        if ( pos + term < product.pictures.length ) {
-            productThumbs.querySelector( '.thumb-down' ).classList.remove( 'disabled' );
-        } else {
-            productThumbs.querySelector( '.thumb-down' ).classList.add( 'disabled' );
-        }
-
-        if ( pos + term === product.pictures.length ) {
-            // moveThumb( "down" );
-            // setPos( pos + 1 );
-        }
-
-        if ( index < pos ) {
-            // moveThumb( "up" );
-            // setPos( pos - 1 );
-        }
-    }, [ term ] )
-
-    useEffect( () => {
-        let productThumbs = document.querySelector( '.product-thumbs-one' );
-        if ( productThumbs ) {
-            if ( pos > 0 ) {
-                productThumbs.querySelector( '.thumb-up' ).classList.remove( 'disabled' );
-            } else {
-                productThumbs.querySelector( '.thumb-up' ).classList.add( 'disabled' );
+        const timer = setTimeout( () => {
+            const productThumbsWrapper = document.querySelector( '.product-thumbs-one' );
+            const productThumb = document.querySelector( '.product-thumb' );
+            
+            // Check if elements exist before accessing properties
+            if ( !productThumbsWrapper || !productThumb ) {
+                return;
             }
 
-            if ( pos + term < product.pictures.length ) {
-                productThumbs.querySelector( '.thumb-down' ).classList.remove( 'disabled' );
-            } else {
-                productThumbs.querySelector( '.thumb-down' ).classList.add( 'disabled' );
-            }
-        }
-    }, [ pos ] )
-
-    // move thumb pos
-    function moveThumb( type = "up" ) {
-        let sign = type === "up" ? 1 : -1;
-        let productThumb = document.querySelector( '.product-thumb' );
-        let wrapperHeight = document.querySelector( '.product-thumbs-one' ).offsetHeight;
-        let transformUnit = productThumb.offsetHeight + parseInt( window.getComputedStyle( productThumb ).getPropertyValue( "margin-bottom" ) );
-        if ( type === 'down' ) {
-            document.querySelector( '.product-thumbs' ).style.top = -transformUnit * ( pos - sign ) + ( wrapperHeight - transformUnit * term ) + parseInt( window.getComputedStyle( productThumb ).getPropertyValue( "margin-bottom" ) ) + 'px';
-        } else {
-            document.querySelector( '.product-thumbs' ).style.top = -transformUnit * ( pos - sign ) + 'px';
-        }
-    }
-
-    // active selected item
-    function activeItem( index ) {
-        if ( document.querySelector( '.product-thumbs' ).querySelector( '.active.product-thumb' ) ) {
-            let activeItems = document.querySelector( '.product-thumbs' ).querySelectorAll( '.active.product-thumb' );
-            activeItems.forEach( item => {
-                item.classList.remove( 'active' );
-            } )
-        }
-        document.querySelector( '.product-thumbs' ).querySelectorAll( '.product-thumb' )[ index ].classList.add( 'active' );
-    }
-
-    // init and destroy thumb carousel in 992px
-    const initCarouselHanlder = () => {
-        if ( window.innerWidth < 992 ) {
-            document.querySelector( '.product-thumbs-one' ).style.display = 'none';
-            document.querySelector( '.product-thumbs-two' ).style.display = 'block';
-            window.jQuery( '.owl-carousel' ).trigger( 'refresh.owl.carousel' );
-        } else {
-            document.querySelector( '.product-thumbs-one' ).style.display = 'block';
-            document.querySelector( '.product-thumbs-two' ).style.display = 'none';
-            setTermHandler();
-        }
-    }
-
-    // change the items displayed once in sidebar
-    const setTermHandler = () => {
-        setTimeout( () => {
-            let productThumb = document.querySelector( '.product-thumb' );
-            let wrapperHeight = document.querySelector( '.product-thumbs-one' ).offsetHeight;
-            let thumbSpace = parseInt( window.getComputedStyle( productThumb ).getPropertyValue( "margin-bottom" ) );
-            let transformUnit = productThumb.offsetHeight + thumbSpace;
-            // newTerm = Math.ceil( ( ( document.querySelector( '.product-gallery.pg-vertical' ).offsetHeight + thumbSpace ) ) / transformUnit );
-            let newTerm = ( ( document.querySelector( '.product-gallery.pg-vertical' ).offsetHeight + thumbSpace ) );
-            newTerm = parseInt( newTerm / transformUnit );
-            console.log( "new term is", newTerm, window.innerWidth );
-            if ( newTerm !== term ) {
-                setTerm( newTerm );
+            const wrapperHeight = productThumbsWrapper.offsetHeight;
+            const thumbHeight = productThumb.offsetHeight;
+            
+            if ( !wrapperHeight || !thumbHeight ) {
+                return;
             }
 
-            let thumbContainer = document.querySelector( '.product-thumbs-one' );
-            if ( product.pictures.length <= newTerm ) {
-                setTimeout( () => {
-                    thumbContainer.querySelector( '.product-thumbs' ).style.top = 0;
-                }, 100 );
-            } else {
-                let currentTop = parseInt( window.getComputedStyle( thumbContainer.querySelector( '.product-thumbs' ) ).getPropertyValue( 'top' ) );
-                let offset = currentTop + transformUnit * product.pictures.length - thumbSpace;
-                let temp = wrapperHeight - offset;
+            const thumbCount = Math.floor( wrapperHeight / thumbHeight );
+            
+            const thumbUpButton = document.querySelector( '.thumb-up' );
+            const thumbDownButton = document.querySelector( '.thumb-down' );
 
-                if ( ( index > newTerm - 1 || temp >= 0 ) && product.pictures.length > newTerm ) {
-                    thumbContainer.querySelector( '.product-thumbs' ).style.top = currentTop + temp + 'px';
+            if ( thumbUpButton ) {
+                thumbUpButton.addEventListener( 'click', thumbUpClick );
+            }
+            if ( thumbDownButton ) {
+                thumbDownButton.addEventListener( 'click', thumbDownClick );
+            }
+
+            function thumbUpClick( e ) {
+                e.preventDefault();
+                const productThumbs = document.querySelector( '.product-thumbs' );
+                if ( !productThumbs ) return;
+                
+                const transform = productThumbs.style.transform;
+                const currentTransform = transform ? parseInt( transform.split( '(' )[1] ) : 0;
+                
+                if ( currentTransform < 0 ) {
+                    productThumbs.style.transform = `translateY(${ currentTransform + thumbHeight }px)`;
+                    
+                    if ( thumbDownButton ) {
+                        thumbDownButton.classList.remove( 'disabled' );
+                    }
+                    if ( currentTransform + thumbHeight >= 0 && thumbUpButton ) {
+                        thumbUpButton.classList.add( 'disabled' );
+                    }
                 }
             }
-        }, 300 );
-    }
 
-    // set the top on clicking prev
-    const prevPosHandler = () => {
-        setPos( pos - 1 );
-        moveThumb( "up" );
-    }
+            function thumbDownClick( e ) {
+                e.preventDefault();
+                const productThumbs = document.querySelector( '.product-thumbs' );
+                if ( !productThumbs ) return;
+                
+                const transform = productThumbs.style.transform;
+                const currentTransform = transform ? parseInt( transform.split( '(' )[1] ) : 0;
+                const maxTransform = -( product.small_pictures.length - thumbCount ) * thumbHeight;
+                
+                if ( currentTransform > maxTransform ) {
+                    productThumbs.style.transform = `translateY(${ currentTransform - thumbHeight }px)`;
+                    
+                    if ( thumbUpButton ) {
+                        thumbUpButton.classList.remove( 'disabled' );
+                    }
+                    if ( currentTransform - thumbHeight <= maxTransform && thumbDownButton ) {
+                        thumbDownButton.classList.add( 'disabled' );
+                    }
+                }
+            }
 
-    // set the top on clicking next
-    const nextPosHandler = () => {
-        setPos( pos + 1 );
-        moveThumb( "down" );
-    }
+            // Cleanup function
+            return () => {
+                if ( thumbUpButton ) {
+                    thumbUpButton.removeEventListener( 'click', thumbUpClick );
+                }
+                if ( thumbDownButton ) {
+                    thumbDownButton.removeEventListener( 'click', thumbDownClick );
+                }
+            };
+        }, 100 );
 
-    // active the thumb which is currently selected
-    const activeHandler = ( e, index ) => {
-        if ( props.onChangeIndex ) {
-            props.onChangeIndex( index );
-        }
+        return () => clearTimeout( timer );
+    }, [ product ] );
 
-        activeItem( index );
+    if ( !product || !product.small_pictures || product.small_pictures.length === 0 ) {
+        return null;
     }
 
     return (
-        <div className="product-thumbs-wrap product-thumbs-one">
-            <div className="product-thumbs" id="product-thumbs">
-                {
-                    product.pictures.map( ( item, index ) => (
-                        <div className={ `product-thumb` } key={ "thumb - " + index } onClick={ ( e ) => activeHandler( e, index ) }>
-                            <img src={ process.env.NEXT_PUBLIC_ASSET_URI + item.url } alt="product thumbnail"
-                                width="109" height="122" />
-                        </div>
-                    ) )
-                }
+        <div className="product-thumbs-wrap">
+            <div className="product-thumbs-one">
+                <div className="product-thumbs">
+                    {
+                        product.small_pictures.map( ( item, index ) => (
+                            <div 
+                                className="product-thumb" 
+                                key={ `product-thumb-${ index }` }
+                            >
+                                <img 
+                                    src={ item.url } 
+                                    alt={ `${product.name} thumbnail ${index + 1}` }
+                                    width={ item.width || 109 } 
+                                    height={ item.height || 122 }
+                                    onError={(e) => {
+                                        e.target.src = '/images/placeholder.jpg';
+                                    }}
+                                />
+                            </div>
+                        ) )
+                    }
+                </div>
             </div>
-
-            <button className="thumb-up" onClick={ prevPosHandler }><i className="fas fa-chevron-left"></i></button>
-            <button className="thumb-down" onClick={ nextPosHandler }><i className="fas fa-chevron-right"></i></button>
-        </div >
-    )
+            <button className="thumb-up disabled">
+                <i className="fas fa-chevron-up"></i>
+            </button>
+            <button className="thumb-down disabled">
+                <i className="fas fa-chevron-down"></i>
+            </button>
+        </div>
+    );
 }
+
+export default React.memo( ThumbOne );

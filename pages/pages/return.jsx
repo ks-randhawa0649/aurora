@@ -1,282 +1,238 @@
-import React from 'react'
-import Head from 'next/head'
-  import { UserContext } from '../../pages/_app'
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { connect } from 'react-redux';
+import Helmet from 'react-helmet';
+import ALink from '~/components/features/custom-link';
+import { cartActions } from '~/store/cart';
 
-// ...existing code...
-export default function Return({ status, customerEmail, items, paymentIntentStatus, paymentError }) {
-  const isComplete = status === 'complete'
-  const isFailed = !isComplete && (status === 'expired' || ['requires_payment_method', 'canceled'].includes(paymentIntentStatus))
-  const { user, setUser } = React.useContext(UserContext)
-  return (
-    <>
-      <Head>
-        <title>
-          {isComplete
-            ? 'Payment Successful'
-            : isFailed
-            ? 'Payment Failed'
-            : 'Processing Payment'} | Aurora
-        </title>
-        <meta name="robots" content="noindex" />
-      </Head>
+function ReturnPage({ clearCart }) {
+    const router = useRouter();
+    const { session_id } = router.query;
+    const [status, setStatus] = useState('loading');
+    const [orderInfo, setOrderInfo] = useState(null);
 
-      <section
-        id="checkout-result"
-        className={`checkout-result ${isComplete ? 'success' : isFailed ? 'failed' : 'processing'}`}
-        aria-live="polite"
-      >
-        {isComplete ? (
-          <div className="card">
-            <div className="icon success-icon" aria-hidden="true">
-              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M8 12l3 3 5-5" />
-              </svg>
-            </div>
-            <h1>Thank you!</h1>
-            <p className="lead">
-              We appreciate your business. A confirmation email will be sent to{' '}
-              <strong>{user.email || 'your email'}</strong>. For questions email{' '}
-              <a href="mailto:orders@aurora.com">orders@aurora.com</a>.
-            </p>
-            {items && items.length > 0 && (
-              <div className="summary">
-                <h2>Order summary</h2>
-                <ul>
-                  {items.map(item => (
-                    <li key={item.id}>
-                      <span className="item-name">{item.description}</span>
-                      <span className="item-qty">× {item.quantity}</span>
-                      {item.amount_total ? (
-                        <span className="item-amt">
-                          ${(item.amount_total / 100).toFixed(2)}
-                        </span>
-                      ) : null}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            <div className="actions">
-              <a href="/" className="btn btn-primary">Continue Shopping</a>
-            </div>
-          </div>
-        ) : isFailed ? (
-          <div className="card">
-            <div className="icon error-icon" aria-hidden="true">
-              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M15 9l-6 6M9 9l6 6" />
-              </svg>
-            </div>
-            <h1>Payment Failed</h1>
-            <p className="lead">
-              Your payment could not be completed.
-              {paymentIntentStatus && (
-                <> (Status: <strong>{paymentIntentStatus}</strong>)</>
-              )}
-            </p>
-            {paymentError && <p className="error-detail">{paymentError}</p>}
-            <p className="lead">
-              Please retry or contact <a href="mailto:orders@aurora.com">support</a>.
-            </p>
-            <div className="actions">
-              <a href="/" className="btn btn-link">Return Home</a>
-              <a href="/pages/checkout" className="btn btn-primary">Retry Payment</a>
-            </div>
-          </div>
-        ) : (
-          <div className="card">
-            <div className="icon spinner" aria-hidden="true">
-              <div className="dot dot1" />
-              <div className="dot dot2" />
-              <div className="dot dot3" />
-            </div>
-            <h1>Processing your payment…</h1>
-            <p className="lead">Please wait while we confirm the transaction.</p>
-            <div className="actions">
-              <a href="/" className="btn btn-link">Return Home</a>
-            </div>
-          </div>
-        )}
-      </section>
+    useEffect(() => {
+        if (session_id) {
+            verifyPaymentAndCreateOrder();
+        }
+    }, [session_id]);
 
-      <style jsx>{`
-        #checkout-result {
-          display: flex;
-          justify-content: center;
-          padding: 60px 20px 100px;
+    const verifyPaymentAndCreateOrder = async () => {
+        try {
+            // Get order data from sessionStorage
+            const pendingOrder = sessionStorage.getItem('pendingOrder');
+            
+            if (!pendingOrder) {
+                console.error('No pending order found');
+                setStatus('error');
+                return;
+            }
+
+            const orderData = JSON.parse(pendingOrder);
+
+            // Step 1: Verify payment status with Stripe
+            const verifyResponse = await fetch(`/api/verify-payment?session_id=${session_id}`);
+            const session = await verifyResponse.json();
+
+            console.log('Payment session:', session);
+
+            if (session.payment_status === 'paid') {
+                // Step 2: Create order in database
+                const orderResponse = await fetch('/api/create_order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        customer: orderData.customer,
+                        items: orderData.items,
+                        pricing: orderData.pricing,
+                        notes: orderData.notes,
+                        payment: {
+                            method: 'stripe',
+                            transactionId: session.payment_intent,
+                            stripeSessionId: session_id,
+                            amount: session.amount_total / 100 // Convert from cents
+                        }
+                    })
+                });
+
+                const orderResult = await orderResponse.json();
+                console.log('Order creation result:', orderResult);
+
+                if (orderResult.success) {
+                    setOrderInfo({
+                        orderId: orderResult.orderId,
+                        total: orderData.pricing.total,
+                        email: orderData.customer.email,
+                        customer: `${orderData.customer.firstName} ${orderData.customer.lastName}`
+                    });
+                    setStatus('success');
+                    
+                    // Clear cart and session storage
+                    clearCart();
+                    sessionStorage.removeItem('pendingOrder');
+                } else {
+                    console.error('Order creation failed:', orderResult.error);
+                    setStatus('error');
+                }
+            } else {
+                console.error('Payment not completed:', session.payment_status);
+                setStatus('error');
+            }
+        } catch (error) {
+            console.error('Error in payment verification/order creation:', error);
+            setStatus('error');
         }
-        .card {
-          max-width: 640px;
-          width: 100%;
-          background: #fff;
-          border-radius: 16px;
-          box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-          padding: 40px 42px 48px;
-          text-align: center;
-        }
-        h1 {
-          font-size: 28px;
-          margin: 16px 0 12px;
-          font-weight: 600;
-          letter-spacing: .4px;
-        }
-        h2 {
-          font-size: 16px;
-          margin: 32px 0 12px;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-          font-weight: 600;
-        }
-        .lead {
-          font-size: 15px;
-          line-height: 1.5;
-          color: #444;
-          margin: 0 0 8px;
-        }
-        .error-detail {
-          font-size: 13px;
-            color: #b42318;
-            background: #fdeceb;
-            padding: 8px 12px;
-            border-radius: 6px;
-            margin: 4px 0 8px;
-            line-height: 1.4;
-        }
-        .icon {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          width: 88px;
-          height: 88px;
-          border-radius: 50%;
-          margin: 0 auto;
-        }
-        .success-icon {
-          color: #1a9e42;
-          background: #e6f8ec;
-        }
-        .error-icon {
-          color: #b42318;
-          background: #fdeceb;
-        }
-        .spinner {
-          position: relative;
-          background: #eef2f7;
-          animation: pulse 1.8s infinite ease-in-out;
-        }
-        .spinner .dot {
-          position: absolute;
-          width: 12px;
-          height: 12px;
-          background: #4a7efc;
-          border-radius: 50%;
-          animation: bounce 1.4s infinite ease-in-out;
-        }
-        .dot1 { top: 22px; left: 22px; animation-delay: 0s; }
-        .dot2 { top: 22px; right: 22px; animation-delay: .3s; }
-        .dot3 { bottom: 22px; left: 50%; transform: translateX(-50%); animation-delay: .6s; }
-        @keyframes bounce {
-          0%, 80%, 100% { transform: scale(0.5); opacity: .5; }
-          40% { transform: scale(1); opacity: 1; }
-        }
-        @keyframes pulse {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.05); }
-        }
-        .summary ul {
-          list-style: none;
-          padding: 0;
-          margin: 0;
-          text-align: left;
-          border: 1px solid #e5e8ec;
-          border-radius: 12px;
-          overflow: hidden;
-        }
-        .summary li {
-          display: flex;
-          align-items: center;
-          padding: 12px 16px;
-          font-size: 14px;
-          background: #fafbfc;
-        }
-        .summary li:not(:last-child) {
-          border-bottom: 1px solid #e5e8ec;
-        }
-        .item-name { flex: 1; font-weight: 500; }
-        .item-qty { margin-left: 12px; color: #666; }
-        .item-amt { margin-left: auto; font-weight: 600; }
-        .actions {
-          margin-top: 32px;
-          display: flex;
-          gap: 16px;
-          justify-content: center;
-          flex-wrap: wrap;
-        }
-        .btn {
-          display: inline-block;
-          padding: 12px 22px;
-          border-radius: 8px;
-          font-size: 14px;
-          font-weight: 600;
-          text-decoration: none;
-          transition: background .2s, color .2s;
-        }
-        .btn-primary { background: #2563eb; color: #fff; }
-        .btn-primary:hover { background: #1d4ed8; }
-        .btn-link { background: transparent; color: #2563eb; }
-        .btn-link:hover { text-decoration: underline; }
-        @media (max-width: 640px) {
-          .card { padding: 32px 24px 40px; }
-          h1 { font-size: 24px; }
-        }
-      `}</style>
-    </>
-  )
+    };
+
+    if (status === 'loading') {
+        return (
+            <main className="main">
+                <Helmet>
+                    <title>Processing Payment | SmartStyle</title>
+                </Helmet>
+                <div className="container mt-10 mb-10">
+                    <div className="text-center">
+                        <div className="loading-overlay">
+                            <div className="bounce-loader">
+                                <div className="bounce1"></div>
+                                <div className="bounce2"></div>
+                                <div className="bounce3"></div>
+                            </div>
+                        </div>
+                        <h3 className="mt-5">Processing your payment...</h3>
+                        <p>Please wait while we confirm your order.</p>
+                    </div>
+                </div>
+            </main>
+        );
+    }
+
+    if (status === 'error') {
+        return (
+            <main className="main">
+                <Helmet>
+                    <title>Payment Error | SmartStyle</title>
+                </Helmet>
+                <div className="container mt-10 mb-10">
+                    <div className="text-center">
+                        <i className="d-icon-times-circle" style={{ fontSize: '80px', color: '#dc3545' }}></i>
+                        <h2 className="mt-4">Payment Failed</h2>
+                        <p className="mb-5">There was an issue processing your payment or creating your order. Please contact support.</p>
+                        <ALink href="/pages/checkout" className="btn btn-dark btn-rounded">
+                            Return to Checkout
+                        </ALink>
+                    </div>
+                </div>
+            </main>
+        );
+    }
+
+    return (
+        <main className="main">
+            <Helmet>
+                <title>Order Confirmation | SmartStyle</title>
+            </Helmet>
+
+            <h1 className="d-none">Order Confirmation | SmartStyle</h1>
+
+            <nav className="breadcrumb-nav">
+                <div className="container">
+                    <ul className="breadcrumb shop-breadcrumb">
+                        <li><ALink href="/pages/cart"><i className="d-icon-bag"></i>Shopping Cart</ALink></li>
+                        <li><ALink href="/pages/checkout"><i className="d-icon-arrow-right"></i>Checkout</ALink></li>
+                        <li className="active"><ALink href="/pages/order"><i className="d-icon-arrow-right"></i>Order Complete</ALink></li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div className="page-content mt-6 pb-2 mb-10">
+                <div className="container">
+                    <div className="order-message mr-auto ml-auto">
+                        <div className="icon-box d-inline-flex align-items-center">
+                            <div className="icon-box-icon mb-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="60" height="60" fill="#28a745">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                </svg>
+                            </div>
+                            <div className="icon-box-content text-left ml-3">
+                                <h5 className="icon-box-title font-weight-bold ls-m">Thank you for your order!</h5>
+                                <p className="ls-m mb-0">Your payment has been processed successfully.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {orderInfo && (
+                        <div className="order-results mt-5">
+                            <div className="card shadow-sm">
+                                <div className="card-body p-5">
+                                    <h4 className="mb-4">Order Details</h4>
+                                    <div className="row mb-3">
+                                        <div className="col-6">
+                                            <span className="text-muted">Order Number:</span>
+                                        </div>
+                                        <div className="col-6 text-right">
+                                            <strong>{orderInfo.orderId}</strong>
+                                        </div>
+                                    </div>
+                                    <div className="row mb-3">
+                                        <div className="col-6">
+                                            <span className="text-muted">Customer:</span>
+                                        </div>
+                                        <div className="col-6 text-right">
+                                            <strong>{orderInfo.customer}</strong>
+                                        </div>
+                                    </div>
+                                    <div className="row mb-3">
+                                        <div className="col-6">
+                                            <span className="text-muted">Email:</span>
+                                        </div>
+                                        <div className="col-6 text-right">
+                                            <strong>{orderInfo.email}</strong>
+                                        </div>
+                                    </div>
+                                    <div className="row mb-3">
+                                        <div className="col-6">
+                                            <span className="text-muted">Status:</span>
+                                        </div>
+                                        <div className="col-6 text-right">
+                                            <span className="badge badge-success">Paid</span>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div className="row">
+                                        <div className="col-6">
+                                            <span className="text-muted">Total:</span>
+                                        </div>
+                                        <div className="col-6 text-right">
+                                            <strong className="text-primary" style={{ fontSize: '24px' }}>
+                                                ${orderInfo.total.toFixed(2)}
+                                            </strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="text-center mt-5">
+                        <p className="mb-4">
+                            <i className="d-icon-envelope mr-2"></i>
+                            A confirmation email has been sent to <strong>{orderInfo?.email}</strong>
+                        </p>
+
+                        <ALink href="/" className="btn btn-dark btn-rounded btn-lg">
+                            <i className="d-icon-arrow-left mr-2"></i>
+                            Continue Shopping
+                        </ALink>
+                    </div>
+                </div>
+            </div>
+        </main>
+    );
 }
 
-// Move Stripe import here so it only loads on the server
-export async function getServerSideProps(ctx) {
-  const { session_id } = ctx.query
-  if (!session_id) return { notFound: true }
-
-  const { stripe } = await import('../../lib/stripe') // server-only
-
-  try {
-    const session = await stripe.checkout.sessions.retrieve(session_id, {
-      expand: ['line_items', 'payment_intent']
-    })
-
-    if (session.status === 'open') {
-      return { redirect: { destination: '/', permanent: false } }
-    }
-
-    const items = (session.line_items?.data || []).map(li => ({
-      id: li.id,
-      quantity: li.quantity,
-      description: li.description || 'Item',
-      amount_total: li.amount_total
-    }))
-
-    let paymentIntentStatus = ''
-    let paymentError = ''
-    if (session.payment_intent && typeof session.payment_intent === 'object') {
-      paymentIntentStatus = session.payment_intent.status
-      paymentError = session.payment_intent.last_payment_error?.message || ''
-    }
-
-    return {
-      props: {
-        status: session.status,
-        customerEmail: session.customer_details?.email || '',
-        items,
-        paymentIntentStatus,
-        paymentError
-      }
-    }
-  } catch (e) {
-    console.error('Stripe session retrieve error:', e.message)
-    return { redirect: { destination: '/', permanent: false } }
-  }
-}
+export default connect(null, {
+    clearCart: cartActions.clearCart
+})(ReturnPage);

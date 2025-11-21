@@ -1,117 +1,80 @@
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Magnifier } from 'react-image-magnifiers';
 
-import ALink from '~/components/features/custom-link';
-import OwlCarousel from '~/components/features/owl-carousel';
+function MediaOne( props ) {
+    const { product, adClass = 'product-gallery-vertical' } = props;
+    const [selectedImage, setSelectedImage] = useState(0);
 
-import ThumbOne from '~/components/partials/product/thumb/thumb-one';
-import ThumbTwo from '~/components/partials/product/thumb/thumb-two';
-import MediaLightBox from '~/components/partials/product/light-box';
-
-import { mainSlider3 } from '~/utils/data/carousel';
-
-export default function MediaOne ( props ) {
-    const { product } = props;
-    const [ index, setIndex ] = useState( 0 );
-    const [ isOpen, setOpenState ] = useState( false );
-    const [ mediaRef, setMediaRef ] = useState( null );
-
-    let lgImages = product.large_pictures ? product.large_pictures : product.pictures;
-
-    useEffect( () => {
-        setIndex( 0 );
-    }, [ window.location.pathname ] )
-
-    useEffect( () => {
-        if ( mediaRef !== null && mediaRef.current !== null && index >= 0 ) {
-            mediaRef.current.$car.to( index, 300, true );
-        }
-    }, [ index ] )
-
-    const setIndexHandler = ( mediaIndex ) => {
-        if ( mediaIndex !== index ) {
-            setIndex( mediaIndex );
-        }
+    if (!product) {
+        return <div className="text-center p-5">Loading product...</div>;
     }
 
-    const changeRefHandler = ( carRef ) => {
-        if ( carRef.current !== undefined ) {
-            setMediaRef( carRef );
-        }
+    if (!product.pictures || !Array.isArray(product.pictures) || product.pictures.length === 0) {
+        return <div className="text-center p-5">No images available</div>;
     }
 
-    const changeOpenState = openState => {
-        setOpenState( openState );
-    }
+    const currentImage = product.pictures[selectedImage] || product.pictures[0];
 
-    const openLightBox = () => {
-        setOpenState( true );
-    }
-
-    let events = {
-        onTranslate: function ( e ) {
-            if ( !e.target ) return;
-            if ( document.querySelector( '.product-thumbs' ) ) {
-                document.querySelector( '.product-thumbs' ).querySelector( '.product-thumb.active' ).classList.remove( 'active' );
-                document.querySelector( '.product-thumbs' ).querySelectorAll( '.product-thumb' )[ e.item.index ].classList.add( 'active' );
-            }
-        }
-    }
+    const handleThumbnailClick = (index) => {
+        setSelectedImage(index);
+    };
 
     return (
-        <>
-            <div className="product-gallery pg-vertical media-default" style={ { top: "88px" } }>
-                <div className="product-label-group">
-                    {
-                        product.stock === 0 ?
-                            <label className="product-label label-out">out</label> : ""
-                    }
-
-                    {
-                        product.is_top ?
-                            <label className="product-label label-top">top</label> : ""
-                    }
-
-                    {
-                        product.is_new ?
-                            <label className="product-label label-new">new</label> : ""
-                    }
-
-                    {
-                        product.discount ?
-                            <label className="product-label label-sale">sale</label> : ""
-                    }
+        <div className={ `product-gallery ${ adClass }` }>
+            <div className="product-single-carousel">
+                <div className="product-item">
+                    <Magnifier
+                        imageSrc={ currentImage.url }
+                        imageAlt={ product.name || 'Product' }
+                        largeImageSrc={ currentImage.url }
+                        dragToMove={ false }
+                        mouseActivation="hover"
+                        cursorStyleActive="crosshair"
+                        className="product-single-image"
+                        style={{
+                            maxWidth: '100%',
+                            height: 'auto'
+                        }}
+                    />
                 </div>
-
-                <OwlCarousel adClass="product-single-carousel owl-theme owl-nav-inner"
-                    options={ mainSlider3 }
-                    onChangeIndex={ setIndexHandler }
-                    onChangeRef={ changeRefHandler }
-                    events={ events }
-                >
-                    {
-                        lgImages.map( ( image, index ) =>
-                            <div key={ image + '-' + index }>
-                                <Magnifier
-                                    imageSrc={ process.env.NEXT_PUBLIC_ASSET_URI + image.url }
-                                    imageAlt="magnifier"
-                                    largeImageSrc={ process.env.NEXT_PUBLIC_ASSET_URI + image.url }
-                                    dragToMove={ false }
-                                    mouseActivation="hover"
-                                    cursorStyleActive="crosshair"
-                                    className="product-image large-image"
-                                />
-                            </div>
-                        ) }
-                </OwlCarousel>
-
-                <ALink href="#" className="product-image-full" onClick={ openLightBox }><i className="d-icon-zoom"></i></ALink>
-
-                <ThumbOne product={ product } index={ index } onChangeIndex={ setIndexHandler } />
-                <ThumbTwo product={ product } index={ index } onChangeIndex={ setIndexHandler } />
             </div>
 
-            <MediaLightBox images={ lgImages } isOpen={ isOpen } changeOpenState={ changeOpenState } index={ index } product={ product } />
-        </>
-    )
+            {product.pictures.length > 1 && (
+                <div className="product-thumbs-wrap" style={{ marginTop: '20px' }}>
+                    <div className="product-thumbs" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                        {product.pictures.map((item, index) => (
+                            <div 
+                                className={`product-thumb ${selectedImage === index ? 'active' : ''}`}
+                                key={`product-thumb-${index}`}
+                                onClick={() => handleThumbnailClick(index)}
+                                style={{ 
+                                    cursor: 'pointer',
+                                    border: selectedImage === index ? '2px solid #000' : '2px solid transparent',
+                                    borderRadius: '4px',
+                                    overflow: 'hidden',
+                                    width: '100px',
+                                    height: '120px'
+                                }}
+                            >
+                                <img 
+                                    src={item.url} 
+                                    alt={`Thumbnail ${index + 1}`}
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        objectFit: 'cover'
+                                    }}
+                                    onError={(e) => {
+                                        e.target.src = '/images/placeholder.jpg';
+                                    }}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
 }
+
+export default React.memo( MediaOne );

@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "NODE_OPTIONS=--openssl-legacy-provider next",
     "build": "SET NODE_OPTIONS=--openssl-legacy-provider && next build",
-    "start": "SET NODE_OPTIONS=--openssl-legacy-provider && next start"
+    "start": "SET NODE_OPTIONS=--openssl-legacy-provider && next start",
+    "inspect-db": "node scripts/inspect-db.js"
+    ,"import-images": "node scripts/import-images.js"
   },
   "dependencies": {
     "@apollo/client": "^3.4.16",
@@ -29,7 +31,7 @@
     "mysql2": "^3.15.3",
     "next": "^10.2.3",
     "next-apollo": "^5.0.4",
-    "next-auth": "4.24.13",
+    "next-auth": "^3.29.10",
     "next-redux-saga": "^4.1.2",
     "next-redux-wrapper": "^7.0.5",
     "node-fetch": "^3.0.0",
