@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import 'react-image-lightbox/style.css';
 import 'react-input-range/lib/css/index.css';
 
+import ChatWidget from '~/components/ChatWidget';
 import ALink from '~/components/features/custom-link';
 
 import Header from '~/components/common/header';
@@ -17,14 +18,20 @@ import MobileMenu from '~/components/common/partials/mobile-menu';
 
 import { modalActions } from '~/store/modal';
 
-import { showScrollTopHandler, scrollTopHandler, stickyHeaderHandler, stickyFooterHandler, resizeHandler } from '~/utils';
+import {
+    showScrollTopHandler,
+    scrollTopHandler,
+    stickyHeaderHandler,
+    stickyFooterHandler,
+    resizeHandler
+} from '~/utils';
 
 function Layout( { children, closeQuickview } ) {
     const router = useRouter();
 
     useLayoutEffect( () => {
         document.querySelector( 'body' ) && document.querySelector( 'body' ).classList.remove( 'loaded' );
-    }, [ router.pathname ] )
+    }, [ router.pathname ] );
 
     useEffect( () => {
         window.addEventListener( 'scroll', showScrollTopHandler, true );
@@ -42,12 +49,12 @@ function Layout( { children, closeQuickview } ) {
             window.removeEventListener( 'resize', stickyFooterHandler );
             window.removeEventListener( 'resize', resizeHandler );
         }
-    }, [] )
+    }, [] );
 
     useEffect( () => {
         closeQuickview();
 
-        let bodyClasses = [ ...document.querySelector( "body" ).classList ];
+        let bodyClasses = [ ...document.querySelector( 'body' ).classList ];
         for ( let i = 0; i < bodyClasses.length; i++ ) {
             document.querySelector( 'body' ).classList.remove( bodyClasses[ i ] );
         }
@@ -55,7 +62,7 @@ function Layout( { children, closeQuickview } ) {
         setTimeout( () => {
             document.querySelector( 'body' ).classList.add( 'loaded' );
         }, 50 );
-    }, [ router.pathname ] )
+    }, [ router.pathname ] );
 
     return (
         <>
@@ -69,7 +76,16 @@ function Layout( { children, closeQuickview } ) {
                 <StickyFooter />
             </div>
 
-            <ALink id="scroll-top" href="#" title="Top" role="button" className="scroll-top" onClick={ () => scrollTopHandler( false ) }><i className="d-icon-arrow-up"></i></ALink>
+            <ALink
+                id="scroll-top"
+                href="#"
+                title="Top"
+                role="button"
+                className="scroll-top"
+                onClick={ () => scrollTopHandler( false ) }
+            >
+                <i className="d-icon-arrow-up"></i>
+            </ALink>
 
             <MobileMenu />
 
@@ -87,6 +103,9 @@ function Layout( { children, closeQuickview } ) {
             <Quickview />
 
             <VideoModal />
+
+            {/* ✅ Chatbot goes here */}
+            <ChatWidget />
         </>
     )
 }
