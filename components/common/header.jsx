@@ -36,7 +36,7 @@ export default function Header( props ) {
 
     return (
         <header className="header header-border">
-            <div className="header-top">
+            {/* <div className="header-top">
                 <div className="container">
                     <div className="header-right">
 
@@ -56,7 +56,7 @@ export default function Header( props ) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
 
             <div className="header-middle sticky-header fix-top sticky-content">
                 <div className="container">
@@ -84,7 +84,18 @@ export default function Header( props ) {
                         </ALink>
                         <span className="divider"></span>
                         <ALink href="/pages/wishlist" className="wishlist">
-                            <i className="d-icon-heart"></i>
+                            <div className="header-user" style={{ display: 'flex', gap: '10px' }}>
+                        {user ? (
+                            <span style={{ display: 'flex', gap: '10px' }}>
+                        <span>
+                            {user.username || user.email}{' '}
+                        </span>
+                        <span><a href="#" onClick={handleLogout}>Logout</a></span>
+                        </span>
+                        ) : (
+                         <LoginModal />
+                        )}
+                        </div>
                         </ALink>
                         <span className="divider"></span>
 

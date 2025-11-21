@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Helmet from 'react-helmet';
+import Reveal from 'react-awesome-reveal';
 
 import ALink from '~/components/features/custom-link';
 import MediaOne from '~/components/partials/product/media/media-one';
 import DetailOne from '~/components/partials/product/detail/detail-one';
 import DescOne from '~/components/partials/product/desc/desc-one';
 import RelatedProducts from '~/components/partials/product/related-products';
+import { fadeIn, fadeInUpShorter, fadeInLeftShorter, fadeInRightShorter } from '~/utils/data/keyframes';
 
 const generateSlug = (name) => 
     (name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -217,43 +219,236 @@ function ProductDefault() {
                 <meta name="description" content={product.short_description} />
             </Helmet>
 
+            <style jsx>{`
+                .product-page {
+                    background: #f8f9fa;
+                    padding-bottom: 80px;
+                }
+
+                .product-header {
+                    background: linear-gradient(135deg, 
+                        #667eea 0%, 
+                        #764ba2 25%, 
+                        #f093fb 50%, 
+                        #4facfe 75%, 
+                        #00f2fe 100%);
+                    padding: 40px 0;
+                    margin-bottom: 40px;
+                    color: #fff;
+                    position: relative;
+                    overflow: hidden;
+                }
+
+                .product-header::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: 
+                        radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+                }
+
+                .breadcrumb-modern {
+                    position: relative;
+                    z-index: 1;
+                    list-style: none;
+                    padding: 0;
+                    margin: 0;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    flex-wrap: wrap;
+                }
+
+                .breadcrumb-modern li {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    font-size: 14px;
+                }
+
+                .breadcrumb-modern li::after {
+                    content: '/';
+                    opacity: 0.5;
+                }
+
+                .breadcrumb-modern li:last-child::after {
+                    display: none;
+                }
+
+                .breadcrumb-modern a {
+                    color: #fff;
+                    text-decoration: none;
+                    opacity: 0.9;
+                    transition: all 0.3s ease;
+                }
+
+                .breadcrumb-modern a:hover {
+                    opacity: 1;
+                    transform: translateX(2px);
+                }
+
+                .breadcrumb-modern li:last-child {
+                    font-weight: 600;
+                    opacity: 1;
+                }
+
+                .product-main-section {
+                    background: #fff;
+                    border-radius: 30px;
+                    padding: 50px;
+                    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+                    margin-bottom: 40px;
+                }
+
+                .product-badge-group {
+                    display: flex;
+                    gap: 10px;
+                    margin-bottom: 20px;
+                }
+
+                .product-badge {
+                    padding: 8px 16px;
+                    border-radius: 8px;
+                    font-size: 12px;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+
+                .badge-new {
+                    background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+                    color: #fff;
+                }
+
+                .badge-sale {
+                    background: linear-gradient(135deg, #f44336 0%, #e53935 100%);
+                    color: #fff;
+                }
+
+                .related-section {
+                    background: #fff;
+                    border-radius: 30px;
+                    padding: 50px;
+                    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+                }
+
+                .related-header {
+                    text-align: center;
+                    margin-bottom: 40px;
+                }
+
+                .related-subtitle {
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: #26c;
+                    text-transform: uppercase;
+                    letter-spacing: 2px;
+                    margin-bottom: 12px;
+                }
+
+                .related-title {
+                    font-size: 36px;
+                    font-weight: 800;
+                    color: #222;
+                    margin-bottom: 12px;
+                }
+
+                .related-description {
+                    font-size: 16px;
+                    color: #666;
+                }
+
+                @media (max-width: 991px) {
+                    .product-main-section,
+                    .related-section {
+                        padding: 30px;
+                        border-radius: 20px;
+                    }
+
+                    .related-title {
+                        font-size: 28px;
+                    }
+                }
+
+                @media (max-width: 767px) {
+                    .product-header {
+                        padding: 30px 0;
+                    }
+
+                    .product-main-section,
+                    .related-section {
+                        padding: 20px;
+                        border-radius: 16px;
+                    }
+
+                    .related-title {
+                        font-size: 24px;
+                    }
+                }
+            `}</style>
+
             <h1 className="d-none">{product.name} - SmartStyle</h1>
 
-            <nav className="breadcrumb-nav">
+            <div className="product-header">
                 <div className="container">
-                    <ul className="breadcrumb">
-                        <li><ALink href="/"><i className="d-icon-home"></i></ALink></li>
-                        <li><ALink href="/pages/shop">Shop</ALink></li>
-                        {product.categories?.[0] && (
-                            <li>
-                                <ALink href={`/pages/shop?category=${product.categories[0].slug}`}>
-                                    {product.categories[0].name}
-                                </ALink>
-                            </li>
-                        )}
-                        <li>{product.name}</li>
-                    </ul>
+                    <Reveal keyframes={fadeIn} delay={100} duration={800} triggerOnce>
+                        <ul className="breadcrumb-modern">
+                            <li><ALink href="/"><i className="d-icon-home"></i></ALink></li>
+                            <li><ALink href="/pages/shop">Shop</ALink></li>
+                            {product.categories?.[0] && (
+                                <li>
+                                    <ALink href={`/pages/shop?category=${product.categories[0].slug}`}>
+                                        {product.categories[0].name}
+                                    </ALink>
+                                </li>
+                            )}
+                            <li>{product.name}</li>
+                        </ul>
+                    </Reveal>
                 </div>
-            </nav>
+            </div>
 
-            <div className="page-content mb-10 pb-6">
+            <div className="product-page">
                 <div className="container">
-                    <div className="product product-single row mb-8">
-                        <div className="col-md-6 mb-6">
-                            <MediaOne product={product} />
-                        </div>
+                    <Reveal keyframes={fadeInUpShorter} delay={200} duration={1000} triggerOnce>
+                        <div className="product-main-section">
+                            <div className="row">
+                                <div className="col-md-6 mb-6">
+                                    <Reveal keyframes={fadeInLeftShorter} delay={300} duration={1000} triggerOnce>
+                                        <MediaOne product={product} />
+                                    </Reveal>
+                                </div>
 
-                        <div className="col-md-6 mb-6">
-                            <DetailOne data={{ product: { data: product } }} />
+                                <div className="col-md-6 mb-6">
+                                    <Reveal keyframes={fadeInRightShorter} delay={300} duration={1000} triggerOnce>
+                                        <DetailOne data={{ product: { data: product } }} />
+                                    </Reveal>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    </Reveal>
 
-                    <DescOne product={product} />
+                    <Reveal keyframes={fadeInUpShorter} delay={400} duration={1000} triggerOnce>
+                        <DescOne product={product} />
+                    </Reveal>
 
                     {related.length > 0 && (
-                        <div className="mt-8">
-                            <RelatedProducts products={related} />
-                        </div>
+                        <Reveal keyframes={fadeInUpShorter} delay={500} duration={1000} triggerOnce>
+                            <div className="related-section mt-6">
+                                <div className="related-header">
+                                    <div className="related-subtitle">You May Also Like</div>
+                                    <h2 className="related-title">Related Products</h2>
+                                    <p className="related-description">
+                                        Discover more amazing pieces from our collection
+                                    </p>
+                                </div>
+                                <RelatedProducts products={related} />
+                            </div>
+                        </Reveal>
                     )}
                 </div>
             </div>

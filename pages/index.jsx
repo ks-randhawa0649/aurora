@@ -47,21 +47,21 @@ function HomePage() {
                     <ServiceBox />
                 </div>
 
-                <CategorySection />
+                {/* <CategorySection /> */}
 
                 <BestCollection products={ bestSelling } loading={ loading } />
 
-                <DealSection />
+                {/* <DealSection /> */}
 
-                <FeaturedCollection products={ featured } loading={ loading } />
+                {/* <FeaturedCollection products={ featured } loading={ loading } /> */}
 
                 <CtaSection />
 
-                <BlogSection posts={ posts } />
+                {/* <BlogSection posts={ posts } /> */}
 
-                <BrandSection />
+                {/* <BrandSection /> */}
 
-                <SmallCollection featured={ featured } latest={ latest } bestSelling={ bestSelling } onSale={ onSale } loading={ loading } />
+                {/* <SmallCollection featured={ featured } latest={ latest } bestSelling={ bestSelling } onSale={ onSale } loading={ loading } /> */}
             </div>
 
             <NewsletterModal />
