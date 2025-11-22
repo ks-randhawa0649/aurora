@@ -13,7 +13,7 @@ How to run the project
 Clone the repository
 1.	git clone https://github.com/ks-randhawa0649/aurora.git
 2.	cd aurora
-3.	git checkout backend_change_1
+3.	git checkout main
 Install dependencies
 4.	npm install
 # or
