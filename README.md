@@ -15,7 +15,7 @@ Clone the repository
 2.	cd aurora
 3.	git checkout main
 Install dependencies
-4.	npm install or yarn
+4.	npm --force install or yarn
 5.	Create .env.local in the project root and fill in the keys and DB info (info given in the next section).
 Start the development server
 6.	npm run dev or yarn dev
