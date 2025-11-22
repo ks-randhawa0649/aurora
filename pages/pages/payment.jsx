@@ -9,7 +9,11 @@ export default function Payment() {
           display: none !important;
         }
         .checkout-spacing {
-          margin-top: 70px; /* space before checkout */,
+          margin-top: 0px; /* space before checkout */,
+          display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%
         }
       `}</style>
     </div>

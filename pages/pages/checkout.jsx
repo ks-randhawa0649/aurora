@@ -15,6 +15,23 @@ function Checkout( props ) {
     const { user } = useContext(UserContext);
     const [loading, setLoading] = useState(true);
     const { cartList } = props;
+    const shippingPrice = 4.99;
+
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        address: '',
+        city: '',
+        state: '',
+        zipCode: '',
+        country: 'United States',
+        notes: ''
+    });
+
+    const [errors, setErrors] = useState({});
+    const [isProcessing, setIsProcessing] = useState(false);
 
     useEffect(() => {
         // Check authentication
@@ -25,7 +42,139 @@ function Checkout( props ) {
         } else {
             setLoading(false);
         }
-    }, [user, loading, router]);
+
+        // Redirect to cart if empty
+        if (!cartList || cartList.length === 0) {
+            router.push('/pages/cart');
+        }
+    }, [user, loading, router, cartList]);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+        
+        if (errors[name]) {
+            setErrors(prev => ({
+                ...prev,
+                [name]: ''
+            }));
+        }
+    };
+
+    const validateForm = () => {
+        const newErrors = {};
+
+        if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
+        if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
+        if (!formData.email.trim()) {
+            newErrors.email = 'Email is required';
+        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            newErrors.email = 'Email is invalid';
+        }
+        if (!formData.phone.trim()) newErrors.phone = 'Phone is required';
+        if (!formData.address.trim()) newErrors.address = 'Address is required';
+        if (!formData.city.trim()) newErrors.city = 'City is required';
+        if (!formData.state.trim()) newErrors.state = 'State is required';
+        if (!formData.zipCode.trim()) newErrors.zipCode = 'Zip code is required';
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const getPrice = (product) => {
+        if (typeof product.price === 'number' && product.price > 0) {
+            return product.price;
+        }
+        if (Array.isArray(product.price) && product.price.length > 0) {
+            return product.price[0] || 0;
+        }
+        return 0;
+    };
+
+    const calculateSubtotal = () => {
+        let total = 0;
+        cartList.forEach(item => {
+            const price = getPrice(item);
+            total += price * item.qty;
+        });
+        return total;
+    };
+
+    const calculateShipping = () => {
+        return 10.00;
+    };
+
+    const calculateTax = () => {
+        return calculateSubtotal() * 0.08;
+    };
+
+    const calculateTotal = () => {
+        return calculateSubtotal() + calculateShipping() + calculateTax();
+    };
+
+    const handlePlaceOrder = async (e) => {
+        e.preventDefault();
+
+        if (!validateForm()) {
+            return;
+        }
+
+        setIsProcessing(true);
+
+        try {
+            // Prepare order data for Stripe
+            const orderData = {
+                customer: {
+                    firstName: formData.firstName,
+                    lastName: formData.lastName,
+                    email: formData.email,
+                    phone: formData.phone,
+                    address: {
+                        street: formData.address,
+                        city: formData.city,
+                        state: formData.state,
+                        zipCode: formData.zipCode,
+                        country: formData.country
+                    }
+                },
+                items: cartList.map(item => ({
+                    product_id: item.id,
+                    name: item.name,
+                    slug: item.slug,
+                    variant: item.variant || null,
+                    quantity: item.qty,
+                    price: getPrice(item),
+                    subtotal: getPrice(item) * item.qty,
+                    image: item.pictures?.[0]?.url || item.small_pictures?.[0]?.url || null
+                })),
+                pricing: {
+                    subtotal: calculateSubtotal(),
+                    shipping: calculateShipping(),
+                    tax: calculateTax(),
+                    total: calculateTotal()
+                },
+                notes: formData.notes
+            };
+
+            // Store order data in sessionStorage to retrieve after payment
+            sessionStorage.setItem('pendingOrder', JSON.stringify(orderData));
+
+            // Redirect to payment page
+        router.push({
+            pathname: '/pages/payment',
+            query: {
+                amount: calculateTotal().toFixed(2)
+            }
+        });
+        } catch (error) {
+            console.error('Error preparing order:', error);
+            alert('Error preparing order. Please try again.');
+            setIsProcessing(false);
+        }
+    };
 
     if (loading || !user) {
         return (
@@ -40,237 +189,673 @@ function Checkout( props ) {
         );
     }
 
+    if (!cartList || cartList.length === 0) {
+        return null;
+    }
+
     return (
-        <div className="main checkout">
+        <div className="main checkout-modern">
             <Helmet>
                 <title>Aurora | Checkout</title>
             </Helmet>
 
             <h1 className="d-none">Aurora - Checkout</h1>
 
-            <nav className="breadcrumb-nav">
+            <div className="page-content pt-7 pb-10">
                 <div className="container">
-                    <ul className="breadcrumb shop-breadcrumb">
-                        <li className="passed"><ALink href="/pages/cart"><i className="d-icon-bag"></i>Shopping Cart</ALink></li>
-                        <li className="active"><ALink href="/pages/checkout"><i className="d-icon-arrow-right"></i>Checkout</ALink></li>
-                        <li><ALink href="/pages/order"><i className="d-icon-arrow-right"></i>Order Complete</ALink></li>
-                    </ul>
-                </div>
-            </nav>
-
-            <div className="page-content pt-7 pb-10 mb-10">
-                <div className="step-by pr-4 pl-4">
-                    <h3 className="title title-simple title-step active"><ALink href="#">2. Checkout</ALink></h3>
-                </div>
-
-                <div className="container mt-8">
-                    <div className="card accordion">
-                        <Card title="
-                            <div class='alert alert-light alert-primary alert-icon mb-4 card-header'>
-                                <i class='fas fa-exclamation-circle'></i>
-                                <span class='text-body'>Have a coupon?</span>
-                                <a href='#' class='text-primary'>Click here to enter your code</a>
-                            </div>" type="parse">
-
-                            <div className="alert-body mb-4 collapsed">
-                                <p>If you have a coupon code, please apply it below.</p>
-                                <form className="check-coupon-box d-flex">
-                                    <input type="text" name="coupon_code" className="input-text form-control text-grey ls-m mr-4"
-                                        id="coupon_code" placeholder="Coupon code" />
-                                    <button type="submit" className="btn btn-dark btn-rounded btn-outline">Apply Coupon</button>
-                                </form>
+                    <div className="checkout-header">
+                        <h1 className="checkout-title">
+                            <span className="checkout-icon">💳</span>
+                            Secure Checkout
+                        </h1>
+                        <div className="breadcrumb-steps">
+                            <div className="step completed">
+                                <span className="step-number">✓</span>
+                                <span className="step-text">Cart</span>
                             </div>
-                        </Card>
+                            <div className="step-divider"></div>
+                            <div className="step active">
+                                <span className="step-number">2</span>
+                                <span className="step-text">Checkout</span>
+                            </div>
+                            <div className="step-divider"></div>
+                            <div className="step">
+                                <span className="step-number">3</span>
+                                <span className="step-text">Complete</span>
+                            </div>
+                        </div>
                     </div>
 
-                    <form action="#" className="form">
+                    <div className="mt-7">
+
+                    <form onSubmit={handlePlaceOrder} className="checkout-form">
                         <div className="row">
                             <div className="col-lg-7 mb-6 mb-lg-0 pr-lg-4">
-                                <h3 className="title title-simple text-left text-uppercase">Billing Details</h3>
+                                <div className="billing-details-card">
+                                    <h3 className="section-title">
+                                        <span className="title-icon">📋</span>
+                                        Billing Details
+                                    </h3>
 
                                 <div className="row">
                                     <div className="col-xs-6">
-                                        <label>First Name *</label>
-                                        <input type="text" className="form-control" name="first-name" required />
+                                        <div className="form-group-modern">
+                                            <label>First Name *</label>
+                                            <input 
+                                                type="text" 
+                                                className={`form-control-modern ${errors.firstName ? 'error' : ''}`}
+                                                name="firstName"
+                                                value={formData.firstName}
+                                                onChange={handleInputChange}
+                                                placeholder="John"
+                                                required 
+                                            />
+                                            {errors.firstName && <div className="error-message">{errors.firstName}</div>}
+                                        </div>
                                     </div>
                                     <div className="col-xs-6">
-                                        <label>Last Name *</label>
-                                        <input type="text" className="form-control" name="last-name" required />
+                                        <div className="form-group-modern">
+                                            <label>Last Name *</label>
+                                            <input 
+                                                type="text" 
+                                                className={`form-control-modern ${errors.lastName ? 'error' : ''}`}
+                                                name="lastName"
+                                                value={formData.lastName}
+                                                onChange={handleInputChange}
+                                                placeholder="Doe"
+                                                required 
+                                            />
+                                            {errors.lastName && <div className="error-message">{errors.lastName}</div>}
+                                        </div>
                                     </div>
                                 </div>
 
-                                <label>Company Name (Optional)</label>
-                                <input type="text" className="form-control" name="company-name" />
-
-                                <label>Country / Region *</label>
-                                <div className="select-box">
-                                    <select name="country" className="form-control">
-                                        <option value="us" defaultValue>United States (US)</option>
-                                        <option value="uk">United Kingdom</option>
-                                        <option value="ca">Canada</option>
-                                        <option value="au">Australia</option>
-                                    </select>
+                                <div className="form-group-modern">
+                                    <label>Email Address *</label>
+                                    <input 
+                                        type="email" 
+                                        className={`form-control-modern ${errors.email ? 'error' : ''}`}
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleInputChange}
+                                        placeholder="john.doe@example.com"
+                                        required 
+                                    />
+                                    {errors.email && <div className="error-message">{errors.email}</div>}
                                 </div>
 
-                                <label>Street Address *</label>
-                                <input type="text" className="form-control" name="address1" required placeholder="House number and street name" />
-                                <input type="text" className="form-control" name="address2" required placeholder="Apartment, suite, unit, etc. (optional)" />
+                                <div className="form-group-modern">
+                                    <label>Phone *</label>
+                                    <input 
+                                        type="tel" 
+                                        className={`form-control-modern ${errors.phone ? 'error' : ''}`}
+                                        name="phone"
+                                        value={formData.phone}
+                                        onChange={handleInputChange}
+                                        placeholder="(555) 123-4567"
+                                        required 
+                                    />
+                                    {errors.phone && <div className="error-message">{errors.phone}</div>}
+                                </div>
+
+                                <div className="form-group-modern">
+                                    <label>Street Address *</label>
+                                    <input 
+                                        type="text" 
+                                        className={`form-control-modern ${errors.address ? 'error' : ''}`}
+                                        name="address"
+                                        placeholder="House number and street name"
+                                        value={formData.address}
+                                        onChange={handleInputChange}
+                                        required 
+                                    />
+                                    {errors.address && <div className="error-message">{errors.address}</div>}
+                                </div>
 
                                 <div className="row">
                                     <div className="col-xs-6">
-                                        <label>Town / City *</label>
-                                        <input type="text" className="form-control" name="city" required />
+                                        <div className="form-group-modern">
+                                            <label>Town / City *</label>
+                                            <input 
+                                                type="text" 
+                                                className={`form-control-modern ${errors.city ? 'error' : ''}`}
+                                                name="city"
+                                                value={formData.city}
+                                                onChange={handleInputChange}
+                                                placeholder="New York"
+                                                required 
+                                            />
+                                            {errors.city && <div className="error-message">{errors.city}</div>}
+                                        </div>
                                     </div>
                                     <div className="col-xs-6">
-                                        <label>State *</label>
-                                        <input type="text" className="form-control" name="state" required />
+                                        <div className="form-group-modern">
+                                            <label>State *</label>
+                                            <input 
+                                                type="text" 
+                                                className={`form-control-modern ${errors.state ? 'error' : ''}`}
+                                                name="state"
+                                                value={formData.state}
+                                                onChange={handleInputChange}
+                                                placeholder="NY"
+                                                required 
+                                            />
+                                            {errors.state && <div className="error-message">{errors.state}</div>}
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div className="row">
                                     <div className="col-xs-6">
-                                        <label>ZIP *</label>
-                                        <input type="text" className="form-control" name="zip" required />
+                                        <div className="form-group-modern">
+                                            <label>Zip Code *</label>
+                                            <input 
+                                                type="text" 
+                                                className={`form-control-modern ${errors.zipCode ? 'error' : ''}`}
+                                                name="zipCode"
+                                                value={formData.zipCode}
+                                                onChange={handleInputChange}
+                                                placeholder="10001"
+                                                required 
+                                            />
+                                            {errors.zipCode && <div className="error-message">{errors.zipCode}</div>}
+                                        </div>
                                     </div>
                                     <div className="col-xs-6">
-                                        <label>Phone *</label>
-                                        <input type="text" className="form-control" name="phone" required />
+                                        <div className="form-group-modern">
+                                            <label>Country *</label>
+                                            <select 
+                                                className="form-control-modern"
+                                                name="country"
+                                                value={formData.country}
+                                                onChange={handleInputChange}
+                                            >
+                                                <option value="United States">United States</option>
+                                                <option value="Canada">Canada</option>
+                                                <option value="United Kingdom">United Kingdom</option>
+                                                <option value="Australia">Australia</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <label>Email Address *</label>
-                                <input type="email" className="form-control" name="email-address" required defaultValue={user?.email || ''} />
-
-                                <h2 className="title title-simple text-uppercase text-left">Additional Information</h2>
-                                <label>Order Notes (Optional)</label>
-                                <textarea className="form-control pb-2 pt-2 mb-0" cols="30" rows="5" placeholder="Notes about your order, e.g. special notes for delivery"></textarea>
+                                <div className="form-group-modern">
+                                    <label>Order Notes (Optional)</label>
+                                    <textarea 
+                                        className="form-control-modern" 
+                                        rows="5"
+                                        name="notes"
+                                        value={formData.notes}
+                                        onChange={handleInputChange}
+                                        placeholder="Notes about your order, e.g. special notes for delivery"
+                                    ></textarea>
+                                </div>
+                                </div>
                             </div>
+
                             <aside className="col-lg-5 sticky-sidebar-wrapper">
                                 <div className="sticky-sidebar mt-1" data-sticky-options="{'bottom': 50}">
-                                    <div className="summary pt-5">
-                                        <h3 className="title title-simple text-left text-uppercase">Your Order</h3>
-                                        <table className="order-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Product</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {
-                                                    cartList.map( ( item, index ) => (
-                                                        <tr key={ 'checkout-item-' + index }>
-                                                            <td className="product-name">{ item.name } <span className="product-quantity">×&nbsp;{ item.qty }</span></td>
-                                                            <td className="product-total text-body">${ toDecimal( item.qty * item.price ) }</td>
-                                                        </tr>
-                                                    ) )
-                                                }
-
-                                                <tr className="summary-subtotal">
-                                                    <td>
-                                                        <h4 className="summary-subtitle">Subtotal</h4>
-                                                    </td>
-                                                    <td className="summary-subtotal-price pb-0 pt-0">${ toDecimal( cartList.reduce( ( acc, item ) => {
-                                                        return acc + item.price * item.qty;
-                                                    }, 0 ) ) }
-                                                    </td>
-                                                </tr>
-                                                <tr className="summary-shipping shipping-row-last">
-                                                    <td>
-                                                        <h4 className="summary-subtitle pb-2 pt-4">Shipping</h4>
-                                                    </td>
-                                                            <td className="summary-subtotal-price pb-0 pt-0">$4.99</td>
-
-                                                            {/* <li>
-                                                                <div className="custom-radio">
-                                                                    <input type="radio" id="free-shipping" name="shipping" className="custom-control-input" />
-                                                                    <label className="custom-control-label" htmlFor="free-shipping">Free shipping</label>
-                                                                </div>
-                                                            </li>
-
-                                                            <li>
-                                                                <div className="custom-radio">
-                                                                    <input type="radio" id="local_pickup" name="shipping" className="custom-control-input" />
-                                                                    <label className="custom-control-label" htmlFor="local_pickup">Local pickup</label>
-                                                                </div>
-                                                            </li> */}
-                                                </tr>
-                                                <tr className="summary-total">
-                                                    <td className="pb-0">
-                                                        <h4 className="summary-subtitle">Total</h4>
-                                                    </td>
-                                                    <td className=" pt-0 pb-0">
-                                                        <p className="summary-total-price ls-s text-primary">${ toDecimal( cartList.reduce( ( acc, item ) => {
-                                                            return acc + item.price * item.qty;
-                                                        }, 0 ) ) }</p>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-
-                                        {/* <div className="payment accordion radio-type">
-                                            <h4 className="summary-subtitle ls-m pb-3">Payment Methods</h4>
-
-                                            <div className="card">
-                                                <div className="card-header">
-                                                    <a href="#collapse1" className="expand">Direct bank transfer</a>
-                                                </div>
-                                                <div id="collapse1" className="expanded" style={ { display: 'block' } }>
-                                                    <div className="card-body ls-m">
-                                                        Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.
+                                    <div className="order-summary-card">
+                                        <h3 className="section-title">
+                                            <span className="title-icon">📦</span>
+                                            Your Order
+                                        </h3>
+                                        <div className="order-items">
+                                            {cartList.map((item, index) => {
+                                                const price = getPrice(item);
+                                                const subtotal = price * item.qty;
+                                                return (
+                                                    <div key={index} className="order-item">
+                                                        <div className="item-info">
+                                                            <div className="item-name-qty">
+                                                                <span className="item-name">{item.name}</span>
+                                                                {item.variant && <span className="item-variant">({item.variant})</span>}
+                                                                <span className="item-qty">× {item.qty}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="item-price">${toDecimal(subtotal)}</div>
                                                     </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="card p-relative">
-                                                <div className="card-header">
-                                                    <a href="#collapse2" className="collapse">Check payments</a>
-                                                </div>
-                                                <div id="collapse2" className="collapsed">
-                                                    <div className="card-body ls-m">
-                                                        Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="card p-relative">
-                                                <div className="card-header">
-                                                    <a href="#collapse3" className="collapse">Cash on delivery</a>
-                                                </div>
-                                                <div id="collapse3" className="collapsed">
-                                                    <div className="card-body ls-m">
-                                                        Pay with cash upon delivery.
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="card p-relative">
-                                                <div className="card-header">
-                                                    <a href="#collapse4" className="collapse">PayPal</a>
-                                                </div>
-                                                <div id="collapse4" className="collapsed">
-                                                    <div className="card-body ls-m">
-                                                        Pay via PayPal; you can pay with your credit card if you don't have a PayPal account.
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div> */}
-
-                                        <div className="form-checkbox mt-4 mb-5">
-                                            <input type="checkbox" className="custom-checkbox" id="terms-condition" name="terms-condition" />
-                                            <label className="form-control-label" htmlFor="terms-condition">
-                                                I have read and agree to the website <a href="#">terms and conditions </a>*
-                                            </label>
+                                                );
+                                            })}
                                         </div>
 
-                                        <button type="submit" className="btn btn-dark btn-rounded btn-order">Place Order</button>
+                                        <div className="order-totals">
+                                            <div className="total-row">
+                                                <span className="total-label">Subtotal</span>
+                                                <span className="total-value">${toDecimal(calculateSubtotal())}</span>
+                                            </div>
+                                            <div className="total-row">
+                                                <span className="total-label">Shipping</span>
+                                                <span className="total-value">${toDecimal(calculateShipping())}</span>
+                                            </div>
+                                            <div className="total-row">
+                                                <span className="total-label">Tax (8%)</span>
+                                                <span className="total-value">${toDecimal(calculateTax())}</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="grand-total">
+                                            <span className="grand-total-label">Total</span>
+                                            <span className="grand-total-value">${toDecimal(calculateTotal())}</span>
+                                        </div>
+
+                                        <button 
+                                            type="submit" 
+                                            className="payment-btn"
+                                            disabled={isProcessing}
+                                        >
+                                            {isProcessing ? (
+                                                <>
+                                                    <span className="spinner"></span>
+                                                    Processing...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <span>Proceed to Payment</span>
+                                                    <i className="fas fa-lock"></i>
+                                                </>
+                                            )}
+                                        </button>
+
+                                        <div className="security-badges">
+                                            <div className="security-badge">
+                                                <i className="fas fa-shield-alt"></i>
+                                                <span>SSL Secure</span>
+                                            </div>
+                                            <div className="security-badge">
+                                                <i className="fas fa-credit-card"></i>
+                                                <span>Safe Payment</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </aside>
                         </div>
                     </form>
+                    </div>
                 </div>
             </div>
+
+            <style jsx>{`
+                .checkout-modern {
+                    background: #f8f9fa;
+                    min-height: 100vh;
+                }
+
+                .checkout-header {
+                    text-align: center;
+                    margin-bottom: 40px;
+                }
+
+                .checkout-title {
+                    font-size: 42px;
+                    font-weight: 800;
+                    color: #222;
+                    margin-bottom: 30px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 15px;
+                }
+
+                .checkout-icon {
+                    font-size: 48px;
+                }
+
+                .breadcrumb-steps {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 20px;
+                    max-width: 600px;
+                    margin: 0 auto;
+                }
+
+                .step {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 8px;
+                    opacity: 0.5;
+                    transition: all 0.3s ease;
+                }
+
+                .step.active,
+                .step.completed {
+                    opacity: 1;
+                }
+
+                .step-number {
+                    width: 48px;
+                    height: 48px;
+                    border-radius: 50%;
+                    background: #e0e0e0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 700;
+                    font-size: 18px;
+                    color: #666;
+                    transition: all 0.3s ease;
+                }
+
+                .step.completed .step-number {
+                    background: #22c55e;
+                    color: white;
+                }
+
+                .step.active .step-number {
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+                }
+
+                .step-text {
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: #666;
+                }
+
+                .step.active .step-text,
+                .step.completed .step-text {
+                    color: #222;
+                }
+
+                .step-divider {
+                    width: 60px;
+                    height: 2px;
+                    background: #e0e0e0;
+                    margin-bottom: 30px;
+                }
+
+                .checkout-form {
+                    width: 100%;
+                }
+
+                .billing-details-card,
+                .order-summary-card {
+                    background: white;
+                    border-radius: 24px;
+                    padding: 32px;
+                    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+                }
+
+                .section-title {
+                    font-size: 24px;
+                    font-weight: 800;
+                    color: #222;
+                    margin: 0 0 32px 0;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    padding-bottom: 20px;
+                    border-bottom: 2px solid #f0f0f0;
+                }
+
+                .title-icon {
+                    font-size: 28px;
+                }
+
+                .form-group-modern {
+                    margin-bottom: 24px;
+                }
+
+                .form-group-modern label {
+                    display: block;
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: #333;
+                    margin-bottom: 8px;
+                }
+
+                .form-control-modern {
+                    width: 100%;
+                    padding: 14px 18px;
+                    border: 2px solid #e0e0e0;
+                    border-radius: 12px;
+                    font-size: 15px;
+                    transition: all 0.3s ease;
+                    background: white;
+                }
+
+                .form-control-modern:focus {
+                    outline: none;
+                    border-color: #667eea;
+                    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+                }
+
+                .form-control-modern.error {
+                    border-color: #f5576c;
+                }
+
+                .form-control-modern::placeholder {
+                    color: #999;
+                }
+
+                .error-message {
+                    color: #f5576c;
+                    font-size: 13px;
+                    margin-top: 6px;
+                    font-weight: 500;
+                }
+
+                .order-summary-card {
+                    position: sticky;
+                    top: 100px;
+                }
+
+                .order-items {
+                    border-bottom: 2px solid #f0f0f0;
+                    padding-bottom: 20px;
+                    margin-bottom: 20px;
+                }
+
+                .order-item {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    padding: 16px 0;
+                    border-bottom: 1px solid #f5f5f5;
+                }
+
+                .order-item:last-child {
+                    border-bottom: none;
+                }
+
+                .item-info {
+                    flex: 1;
+                }
+
+                .item-name-qty {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 6px;
+                }
+
+                .item-name {
+                    font-size: 15px;
+                    font-weight: 600;
+                    color: #222;
+                }
+
+                .item-variant {
+                    font-size: 13px;
+                    color: #666;
+                    font-style: italic;
+                }
+
+                .item-qty {
+                    font-size: 13px;
+                    color: #999;
+                }
+
+                .item-price {
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: #667eea;
+                    margin-left: 16px;
+                }
+
+                .order-totals {
+                    border-bottom: 2px solid #f0f0f0;
+                    padding-bottom: 20px;
+                    margin-bottom: 20px;
+                }
+
+                .total-row {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 14px;
+                }
+
+                .total-label {
+                    font-size: 15px;
+                    color: #666;
+                }
+
+                .total-value {
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: #222;
+                }
+
+                .grand-total {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 24px 0;
+                    margin-bottom: 24px;
+                }
+
+                .grand-total-label {
+                    font-size: 20px;
+                    font-weight: 800;
+                    color: #222;
+                }
+
+                .grand-total-value {
+                    font-size: 32px;
+                    font-weight: 800;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                }
+
+                .payment-btn {
+                    width: 100%;
+                    padding: 18px 28px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    border: none;
+                    border-radius: 16px;
+                    color: white;
+                    font-size: 16px;
+                    font-weight: 700;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+                    margin-bottom: 24px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                }
+
+                .payment-btn:hover:not(:disabled) {
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.5);
+                }
+
+                .payment-btn:disabled {
+                    opacity: 0.7;
+                    cursor: not-allowed;
+                }
+
+                .spinner {
+                    width: 20px;
+                    height: 20px;
+                    border: 3px solid rgba(255, 255, 255, 0.3);
+                    border-top-color: white;
+                    border-radius: 50%;
+                    animation: spin 0.8s linear infinite;
+                    margin-right: 10px;
+                }
+
+                @keyframes spin {
+                    to { transform: rotate(360deg); }
+                }
+
+                .security-badges {
+                    display: flex;
+                    justify-content: space-around;
+                    gap: 16px;
+                }
+
+                .security-badge {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 8px;
+                    font-size: 12px;
+                    color: #666;
+                    text-align: center;
+                }
+
+                .security-badge i {
+                    font-size: 24px;
+                    color: #667eea;
+                }
+
+                @media (max-width: 992px) {
+                    .order-summary-card {
+                        position: static;
+                        margin-top: 32px;
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    .checkout-title {
+                        font-size: 32px;
+                        flex-direction: column;
+                        gap: 12px;
+                    }
+
+                    .checkout-icon {
+                        font-size: 40px;
+                    }
+
+                    .breadcrumb-steps {
+                        gap: 12px;
+                    }
+
+                    .step-number {
+                        width: 40px;
+                        height: 40px;
+                        font-size: 16px;
+                    }
+
+                    .step-text {
+                        font-size: 12px;
+                    }
+
+                    .step-divider {
+                        width: 40px;
+                    }
+
+                    .billing-details-card,
+                    .order-summary-card {
+                        padding: 24px;
+                    }
+
+                    .section-title {
+                        font-size: 20px;
+                    }
+
+                    .form-control-modern {
+                        padding: 12px 16px;
+                    }
+                }
+            `}</style>
         </div>
     )
 }

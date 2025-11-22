@@ -17,6 +17,7 @@
 		header: (
             font-family: $font-family,
             letter-spacing:  -.025em,
+            
             color: false,
             background: #fff,
             // Link's color
@@ -58,7 +59,8 @@
 			),
             // Header Middle
 			middle: (
-				padding-top: 2.7rem,
+				padding-top: 0,
+                max-height:12rem,
                 padding-bottom: 2.7rem,
 				color: #222,
 				background: #fff,
@@ -341,6 +343,7 @@
     }
     .main-nav {
         margin-right: 1.5rem;
+        
     }
     .header-right .cart-dropdown {
         > a::after {

@@ -145,10 +145,12 @@ export const stickyHeaderHandler = function () {
  * Add or remove settings when the window is resized
  */
 export const resizeHandler = function ( width = 992, attri = 'right-sidebar-active' ) {
-    let bodyClasses = document.querySelector( "body" ) && document.querySelector( "body" ).classList;
-    bodyClasses = bodyClasses.value.split( ' ' ).filter( item => item !== 'home' && item !== 'loaded' );
+    const body = document.querySelector( "body" );
+    if (!body) return;
+    
+    const bodyClasses = Array.from(body.classList).filter( item => item !== 'home' && item !== 'loaded' );
     for ( let i = 0; i < bodyClasses.length; i++ ) {
-        document.querySelector( "body" ) && document.querySelector( 'body' ).classList.remove( bodyClasses[ i ] );
+        body.classList.remove( bodyClasses[ i ] );
     }
 }
 

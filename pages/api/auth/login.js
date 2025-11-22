@@ -17,7 +17,9 @@ export default async function handler(req, res) {
 
     const token = jwt.sign({ uid: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' })
     res.setHeader('Set-Cookie', `session=${token}; HttpOnly; Path=/; SameSite=Lax; Max-Age=604800`)
-    return res.status(200).json({ ok: true })
+    // return basic user info to the client
+    const [userRow] = await query('SELECT id, email, username FROM users WHERE id = ?', [user.id])
+    return res.status(200).json({ ok: true, user: userRow })
   } catch (e) {
     console.error(e)
     return res.status(500).json({ error: 'server' })

@@ -40,201 +40,200 @@ function ContactUs() {
     };
 
     return (
-        <main className="main contact-us">
+        <main className="main contact-us-modern">
             <Helmet>
                 <title>Contact Us | SmartStyle eCommerce</title>
             </Helmet>
 
             <h1 className="d-none">Contact Us - SmartStyle eCommerce</h1>
 
-            <nav className="breadcrumb-nav">
+            <div className="page-content-modern">
                 <div className="container">
-                    <ul className="breadcrumb">
-                        <li><ALink href="/"><i className="d-icon-home"></i></ALink></li>
-                        <li>Contact Us</li>
-                    </ul>
-                </div>
-            </nav>
+                    <div className="contact-header-modern">
+                        <h1 className="contact-title-modern">
+                            <span className="title-icon">💬</span>
+                            Get In Touch
+                        </h1>
+                        <p className="contact-subtitle-modern">We're here to help and answer any question you might have</p>
+                    </div>
 
-            <div className="page-content mt-10 pt-7">
-                <div className="container">
-                    <section className="contact-section">
+                    <section className="contact-info-section-modern">
                         <div className="row">
                             <div className="col-lg-3 col-md-6 col-sm-6 mb-4">
-                                <div className="contact-info-box">
-                                    <i className="d-icon-map"></i>
-                                    <h4>Address</h4>
-                                    <p>21 Yonge St<br />Toronto, ON<br />Canada</p>
+                                <div className="contact-info-card-modern">
+                                    <div className="info-icon-modern">📍</div>
+                                    <h4 className="info-title-modern">Address</h4>
+                                    <p className="info-text-modern">21 Yonge St<br />Toronto, ON<br />Canada</p>
                                 </div>
                             </div>
                             <div className="col-lg-3 col-md-6 col-sm-6 mb-4">
-                                <div className="contact-info-box">
-                                    <i className="d-icon-phone"></i>
-                                    <h4>Phone</h4>
-                                    <p>
+                                <div className="contact-info-card-modern">
+                                    <div className="info-icon-modern">📞</div>
+                                    <h4 className="info-title-modern">Phone</h4>
+                                    <p className="info-text-modern">
                                         <a href="tel:1234567890">Toll Free: (123) 456-7890</a>
                                     </p>
                                 </div>
                             </div>
                             <div className="col-lg-3 col-md-6 col-sm-6 mb-4">
-                                <div className="contact-info-box">
-                                    <i className="d-icon-envelope"></i>
-                                    <h4>Email</h4>
-                                    <p>
+                                <div className="contact-info-card-modern">
+                                    <div className="info-icon-modern">✉️</div>
+                                    <h4 className="info-title-modern">Email</h4>
+                                    <p className="info-text-modern">
                                         <a href="mailto:support@aurora.com">support@aurora.com</a>
                                     </p>
                                 </div>
                             </div>
                             <div className="col-lg-3 col-md-6 col-sm-6 mb-4">
-                                <div className="contact-info-box">
-                                    <i className="d-icon-clock"></i>
-                                    <h4>Working Hours</h4>
-                                    <p>Mon - Sun<br />9:00 AM - 8:00 PM</p>
+                                <div className="contact-info-card-modern">
+                                    <div className="info-icon-modern">🕐</div>
+                                    <h4 className="info-title-modern">Working Hours</h4>
+                                    <p className="info-text-modern">Mon - Sun<br />9:00 AM - 8:00 PM</p>
                                 </div>
                             </div>
                         </div>
                     </section>
 
-                    <hr className="divider mb-10 pb-1" />
-
-                    <section className="contact-section">
+                    <section className="contact-form-section-modern">
                         <div className="row">
                             <div className="col-lg-6 mb-8">
-                                <h2 className="title title-simple text-left mb-5">Get In Touch</h2>
-                                <p className="mb-6">
-                                    We're here to help and answer any question you might have. We look forward to hearing from you!
-                                    Fill out the form below and we'll get back to you as soon as possible.
-                                </p>
+                                <div className="form-card-modern">
+                                    <h2 className="form-title-modern">Send Us a Message</h2>
+                                    <p className="form-desc-modern">
+                                        Fill out the form below and we'll get back to you as soon as possible.
+                                    </p>
 
-                                <form className="contact-form" onSubmit={handleSubmit}>
-                                    <div className="row">
-                                        <div className="col-sm-6 mb-4">
-                                            <input 
-                                                type="text" 
-                                                className="form-control" 
-                                                name="name" 
-                                                placeholder="Your Name *" 
-                                                value={formData.name}
+                                    <form className="contact-form-modern" onSubmit={handleSubmit}>
+                                        <div className="row">
+                                            <div className="col-sm-6 mb-4">
+                                                <input 
+                                                    type="text" 
+                                                    className="form-control-modern" 
+                                                    name="name" 
+                                                    placeholder="Your Name *" 
+                                                    value={formData.name}
+                                                    onChange={handleChange}
+                                                    required 
+                                                />
+                                            </div>
+                                            <div className="col-sm-6 mb-4">
+                                                <input 
+                                                    type="email" 
+                                                    className="form-control-modern" 
+                                                    name="email" 
+                                                    placeholder="Your Email *" 
+                                                    value={formData.email}
+                                                    onChange={handleChange}
+                                                    required 
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-sm-6 mb-4">
+                                                <input 
+                                                    type="tel" 
+                                                    className="form-control-modern" 
+                                                    name="phone" 
+                                                    placeholder="Your Phone" 
+                                                    value={formData.phone}
+                                                    onChange={handleChange}
+                                                />
+                                            </div>
+                                            <div className="col-sm-6 mb-4">
+                                                <input 
+                                                    type="text" 
+                                                    className="form-control-modern" 
+                                                    name="subject" 
+                                                    placeholder="Subject" 
+                                                    value={formData.subject}
+                                                    onChange={handleChange}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="form-group mb-5">
+                                            <textarea 
+                                                className="form-control-modern" 
+                                                name="message" 
+                                                placeholder="Your Message *" 
+                                                rows="6"
+                                                value={formData.message}
                                                 onChange={handleChange}
-                                                required 
-                                            />
+                                                required
+                                            ></textarea>
                                         </div>
-                                        <div className="col-sm-6 mb-4">
-                                            <input 
-                                                type="email" 
-                                                className="form-control" 
-                                                name="email" 
-                                                placeholder="Your Email *" 
-                                                value={formData.email}
-                                                onChange={handleChange}
-                                                required 
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-6 mb-4">
-                                            <input 
-                                                type="tel" 
-                                                className="form-control" 
-                                                name="phone" 
-                                                placeholder="Your Phone" 
-                                                value={formData.phone}
-                                                onChange={handleChange}
-                                            />
-                                        </div>
-                                        <div className="col-sm-6 mb-4">
-                                            <input 
-                                                type="text" 
-                                                className="form-control" 
-                                                name="subject" 
-                                                placeholder="Subject" 
-                                                value={formData.subject}
-                                                onChange={handleChange}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="form-group mb-5">
-                                        <textarea 
-                                            className="form-control" 
-                                            name="message" 
-                                            placeholder="Your Message *" 
-                                            rows="8"
-                                            value={formData.message}
-                                            onChange={handleChange}
-                                            required
-                                        ></textarea>
-                                    </div>
-                                    <button 
-                                        type="submit" 
-                                        className="btn btn-dark btn-rounded"
-                                        disabled={submitting}
-                                    >
-                                        {submitting ? 'Sending...' : 'Send Message'}
-                                        <i className="d-icon-arrow-right"></i>
-                                    </button>
-                                    {submitMessage && (
-                                        <div className="alert alert-success mt-4" role="alert">
-                                            {submitMessage}
-                                        </div>
-                                    )}
-                                </form>
+                                        <button 
+                                            type="submit" 
+                                            className="btn-submit-modern"
+                                            disabled={submitting}
+                                        >
+                                            {submitting ? (
+                                                <>
+                                                    <span className="spinner-small"></span>
+                                                    Sending...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    Send Message
+                                                    <i className="fas fa-paper-plane"></i>
+                                                </>
+                                            )}
+                                        </button>
+                                        {submitMessage && (
+                                            <div className="alert-success-modern">
+                                                ✓ {submitMessage}
+                                            </div>
+                                        )}
+                                    </form>
+                                </div>
                             </div>
 
                             <div className="col-lg-6 mb-8">
-                                <h2 className="title title-simple text-left mb-5">Find Us Here</h2>
-                                <div className="map-container">
-                                    <iframe
-                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2887.0493784195777!2d-79.3790665!3d43.6461999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4cb2db28b30ab%3A0xac14a68c40860c88!2s21%20Yonge%20St%2C%20Toronto%2C%20ON%20M5J%202X7!5e0!3m2!1sen!2sca!4v1699000000000!5m2!1sen!2sca"
-                                        width="100%"
-                                        height="450"
-                                        style={{ border: 0 }}
-                                        allowFullScreen=""
-                                        loading="lazy"
-                                    ></iframe>
+                                <div className="map-card-modern">
+                                    <h2 className="form-title-modern">Find Us Here</h2>
+                                    <div className="map-wrapper-modern">
+                                        <iframe
+                                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2887.0493784195777!2d-79.3790665!3d43.6461999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4cb2db28b30ab%3A0xac14a68c40860c88!2s21%20Yonge%20St%2C%20Toronto%2C%20ON%20M5J%202X7!5e0!3m2!1sen!2sca!4v1699000000000!5m2!1sen!2sca"
+                                            width="100%"
+                                            height="450"
+                                            style={{ border: 0 }}
+                                            allowFullScreen=""
+                                            loading="lazy"
+                                        ></iframe>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </section>
 
-                    <section className="contact-section pb-10">
+                    <section className="features-section-modern">
+                        <h2 className="features-title-modern">Why Choose Us?</h2>
                         <div className="row">
-                            <div className="col-12">
-                                <h2 className="title title-simple text-center mb-5">Why Choose Us?</h2>
-                            </div>
                             <div className="col-lg-3 col-md-6 col-sm-6 mb-4">
-                                <div className="icon-box text-center">
-                                    <i className="d-icon-truck"></i>
-                                    <div className="icon-box-content">
-                                        <h4>Free Shipping</h4>
-                                        <p>On orders over $99</p>
-                                    </div>
+                                <div className="feature-card-modern">
+                                    <div className="feature-icon-modern">🚚</div>
+                                    <h4 className="feature-title-modern">Free Shipping</h4>
+                                    <p className="feature-desc-modern">On orders over $99</p>
                                 </div>
                             </div>
                             <div className="col-lg-3 col-md-6 col-sm-6 mb-4">
-                                <div className="icon-box text-center">
-                                    <i className="d-icon-service"></i>
-                                    <div className="icon-box-content">
-                                        <h4>24/7 Support</h4>
-                                        <p>We're here to help</p>
-                                    </div>
+                                <div className="feature-card-modern">
+                                    <div className="feature-icon-modern">💬</div>
+                                    <h4 className="feature-title-modern">24/7 Support</h4>
+                                    <p className="feature-desc-modern">We're here to help</p>
                                 </div>
                             </div>
                             <div className="col-lg-3 col-md-6 col-sm-6 mb-4">
-                                <div className="icon-box text-center">
-                                    <i className="d-icon-money"></i>
-                                    <div className="icon-box-content">
-                                        <h4>Money Back</h4>
-                                        <p>30 days guarantee</p>
-                                    </div>
+                                <div className="feature-card-modern">
+                                    <div className="feature-icon-modern">💰</div>
+                                    <h4 className="feature-title-modern">Money Back</h4>
+                                    <p className="feature-desc-modern">30 days guarantee</p>
                                 </div>
                             </div>
                             <div className="col-lg-3 col-md-6 col-sm-6 mb-4">
-                                <div className="icon-box text-center">
-                                    <i className="d-icon-lock"></i>
-                                    <div className="icon-box-content">
-                                        <h4>Secure Payment</h4>
-                                        <p>Safe & protected</p>
-                                    </div>
+                                <div className="feature-card-modern">
+                                    <div className="feature-icon-modern">🔒</div>
+                                    <h4 className="feature-title-modern">Secure Payment</h4>
+                                    <p className="feature-desc-modern">Safe & protected</p>
                                 </div>
                             </div>
                         </div>
@@ -243,91 +242,300 @@ function ContactUs() {
             </div>
 
             <style jsx>{`
-                .contact-info-box {
+                .contact-us-modern {
+                    background: #f8f9fa;
+                    min-height: 100vh;
+                }
+
+                .page-content-modern {
+                    padding: 60px 0 80px;
+                }
+
+                .contact-header-modern {
                     text-align: center;
-                    padding: 30px 20px;
-                    background: #f8f8f8;
-                    border-radius: 8px;
-                    transition: all 0.3s;
-                    height: 100%;
+                    margin-bottom: 60px;
                 }
-                .contact-info-box:hover {
-                    background: #fff;
-                    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-                    transform: translateY(-5px);
-                }
-                .contact-info-box i {
-                    font-size: 40px;
-                    color: #336699;
-                    margin-bottom: 15px;
-                }
-                .contact-info-box h4 {
-                    font-size: 18px;
-                    font-weight: 600;
-                    margin-bottom: 10px;
-                    color: #333;
-                }
-                .contact-info-box p {
-                    font-size: 14px;
-                    color: #666;
-                    margin: 0;
-                    line-height: 1.8;
-                }
-                .contact-info-box a {
-                    color: #666;
-                    transition: color 0.3s;
-                }
-                .contact-info-box a:hover {
-                    color: #336699;
-                }
-                .map-container {
-                    border-radius: 8px;
-                    overflow: hidden;
-                    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-                }
-                .icon-box {
-                    padding: 30px 20px;
-                    background: #f8f8f8;
-                    border-radius: 8px;
-                    transition: all 0.3s;
-                    height: 100%;
-                }
-                .icon-box:hover {
-                    background: #fff;
-                    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-                }
-                .icon-box i {
+
+                .contact-title-modern {
                     font-size: 48px;
-                    color: #336699;
-                    margin-bottom: 15px;
+                    font-weight: 800;
+                    color: #222;
+                    margin-bottom: 16px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 16px;
                 }
-                .icon-box h4 {
-                    font-size: 16px;
+
+                .title-icon {
+                    font-size: 52px;
+                }
+
+                .contact-subtitle-modern {
+                    font-size: 18px;
+                    color: #666;
+                    max-width: 600px;
+                    margin: 0 auto;
+                }
+
+                .contact-info-section-modern {
+                    margin-bottom: 60px;
+                }
+
+                .contact-info-card-modern {
+                    background: white;
+                    border-radius: 20px;
+                    padding: 40px 24px;
+                    text-align: center;
+                    height: 100%;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+                }
+
+                .contact-info-card-modern:hover {
+                    transform: translateY(-8px);
+                    box-shadow: 0 12px 32px rgba(102, 126, 234, 0.2);
+                }
+
+                .info-icon-modern {
+                    font-size: 56px;
+                    margin-bottom: 20px;
+                }
+
+                .info-title-modern {
+                    font-size: 20px;
+                    font-weight: 700;
+                    color: #222;
+                    margin-bottom: 12px;
+                }
+
+                .info-text-modern {
+                    font-size: 15px;
+                    color: #666;
+                    line-height: 1.8;
+                    margin: 0;
+                }
+
+                .info-text-modern a {
+                    color: #667eea;
+                    text-decoration: none;
                     font-weight: 600;
-                    margin-bottom: 5px;
-                    color: #333;
+                    transition: opacity 0.3s ease;
                 }
-                .icon-box p {
+
+                .info-text-modern a:hover {
+                    opacity: 0.8;
+                }
+
+                .contact-form-section-modern {
+                    margin-bottom: 60px;
+                }
+
+                .form-card-modern,
+                .map-card-modern {
+                    background: white;
+                    border-radius: 24px;
+                    padding: 40px;
+                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+                    height: 100%;
+                }
+
+                .form-title-modern {
+                    font-size: 28px;
+                    font-weight: 800;
+                    color: #222;
+                    margin-bottom: 12px;
+                }
+
+                .form-desc-modern {
+                    font-size: 16px;
+                    color: #666;
+                    margin-bottom: 32px;
+                    line-height: 1.6;
+                }
+
+                .contact-form-modern {
+                    width: 100%;
+                }
+
+                .form-control-modern {
+                    width: 100%;
+                    padding: 14px 18px;
+                    border: 2px solid #e0e0e0;
+                    border-radius: 12px;
+                    font-size: 15px;
+                    transition: all 0.3s ease;
+                    background: white;
+                }
+
+                .form-control-modern:focus {
+                    outline: none;
+                    border-color: #667eea;
+                    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+                }
+
+                .form-control-modern::placeholder {
+                    color: #999;
+                }
+
+                .btn-submit-modern {
+                    width: 100%;
+                    padding: 16px 32px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    border: none;
+                    border-radius: 12px;
+                    color: white;
+                    font-size: 16px;
+                    font-weight: 700;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 12px;
+                }
+
+                .btn-submit-modern:hover:not(:disabled) {
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.5);
+                }
+
+                .btn-submit-modern:disabled {
+                    opacity: 0.7;
+                    cursor: not-allowed;
+                }
+
+                .spinner-small {
+                    width: 18px;
+                    height: 18px;
+                    border: 3px solid rgba(255, 255, 255, 0.3);
+                    border-top-color: white;
+                    border-radius: 50%;
+                    animation: spin 0.8s linear infinite;
+                }
+
+                @keyframes spin {
+                    to { transform: rotate(360deg); }
+                }
+
+                .alert-success-modern {
+                    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+                    border: 2px solid #28a745;
+                    color: #155724;
+                    border-radius: 12px;
+                    padding: 16px 20px;
+                    margin-top: 20px;
+                    font-weight: 600;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                }
+
+                .map-wrapper-modern {
+                    border-radius: 16px;
+                    overflow: hidden;
+                    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+                    margin-top: 24px;
+                }
+
+                .features-section-modern {
+                    background: white;
+                    border-radius: 24px;
+                    padding: 60px 40px;
+                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+                }
+
+                .features-title-modern {
+                    font-size: 36px;
+                    font-weight: 800;
+                    color: #222;
+                    text-align: center;
+                    margin-bottom: 48px;
+                }
+
+                .feature-card-modern {
+                    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                    border-radius: 20px;
+                    padding: 32px 24px;
+                    text-align: center;
+                    height: 100%;
+                    transition: all 0.3s ease;
+                }
+
+                .feature-card-modern:hover {
+                    transform: translateY(-8px);
+                    box-shadow: 0 12px 32px rgba(102, 126, 234, 0.15);
+                }
+
+                .feature-icon-modern {
+                    font-size: 52px;
+                    margin-bottom: 16px;
+                }
+
+                .feature-title-modern {
+                    font-size: 18px;
+                    font-weight: 700;
+                    color: #222;
+                    margin-bottom: 8px;
+                }
+
+                .feature-desc-modern {
                     font-size: 14px;
                     color: #666;
                     margin: 0;
                 }
-                .contact-form .form-control {
-                    border-radius: 5px;
-                    border: 1px solid #e1e1e1;
-                    padding: 12px 20px;
-                    font-size: 14px;
+
+                @media (max-width: 992px) {
+                    .contact-title-modern {
+                        font-size: 40px;
+                    }
+
+                    .form-card-modern,
+                    .map-card-modern {
+                        padding: 32px 24px;
+                    }
                 }
-                .contact-form .form-control:focus {
-                    border-color: #336699;
-                    box-shadow: 0 0 0 0.2rem rgba(51, 102, 153, 0.1);
-                }
-                .alert-success {
-                    background-color: #d4edda;
-                    border-color: #c3e6cb;
-                    color: #155724;
-                    border-radius: 5px;
-                    padding: 15px;
+
+                @media (max-width: 768px) {
+                    .page-content-modern {
+                        padding: 40px 0 60px;
+                    }
+
+                    .contact-title-modern {
+                        font-size: 32px;
+                        flex-direction: column;
+                        gap: 12px;
+                    }
+
+                    .title-icon {
+                        font-size: 44px;
+                    }
+
+                    .contact-subtitle-modern {
+                        font-size: 16px;
+                    }
+
+                    .contact-info-card-modern {
+                        padding: 32px 20px;
+                    }
+
+                    .form-card-modern,
+                    .map-card-modern {
+                        padding: 24px 20px;
+                    }
+
+                    .form-title-modern {
+                        font-size: 24px;
+                    }
+
+                    .features-section-modern {
+                        padding: 40px 24px;
+                    }
+
+                    .features-title-modern {
+                        font-size: 28px;
+                    }
                 }
             `}</style>
         </main>
