@@ -1,4 +1,5 @@
 import { query } from '../../lib/database';
+import { getUserFromRequest } from '../../lib/auth';
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -8,17 +9,26 @@ export default async function handler(req, res) {
     try {
         const { customer, items, pricing, notes, payment } = req.body;
 
+        // Get logged-in user
+        const user = await getUserFromRequest(req);
+        
+        // Use logged-in user's email if available, otherwise fall back to customer.email
+        const emailToUse = user?.email || customer.email;
+        
+        console.log('[create_order] Using email:', emailToUse, 'from', user ? 'logged-in user' : 'form data');
+
         // Generate UUIDs for order and customer
         const orderId = generateUUID();
         const customerId = generateUUID();
 
         // First, create or get customer
         const customerCheckQuery = `SELECT customer_id FROM customers WHERE email = ?`;
-        const existingCustomer = await query(customerCheckQuery, [customer.email]);
+        const existingCustomer = await query(customerCheckQuery, [emailToUse]);
 
         let finalCustomerId;
         if (existingCustomer && existingCustomer.length > 0) {
             finalCustomerId = existingCustomer[0].customer_id;
+            console.log('[create_order] Using existing customer:', finalCustomerId);
         } else {
             // Create new customer
             const customerQuery = `
@@ -27,10 +37,11 @@ export default async function handler(req, res) {
             `;
             await query(customerQuery, [
                 customerId,
-                customer.email,
-                `${customer.firstName} ${customer.lastName}`
+                emailToUse,
+                user?.username || `${customer.firstName} ${customer.lastName}`
             ]);
             finalCustomerId = customerId;
+            console.log('[create_order] Created new customer:', finalCustomerId);
         }
 
         // Create address for this customer
