@@ -22,7 +22,7 @@ Start the development server
 Then open: http://localhost:3000
 
 
-Configuration (.env.local)
+#Configuration (.env.local)
 Create a .env.local file in the project root and add:
 # https://dashboard.stripe.com/apikeys
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_51SJeCHBJKB6HMUU0C1nSJIURNgcLFCgs723L2JYZ1HfqMy47l3Gdxc9qrKgKvRXM6X3RzNN7BHvaPh3Ho5VC332i00R8oOfyHh
