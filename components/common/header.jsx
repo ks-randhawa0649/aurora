@@ -88,7 +88,9 @@ export default function Header( props ) {
                         {user ? (
                             <span style={{ display: 'flex', gap: '10px' }}>
                         <span>
-                            {user.username || user.email}{' '}
+                            <ALink href="/pages/account" style={{ color: 'inherit', textDecoration: 'none' }}>
+                                {user.username || user.email}
+                            </ALink>{' '}
                         </span>
                         <span><a href="#" onClick={handleLogout}>Logout</a></span>
                         </span>
