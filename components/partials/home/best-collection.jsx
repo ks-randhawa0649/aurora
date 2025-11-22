@@ -84,7 +84,7 @@ function BestCollection ( props ) {
                                 <span className="collection-category">{collectionItems[0].category}</span>
                                 <h3 className="collection-title">{collectionItems[0].title}</h3>
                                 <p className="collection-description">{collectionItems[0].description}</p>
-                                <ALink href="/shop" className="collection-btn">
+                                <ALink href="/pages/shop" className="collection-btn">
                                     Explore Now
                                     <i className="d-icon-arrow-right"></i>
                                 </ALink>
@@ -116,7 +116,7 @@ function BestCollection ( props ) {
                                         <span className="collection-category">{item.category}</span>
                                         <h3 className="collection-title">{item.title}</h3>
                                         <p className="collection-description">{item.description}</p>
-                                        <ALink href="/shop" className="collection-link">
+                                        <ALink href="/pages/shop" className="collection-link">
                                             Shop Now →
                                         </ALink>
                                     </div>
@@ -129,7 +129,7 @@ function BestCollection ( props ) {
                 {/* View All Button */}
                 <Reveal keyframes={ fadeInUpShorter } delay={ 800 } duration={ 1000 } triggerOnce>
                     <div className="collection-footer">
-                        <ALink href="/shop" className="btn btn-primary btn-modern btn-lg">
+                        <ALink href="/pages/shop" className="btn btn-primary btn-modern btn-lg">
                             View All Collections
                             <i className="d-icon-arrow-right"></i>
                         </ALink>

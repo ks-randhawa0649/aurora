@@ -48,11 +48,11 @@ function IntroSection( props ) {
 
                             <Reveal keyframes={ fadeInUpShorter } delay={ 1200 } duration={ 1000 }>
                                 <div className="button-group">
-                                    <ALink href="/shop" className="btn btn-primary btn-modern">
+                                    <ALink href="/pages/shop" className="btn btn-primary btn-modern">
                                         Explore Collection
                                         <i className="d-icon-arrow-right"></i>
                                     </ALink>
-                                    <ALink href="/shop" className="btn btn-outline-light btn-modern">
+                                    <ALink href="/pages/shop" className="btn btn-outline-light btn-modern">
                                         View Lookbook
                                     </ALink>
                                 </div>
@@ -134,7 +134,7 @@ function IntroSection( props ) {
                                 </Reveal>
 
                                 <Reveal keyframes={ fadeInUp } delay={ 1200 } duration={ 1000 }>
-                                    <ALink href="/shop" className="btn btn-dark btn-modern btn-lg">
+                                    <ALink href="/pages/shop" className="btn btn-dark btn-modern btn-lg">
                                         Shop Now
                                         <i className="d-icon-arrow-right"></i>
                                     </ALink>
@@ -188,7 +188,7 @@ function IntroSection( props ) {
                             </Reveal>
 
                             <Reveal keyframes={ fadeInUpShorter } delay={ 1100 } duration={ 1000 }>
-                                <ALink href="/shop" className="btn btn-white btn-modern btn-lg">
+                                <ALink href="/pages/shop" className="btn btn-white btn-modern btn-lg">
                                     Shop Sale Now
                                     <i className="d-icon-arrow-right"></i>
                                 </ALink>
