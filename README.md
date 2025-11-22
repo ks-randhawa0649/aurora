@@ -21,6 +21,8 @@ Start the development server
 6.	npm run dev or yarn dev
 Then open: http://localhost:3000
 
+#to test the project you can also use these credentials: email : test1@aurora.com , password: test1 
+
 
 #Configuration (.env.local)
 Create a .env.local file in the project root and add:
