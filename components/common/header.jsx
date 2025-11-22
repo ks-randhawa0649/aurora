@@ -84,7 +84,7 @@ export default function Header( props ) {
                         </ALink>
                         <span className="divider"></span>
                         
-                            <div className="header-user" style={{ display: 'flex', gap: '10px' }}>
+                            <div className="header-user mr-2" style={{ display: 'flex', gap: '10px' }}>
                         {user ? (
                             <span style={{ display: 'flex', gap: '10px' }}>
                         <span>

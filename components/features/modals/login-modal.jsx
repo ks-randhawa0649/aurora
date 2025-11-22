@@ -73,7 +73,7 @@ function LoginModal() {
 
     return (
         <>
-            <a className="login-link d-lg-show" href="#" onClick={ openModal }>
+            <a className="login-link d-lg-show mr-0 " href="#" onClick={ openModal }>
                 <i className="d-icon-user"></i>Sign in</a>
             <span className="delimiter">/</span>
             <a className="register-link ml-0" onClick={ ( e ) => openModal( e, 1 ) } href="#">Register</a>
