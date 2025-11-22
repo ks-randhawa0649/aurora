@@ -21,7 +21,7 @@ Start the development server
 6.	npm run dev or yarn dev
 Then open: http://localhost:3000
 
-#to test the project you can also use these credentials: email : test1@aurora.com , password: test1 
+
 
 
 #Configuration (.env.local)
@@ -42,7 +42,7 @@ GEMINI_API_KEY= AIzaSyB4p6OkIcthK4vckWmzmGj5hqWmggUeMyE
 
 # Using the system
 1.	Go to http://localhost:3000.
-2.	Register a new account and log in.
+2.	Register a new account and log in #to test the project you can also use these credentials: email : test1@aurora.com , password: test1 .
 3.	Browse products, add items to the cart, and proceed to checkout.
 4.	Enter test card details on the Stripe Embedded Checkout page (using Stripe’s test cards).
 5.	After successful payment, you’ll be redirected back to the site, and an order will be stored in MySQL.
