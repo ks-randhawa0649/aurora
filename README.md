@@ -1,6 +1,6 @@
 Aurora is a full-stack fashion e-commerce web app that lets users browse products, add items to a cart, check out using Stripe, chat with an AI fashion stylist powered by Google Gemini and give users an opportunity to test the look and vibe on themselves before ordering a product.
 
-Main features 
+#Main features 
 •	User registration and secure login.
 •	Product catalogue with images.
 •	Shopping cart and checkout flow with order creation in a MySQL database.
@@ -8,21 +8,17 @@ Main features
 •	Floating AI stylist chat bot that suggests outfits and colour combinations.
 •	AI – powered try-on for our pro users (to be completed before final product presentation)
 
-How to run the project 
+#How to run the project 
 
 Clone the repository
 1.	git clone https://github.com/ks-randhawa0649/aurora.git
 2.	cd aurora
 3.	git checkout main
 Install dependencies
-4.	npm install
-# or
-yarn
+4.	npm install or yarn
 5.	Create .env.local in the project root and fill in the keys and DB info (info given in the next section).
 Start the development server
-6.	npm run dev
-# or
-yarn dev
+6.	npm run dev or yarn dev
 Then open: http://localhost:3000
 
 
