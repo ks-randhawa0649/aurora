@@ -73,7 +73,7 @@ function Layout( { children, closeQuickview } ) {
 
                 <Footer />
 
-                <StickyFooter />
+                {/* <StickyFooter /> */}
             </div>
 
             <ALink

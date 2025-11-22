@@ -61,8 +61,8 @@ export default function Header( props ) {
             <div className="header-middle sticky-header fix-top sticky-content">
                 <div className="container">
                     <div className="header-left">
-                        <ALink href="#" className="mobile-menu-toggle" onClick={ showMobileMenu }>
-                            <i className="d-icon-bars2"></i>
+                        <ALink href="#" className="mobile-menu-toggle d-lg-none" onClick={ showMobileMenu } style={{ display: 'flex', alignItems: 'center', fontSize: '24px', padding: '10px', color: '#333' }}>
+                            <i className="d-icon-bars2">☰</i>
                         </ALink>
 
                         <ALink href="/" className="logo">
