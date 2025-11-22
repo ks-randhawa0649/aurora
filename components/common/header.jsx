@@ -83,7 +83,7 @@ export default function Header( props ) {
                             </div>
                         </ALink>
                         <span className="divider"></span>
-                        <ALink href="/pages/wishlist" className="wishlist">
+                        
                             <div className="header-user" style={{ display: 'flex', gap: '10px' }}>
                         {user ? (
                             <span style={{ display: 'flex', gap: '10px' }}>
@@ -96,7 +96,7 @@ export default function Header( props ) {
                          <LoginModal />
                         )}
                         </div>
-                        </ALink>
+                        
                         <span className="divider"></span>
 
                         <CartMenu />

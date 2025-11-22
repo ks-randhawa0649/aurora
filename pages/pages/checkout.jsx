@@ -194,259 +194,668 @@ function Checkout( props ) {
     }
 
     return (
-        <div className="main checkout">
+        <div className="main checkout-modern">
             <Helmet>
                 <title>Aurora | Checkout</title>
             </Helmet>
 
             <h1 className="d-none">Aurora - Checkout</h1>
 
-            <nav className="breadcrumb-nav">
+            <div className="page-content pt-7 pb-10">
                 <div className="container">
-                    <ul className="breadcrumb shop-breadcrumb">
-                        <li className="passed"><ALink href="/pages/cart"><i className="d-icon-bag"></i>Shopping Cart</ALink></li>
-                        <li className="active"><ALink href="/pages/checkout"><i className="d-icon-arrow-right"></i>Checkout</ALink></li>
-                        <li><ALink href="/pages/order"><i className="d-icon-arrow-right"></i>Order Complete</ALink></li>
-                    </ul>
-                </div>
-            </nav>
-
-            <div className="page-content pt-7 pb-10 mb-10">
-                <div className="step-by pr-4 pl-4">
-                    <h3 className="title title-simple title-step active"><ALink href="#">2. Checkout</ALink></h3>
-                </div>
-
-                <div className="container mt-8">
-                    <div className="card accordion">
-                        <Card title="
-                            <div class='alert alert-light alert-primary alert-icon mb-4 card-header'>
-                                <i class='fas fa-exclamation-circle'></i>
-                                <span class='text-body'>Have a coupon?</span>
-                                <a href='#' class='text-primary'>Click here to enter your code</a>
-                            </div>" type="parse">
-
-                            <div className="alert-body mb-4 collapsed">
-                                <p>If you have a coupon code, please apply it below.</p>
-                                <form className="check-coupon-box d-flex">
-                                    <input type="text" name="coupon_code" className="input-text form-control text-grey ls-m mr-4"
-                                        id="coupon_code" placeholder="Coupon code" />
-                                    <button type="submit" className="btn btn-dark btn-rounded btn-outline">Apply Coupon</button>
-                                </form>
+                    <div className="checkout-header">
+                        <h1 className="checkout-title">
+                            <span className="checkout-icon">💳</span>
+                            Secure Checkout
+                        </h1>
+                        <div className="breadcrumb-steps">
+                            <div className="step completed">
+                                <span className="step-number">✓</span>
+                                <span className="step-text">Cart</span>
                             </div>
-                        </Card>
+                            <div className="step-divider"></div>
+                            <div className="step active">
+                                <span className="step-number">2</span>
+                                <span className="step-text">Checkout</span>
+                            </div>
+                            <div className="step-divider"></div>
+                            <div className="step">
+                                <span className="step-number">3</span>
+                                <span className="step-text">Complete</span>
+                            </div>
+                        </div>
                     </div>
 
-                    <form onSubmit={handlePlaceOrder} className="form">
+                    <div className="mt-7">
+
+                    <form onSubmit={handlePlaceOrder} className="checkout-form">
                         <div className="row">
                             <div className="col-lg-7 mb-6 mb-lg-0 pr-lg-4">
-                                <h3 className="title title-simple text-left text-uppercase">Billing Details</h3>
+                                <div className="billing-details-card">
+                                    <h3 className="section-title">
+                                        <span className="title-icon">📋</span>
+                                        Billing Details
+                                    </h3>
 
                                 <div className="row">
                                     <div className="col-xs-6">
-                                        <label>First Name *</label>
-                                        <input 
-                                            type="text" 
-                                            className={`form-control ${errors.firstName ? 'is-invalid' : ''}`}
-                                            name="firstName"
-                                            value={formData.firstName}
-                                            onChange={handleInputChange}
-                                            required 
-                                        />
-                                        {errors.firstName && <div className="invalid-feedback d-block">{errors.firstName}</div>}
+                                        <div className="form-group-modern">
+                                            <label>First Name *</label>
+                                            <input 
+                                                type="text" 
+                                                className={`form-control-modern ${errors.firstName ? 'error' : ''}`}
+                                                name="firstName"
+                                                value={formData.firstName}
+                                                onChange={handleInputChange}
+                                                placeholder="John"
+                                                required 
+                                            />
+                                            {errors.firstName && <div className="error-message">{errors.firstName}</div>}
+                                        </div>
                                     </div>
                                     <div className="col-xs-6">
-                                        <label>Last Name *</label>
-                                        <input 
-                                            type="text" 
-                                            className={`form-control ${errors.lastName ? 'is-invalid' : ''}`}
-                                            name="lastName"
-                                            value={formData.lastName}
-                                            onChange={handleInputChange}
-                                            required 
-                                        />
-                                        {errors.lastName && <div className="invalid-feedback d-block">{errors.lastName}</div>}
+                                        <div className="form-group-modern">
+                                            <label>Last Name *</label>
+                                            <input 
+                                                type="text" 
+                                                className={`form-control-modern ${errors.lastName ? 'error' : ''}`}
+                                                name="lastName"
+                                                value={formData.lastName}
+                                                onChange={handleInputChange}
+                                                placeholder="Doe"
+                                                required 
+                                            />
+                                            {errors.lastName && <div className="error-message">{errors.lastName}</div>}
+                                        </div>
                                     </div>
                                 </div>
 
-                                <label>Email Address *</label>
-                                <input 
-                                    type="email" 
-                                    className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleInputChange}
-                                    required 
-                                />
-                                {errors.email && <div className="invalid-feedback d-block">{errors.email}</div>}
+                                <div className="form-group-modern">
+                                    <label>Email Address *</label>
+                                    <input 
+                                        type="email" 
+                                        className={`form-control-modern ${errors.email ? 'error' : ''}`}
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleInputChange}
+                                        placeholder="john.doe@example.com"
+                                        required 
+                                    />
+                                    {errors.email && <div className="error-message">{errors.email}</div>}
+                                </div>
 
-                                <label>Phone *</label>
-                                <input 
-                                    type="tel" 
-                                    className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
-                                    name="phone"
-                                    value={formData.phone}
-                                    onChange={handleInputChange}
-                                    required 
-                                />
-                                {errors.phone && <div className="invalid-feedback d-block">{errors.phone}</div>}
+                                <div className="form-group-modern">
+                                    <label>Phone *</label>
+                                    <input 
+                                        type="tel" 
+                                        className={`form-control-modern ${errors.phone ? 'error' : ''}`}
+                                        name="phone"
+                                        value={formData.phone}
+                                        onChange={handleInputChange}
+                                        placeholder="(555) 123-4567"
+                                        required 
+                                    />
+                                    {errors.phone && <div className="error-message">{errors.phone}</div>}
+                                </div>
 
-                                <label>Street Address *</label>
-                                <input 
-                                    type="text" 
-                                    className={`form-control ${errors.address ? 'is-invalid' : ''}`}
-                                    name="address"
-                                    placeholder="House number and street name"
-                                    value={formData.address}
-                                    onChange={handleInputChange}
-                                    required 
-                                />
-                                {errors.address && <div className="invalid-feedback d-block">{errors.address}</div>}
-
-                                <div className="row">
-                                    <div className="col-xs-6">
-                                        <label>Town / City *</label>
-                                        <input 
-                                            type="text" 
-                                            className={`form-control ${errors.city ? 'is-invalid' : ''}`}
-                                            name="city"
-                                            value={formData.city}
-                                            onChange={handleInputChange}
-                                            required 
-                                        />
-                                        {errors.city && <div className="invalid-feedback d-block">{errors.city}</div>}
-                                    </div>
-                                    <div className="col-xs-6">
-                                        <label>State *</label>
-                                        <input 
-                                            type="text" 
-                                            className={`form-control ${errors.state ? 'is-invalid' : ''}`}
-                                            name="state"
-                                            value={formData.state}
-                                            onChange={handleInputChange}
-                                            required 
-                                        />
-                                        {errors.state && <div className="invalid-feedback d-block">{errors.state}</div>}
-                                    </div>
+                                <div className="form-group-modern">
+                                    <label>Street Address *</label>
+                                    <input 
+                                        type="text" 
+                                        className={`form-control-modern ${errors.address ? 'error' : ''}`}
+                                        name="address"
+                                        placeholder="House number and street name"
+                                        value={formData.address}
+                                        onChange={handleInputChange}
+                                        required 
+                                    />
+                                    {errors.address && <div className="error-message">{errors.address}</div>}
                                 </div>
 
                                 <div className="row">
                                     <div className="col-xs-6">
-                                        <label>Zip Code *</label>
-                                        <input 
-                                            type="text" 
-                                            className={`form-control ${errors.zipCode ? 'is-invalid' : ''}`}
-                                            name="zipCode"
-                                            value={formData.zipCode}
-                                            onChange={handleInputChange}
-                                            required 
-                                        />
-                                        {errors.zipCode && <div className="invalid-feedback d-block">{errors.zipCode}</div>}
+                                        <div className="form-group-modern">
+                                            <label>Town / City *</label>
+                                            <input 
+                                                type="text" 
+                                                className={`form-control-modern ${errors.city ? 'error' : ''}`}
+                                                name="city"
+                                                value={formData.city}
+                                                onChange={handleInputChange}
+                                                placeholder="New York"
+                                                required 
+                                            />
+                                            {errors.city && <div className="error-message">{errors.city}</div>}
+                                        </div>
                                     </div>
                                     <div className="col-xs-6">
-                                        <label>Country *</label>
-                                        <select 
-                                            className="form-control"
-                                            name="country"
-                                            value={formData.country}
-                                            onChange={handleInputChange}
-                                        >
-                                            <option value="United States">United States</option>
-                                            <option value="Canada">Canada</option>
-                                            <option value="United Kingdom">United Kingdom</option>
-                                            <option value="Australia">Australia</option>
-                                        </select>
+                                        <div className="form-group-modern">
+                                            <label>State *</label>
+                                            <input 
+                                                type="text" 
+                                                className={`form-control-modern ${errors.state ? 'error' : ''}`}
+                                                name="state"
+                                                value={formData.state}
+                                                onChange={handleInputChange}
+                                                placeholder="NY"
+                                                required 
+                                            />
+                                            {errors.state && <div className="error-message">{errors.state}</div>}
+                                        </div>
                                     </div>
                                 </div>
 
-                                <label>Order Notes (Optional)</label>
-                                <textarea 
-                                    className="form-control pb-2 pt-2 mb-0" 
-                                    cols="30" 
-                                    rows="5"
-                                    name="notes"
-                                    value={formData.notes}
-                                    onChange={handleInputChange}
-                                    placeholder="Notes about your order, e.g. special notes for delivery"
-                                ></textarea>
+                                <div className="row">
+                                    <div className="col-xs-6">
+                                        <div className="form-group-modern">
+                                            <label>Zip Code *</label>
+                                            <input 
+                                                type="text" 
+                                                className={`form-control-modern ${errors.zipCode ? 'error' : ''}`}
+                                                name="zipCode"
+                                                value={formData.zipCode}
+                                                onChange={handleInputChange}
+                                                placeholder="10001"
+                                                required 
+                                            />
+                                            {errors.zipCode && <div className="error-message">{errors.zipCode}</div>}
+                                        </div>
+                                    </div>
+                                    <div className="col-xs-6">
+                                        <div className="form-group-modern">
+                                            <label>Country *</label>
+                                            <select 
+                                                className="form-control-modern"
+                                                name="country"
+                                                value={formData.country}
+                                                onChange={handleInputChange}
+                                            >
+                                                <option value="United States">United States</option>
+                                                <option value="Canada">Canada</option>
+                                                <option value="United Kingdom">United Kingdom</option>
+                                                <option value="Australia">Australia</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="form-group-modern">
+                                    <label>Order Notes (Optional)</label>
+                                    <textarea 
+                                        className="form-control-modern" 
+                                        rows="5"
+                                        name="notes"
+                                        value={formData.notes}
+                                        onChange={handleInputChange}
+                                        placeholder="Notes about your order, e.g. special notes for delivery"
+                                    ></textarea>
+                                </div>
+                                </div>
                             </div>
 
                             <aside className="col-lg-5 sticky-sidebar-wrapper">
                                 <div className="sticky-sidebar mt-1" data-sticky-options="{'bottom': 50}">
-                                    <div className="summary pt-5">
-                                        <h3 className="title title-simple text-left text-uppercase">Your Order</h3>
-                                        <table className="order-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Product</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {cartList.map((item, index) => {
-                                                    const price = getPrice(item);
-                                                    const subtotal = price * item.qty;
-                                                    return (
-                                                        <tr key={index}>
-                                                            <td className="product-name">
-                                                                {item.name} 
-                                                                {item.variant && <span className="product-quantity"> ({item.variant})</span>}
-                                                                <span className="product-quantity"> × {item.qty}</span>
-                                                            </td>
-                                                            <td className="product-total text-body">${toDecimal(subtotal)}</td>
-                                                        </tr>
-                                                    );
-                                                })}
-                                                <tr className="summary-subtotal">
-                                                    <td>
-                                                        <h4 className="summary-subtitle">Subtotal</h4>
-                                                    </td>
-                                                    <td className="summary-subtotal-price pb-0 pt-0">
-                                                        ${toDecimal(calculateSubtotal())}
-                                                    </td>
-                                                </tr>
-                                                <tr className="summary-subtotal">
-                                                    <td>
-                                                        <h4 className="summary-subtitle">Shipping</h4>
-                                                    </td>
-                                                    <td className="summary-subtotal-price pb-0 pt-0">
-                                                        ${toDecimal(calculateShipping())}
-                                                    </td>
-                                                </tr>
-                                                <tr className="summary-subtotal">
-                                                    <td>
-                                                        <h4 className="summary-subtitle">Tax</h4>
-                                                    </td>
-                                                    <td className="summary-subtotal-price pb-0 pt-0">
-                                                        ${toDecimal(calculateTax())}
-                                                    </td>
-                                                </tr>
-                                                <tr className="summary-total">
-                                                    <td className="pb-0">
-                                                        <h4 className="summary-subtitle">Total</h4>
-                                                    </td>
-                                                    <td className="pt-0 pb-0">
-                                                        <p className="summary-total-price ls-s text-primary">
-                                                            ${toDecimal(calculateTotal())}
-                                                        </p>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                    <div className="order-summary-card">
+                                        <h3 className="section-title">
+                                            <span className="title-icon">📦</span>
+                                            Your Order
+                                        </h3>
+                                        <div className="order-items">
+                                            {cartList.map((item, index) => {
+                                                const price = getPrice(item);
+                                                const subtotal = price * item.qty;
+                                                return (
+                                                    <div key={index} className="order-item">
+                                                        <div className="item-info">
+                                                            <div className="item-name-qty">
+                                                                <span className="item-name">{item.name}</span>
+                                                                {item.variant && <span className="item-variant">({item.variant})</span>}
+                                                                <span className="item-qty">× {item.qty}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="item-price">${toDecimal(subtotal)}</div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+
+                                        <div className="order-totals">
+                                            <div className="total-row">
+                                                <span className="total-label">Subtotal</span>
+                                                <span className="total-value">${toDecimal(calculateSubtotal())}</span>
+                                            </div>
+                                            <div className="total-row">
+                                                <span className="total-label">Shipping</span>
+                                                <span className="total-value">${toDecimal(calculateShipping())}</span>
+                                            </div>
+                                            <div className="total-row">
+                                                <span className="total-label">Tax (8%)</span>
+                                                <span className="total-value">${toDecimal(calculateTax())}</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="grand-total">
+                                            <span className="grand-total-label">Total</span>
+                                            <span className="grand-total-value">${toDecimal(calculateTotal())}</span>
+                                        </div>
 
                                         <button 
                                             type="submit" 
-                                            className="btn btn-dark btn-rounded btn-order"
+                                            className="payment-btn"
                                             disabled={isProcessing}
                                         >
-                                            {isProcessing ? 'Processing...' : 'Proceed to Payment'}
+                                            {isProcessing ? (
+                                                <>
+                                                    <span className="spinner"></span>
+                                                    Processing...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <span>Proceed to Payment</span>
+                                                    <i className="fas fa-lock"></i>
+                                                </>
+                                            )}
                                         </button>
+
+                                        <div className="security-badges">
+                                            <div className="security-badge">
+                                                <i className="fas fa-shield-alt"></i>
+                                                <span>SSL Secure</span>
+                                            </div>
+                                            <div className="security-badge">
+                                                <i className="fas fa-credit-card"></i>
+                                                <span>Safe Payment</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </aside>
                         </div>
                     </form>
+                    </div>
                 </div>
             </div>
+
+            <style jsx>{`
+                .checkout-modern {
+                    background: #f8f9fa;
+                    min-height: 100vh;
+                }
+
+                .checkout-header {
+                    text-align: center;
+                    margin-bottom: 40px;
+                }
+
+                .checkout-title {
+                    font-size: 42px;
+                    font-weight: 800;
+                    color: #222;
+                    margin-bottom: 30px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 15px;
+                }
+
+                .checkout-icon {
+                    font-size: 48px;
+                }
+
+                .breadcrumb-steps {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 20px;
+                    max-width: 600px;
+                    margin: 0 auto;
+                }
+
+                .step {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 8px;
+                    opacity: 0.5;
+                    transition: all 0.3s ease;
+                }
+
+                .step.active,
+                .step.completed {
+                    opacity: 1;
+                }
+
+                .step-number {
+                    width: 48px;
+                    height: 48px;
+                    border-radius: 50%;
+                    background: #e0e0e0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 700;
+                    font-size: 18px;
+                    color: #666;
+                    transition: all 0.3s ease;
+                }
+
+                .step.completed .step-number {
+                    background: #22c55e;
+                    color: white;
+                }
+
+                .step.active .step-number {
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+                }
+
+                .step-text {
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: #666;
+                }
+
+                .step.active .step-text,
+                .step.completed .step-text {
+                    color: #222;
+                }
+
+                .step-divider {
+                    width: 60px;
+                    height: 2px;
+                    background: #e0e0e0;
+                    margin-bottom: 30px;
+                }
+
+                .checkout-form {
+                    width: 100%;
+                }
+
+                .billing-details-card,
+                .order-summary-card {
+                    background: white;
+                    border-radius: 24px;
+                    padding: 32px;
+                    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+                }
+
+                .section-title {
+                    font-size: 24px;
+                    font-weight: 800;
+                    color: #222;
+                    margin: 0 0 32px 0;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    padding-bottom: 20px;
+                    border-bottom: 2px solid #f0f0f0;
+                }
+
+                .title-icon {
+                    font-size: 28px;
+                }
+
+                .form-group-modern {
+                    margin-bottom: 24px;
+                }
+
+                .form-group-modern label {
+                    display: block;
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: #333;
+                    margin-bottom: 8px;
+                }
+
+                .form-control-modern {
+                    width: 100%;
+                    padding: 14px 18px;
+                    border: 2px solid #e0e0e0;
+                    border-radius: 12px;
+                    font-size: 15px;
+                    transition: all 0.3s ease;
+                    background: white;
+                }
+
+                .form-control-modern:focus {
+                    outline: none;
+                    border-color: #667eea;
+                    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+                }
+
+                .form-control-modern.error {
+                    border-color: #f5576c;
+                }
+
+                .form-control-modern::placeholder {
+                    color: #999;
+                }
+
+                .error-message {
+                    color: #f5576c;
+                    font-size: 13px;
+                    margin-top: 6px;
+                    font-weight: 500;
+                }
+
+                .order-summary-card {
+                    position: sticky;
+                    top: 100px;
+                }
+
+                .order-items {
+                    border-bottom: 2px solid #f0f0f0;
+                    padding-bottom: 20px;
+                    margin-bottom: 20px;
+                }
+
+                .order-item {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    padding: 16px 0;
+                    border-bottom: 1px solid #f5f5f5;
+                }
+
+                .order-item:last-child {
+                    border-bottom: none;
+                }
+
+                .item-info {
+                    flex: 1;
+                }
+
+                .item-name-qty {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 6px;
+                }
+
+                .item-name {
+                    font-size: 15px;
+                    font-weight: 600;
+                    color: #222;
+                }
+
+                .item-variant {
+                    font-size: 13px;
+                    color: #666;
+                    font-style: italic;
+                }
+
+                .item-qty {
+                    font-size: 13px;
+                    color: #999;
+                }
+
+                .item-price {
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: #667eea;
+                    margin-left: 16px;
+                }
+
+                .order-totals {
+                    border-bottom: 2px solid #f0f0f0;
+                    padding-bottom: 20px;
+                    margin-bottom: 20px;
+                }
+
+                .total-row {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 14px;
+                }
+
+                .total-label {
+                    font-size: 15px;
+                    color: #666;
+                }
+
+                .total-value {
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: #222;
+                }
+
+                .grand-total {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 24px 0;
+                    margin-bottom: 24px;
+                }
+
+                .grand-total-label {
+                    font-size: 20px;
+                    font-weight: 800;
+                    color: #222;
+                }
+
+                .grand-total-value {
+                    font-size: 32px;
+                    font-weight: 800;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                }
+
+                .payment-btn {
+                    width: 100%;
+                    padding: 18px 28px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    border: none;
+                    border-radius: 16px;
+                    color: white;
+                    font-size: 16px;
+                    font-weight: 700;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+                    margin-bottom: 24px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                }
+
+                .payment-btn:hover:not(:disabled) {
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.5);
+                }
+
+                .payment-btn:disabled {
+                    opacity: 0.7;
+                    cursor: not-allowed;
+                }
+
+                .spinner {
+                    width: 20px;
+                    height: 20px;
+                    border: 3px solid rgba(255, 255, 255, 0.3);
+                    border-top-color: white;
+                    border-radius: 50%;
+                    animation: spin 0.8s linear infinite;
+                    margin-right: 10px;
+                }
+
+                @keyframes spin {
+                    to { transform: rotate(360deg); }
+                }
+
+                .security-badges {
+                    display: flex;
+                    justify-content: space-around;
+                    gap: 16px;
+                }
+
+                .security-badge {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 8px;
+                    font-size: 12px;
+                    color: #666;
+                    text-align: center;
+                }
+
+                .security-badge i {
+                    font-size: 24px;
+                    color: #667eea;
+                }
+
+                @media (max-width: 992px) {
+                    .order-summary-card {
+                        position: static;
+                        margin-top: 32px;
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    .checkout-title {
+                        font-size: 32px;
+                        flex-direction: column;
+                        gap: 12px;
+                    }
+
+                    .checkout-icon {
+                        font-size: 40px;
+                    }
+
+                    .breadcrumb-steps {
+                        gap: 12px;
+                    }
+
+                    .step-number {
+                        width: 40px;
+                        height: 40px;
+                        font-size: 16px;
+                    }
+
+                    .step-text {
+                        font-size: 12px;
+                    }
+
+                    .step-divider {
+                        width: 40px;
+                    }
+
+                    .billing-details-card,
+                    .order-summary-card {
+                        padding: 24px;
+                    }
+
+                    .section-title {
+                        font-size: 20px;
+                    }
+
+                    .form-control-modern {
+                        padding: 12px 16px;
+                    }
+                }
+            `}</style>
         </div>
     )
 }
