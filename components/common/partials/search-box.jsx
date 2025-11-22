@@ -88,7 +88,7 @@ function SearchForm() {
     function onSubmitSearchForm( e ) {
         e.preventDefault();
         router.push( {
-            pathname: '/shop',
+            pathname: '/pages/shop',
             query: {
                 search: search
             }

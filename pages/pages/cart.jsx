@@ -295,8 +295,7 @@ function Cart( props ) {
                                             </div>
 
                                             <ALink href="/pages/checkout" className="checkout-btn">
-                                                <span>Proceed to Checkout</span>
-                                                <i className="fas fa-arrow-right"></i>
+                                                <button className="promo-apply-btn">Proceed to Checkout    <i className="fas fa-arrow-right"></i></button>            
                                             </ALink>
 
                                             <div className="trust-badges">
@@ -870,6 +869,57 @@ function Cart( props ) {
                     gap: 8px;
                     font-size: 13px;
                     color: #666;
+                }
+
+                .checkout-btn {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    width: 100%;
+                    padding: 18px 28px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    border: none;
+                    border-radius: 16px;
+                    color: white;
+                    font-size: 16px;
+                    font-weight: 700;
+                    text-decoration: none;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+                    margin-bottom: 40px; /* Increased from 24px to 32px */
+                }
+
+                .checkout-btn:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.5);
+                    color: white;
+                }
+
+                .trust-badges {
+                    display: flex;
+                    justify-content: space-around;
+                    gap: 24px; /* Increased from 16px to 24px */
+                    padding-top: 20px; /* Added top padding */
+                }
+
+                .trust-badge {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 10px; /* Increased from 8px to 10px */
+                    font-size: 12px;
+                    color: #666;
+                    text-align: center;
+                }
+
+                .trust-badge i {
+                    font-size: 28px; /* Increased from 24px to 28px */
+                    color: #667eea;
+                }
+
+                .trust-badge span {
+                    font-weight: 600; /* Added for better visibility */
                 }
 
                 .empty-feature i {
