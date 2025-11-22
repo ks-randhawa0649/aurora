@@ -1,6 +1,6 @@
 Aurora is a full-stack fashion e-commerce web app that lets users browse products, add items to a cart, check out using Stripe, chat with an AI fashion stylist powered by Google Gemini and give users an opportunity to test the look and vibe on themselves before ordering a product.
 
-#Main features 
+# Main features 
 •	User registration and secure login.
 •	Product catalogue with images.
 •	Shopping cart and checkout flow with order creation in a MySQL database.
@@ -8,7 +8,7 @@ Aurora is a full-stack fashion e-commerce web app that lets users browse product
 •	Floating AI stylist chat bot that suggests outfits and colour combinations.
 •	AI – powered try-on for our pro users (to be completed before final product presentation)
 
-#How to run the project 
+# How to run the project 
 
 Clone the repository
 1.	git clone https://github.com/ks-randhawa0649/aurora.git
@@ -24,11 +24,11 @@ Then open: http://localhost:3000
 
 #Configuration (.env.local)
 Create a .env.local file in the project root and add:
-# https://dashboard.stripe.com/apikeys
+#https://dashboard.stripe.com/apikeys
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_51SJeCHBJKB6HMUU0C1nSJIURNgcLFCgs723L2JYZ1HfqMy47l3Gdxc9qrKgKvRXM6X3RzNN7BHvaPh3Ho5VC332i00R8oOfyHh
 NEXT_PUBLIC_STRIPE_SECRET_KEY=sk_test_51SJeCHBJKB6HMUU00qEPR8HWgqWNLuTrbLqnQzoO55zAhp3txlZE4c4fGywCE1mN8IENS0qgjl6twbVPU6loO1jI00vcfqNpyj
-# Set this environment variable to support webhooks — https://stripe.com/docs/webhooks#verify-events
-# STRIPE_WEBHOOK_SECRET=whsec_12345
+#Set this environment variable to support webhooks — https://stripe.com/docs/webhooks#verify-events
+#STRIPE_WEBHOOK_SECRET=whsec_12345
 JWT_SECRET=haJN5QLNNRKV3eyPpMvt61F8wqgT3AtHnb077nF+Spr2VedeSropMk2YS7d3LU4N
 STRIPE_SECRET_KEY=sk_test_51SJeCHBJKB6HMUU00qEPR8HWgqWNLuTrbLqnQzoO55zAhp3txlZE4c4fGywCE1mN8IENS0qgjl6twbVPU6loO1jI00vcfqNpyj
 MYSQL_HOST=smartstyle-curated-smartstyle.e.aivencloud.com
@@ -38,7 +38,7 @@ MYSQL_PASSWORD=AVNS_XvPjoZcthfKbL_YOcIv
 MYSQL_DATABASE=smartstyle_curated
 GEMINI_API_KEY= AIzaSyB4p6OkIcthK4vckWmzmGj5hqWmggUeMyE
 
-Using the system
+# Using the system
 1.	Go to http://localhost:3000.
 2.	Register a new account and log in.
 3.	Browse products, add items to the cart, and proceed to checkout.
@@ -46,7 +46,7 @@ Using the system
 5.	After successful payment, you’ll be redirected back to the site, and an order will be stored in MySQL.
 6.	Click the floating Aurora AI button to open the chat and ask the stylist for outfit ideas and style suggestions.
 
-Dependencies
+# Dependencies
 All Node packages used by the project are installed automatically via npm install using package.json. 
 All runtime dependencies (with versions) used in this project are listed below for reference.
 •	@apollo/client - 3.4.16
