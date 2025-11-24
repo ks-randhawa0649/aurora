@@ -16,29 +16,14 @@ Clone the repository
 3.	git checkout main
 Install dependencies
 4.	npm --force install or yarn
-5.	Create .env.local in the project root and fill in the keys and DB info (info given in the next section).
 Start the development server
-6.	npm run dev or yarn dev
+5.	npm run dev or yarn dev
 Then open: http://localhost:3000
 
 
 
-
 #Configuration (.env.local)
-Create a .env.local file in the project root and add:
-#https://dashboard.stripe.com/apikeys
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_51SJeCHBJKB6HMUU0C1nSJIURNgcLFCgs723L2JYZ1HfqMy47l3Gdxc9qrKgKvRXM6X3RzNN7BHvaPh3Ho5VC332i00R8oOfyHh
-NEXT_PUBLIC_STRIPE_SECRET_KEY=sk_test_51SJeCHBJKB6HMUU00qEPR8HWgqWNLuTrbLqnQzoO55zAhp3txlZE4c4fGywCE1mN8IENS0qgjl6twbVPU6loO1jI00vcfqNpyj
-#Set this environment variable to support webhooks — https://stripe.com/docs/webhooks#verify-events
-#STRIPE_WEBHOOK_SECRET=whsec_12345
-JWT_SECRET=haJN5QLNNRKV3eyPpMvt61F8wqgT3AtHnb077nF+Spr2VedeSropMk2YS7d3LU4N
-STRIPE_SECRET_KEY=sk_test_51SJeCHBJKB6HMUU00qEPR8HWgqWNLuTrbLqnQzoO55zAhp3txlZE4c4fGywCE1mN8IENS0qgjl6twbVPU6loO1jI00vcfqNpyj
-MYSQL_HOST=smartstyle-curated-smartstyle.e.aivencloud.com
-MYSQL_PORT=26358
-MYSQL_USER=avnadmin
-MYSQL_PASSWORD=AVNS_XvPjoZcthfKbL_YOcIv
-MYSQL_DATABASE=smartstyle_curated
-GEMINI_API_KEY= AIzaSyB4p6OkIcthK4vckWmzmGj5hqWmggUeMyE
+.env.local is located at the project root.
 
 # Using the system
 1.	Go to http://localhost:3000.
