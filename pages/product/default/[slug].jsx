@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
 import Helmet from 'react-helmet';
 import Reveal from 'react-awesome-reveal';
-
+import { UserContext } from '../../_app';
 import ALink from '~/components/features/custom-link';
 import MediaOne from '~/components/partials/product/media/media-one';
 import DetailOne from '~/components/partials/product/detail/detail-one';
@@ -31,6 +31,7 @@ const isNewProduct = (createdAt) => {
 function ProductDefault() {
     const router = useRouter();
     const { slug } = router.query;
+    const { user } = useContext(UserContext);
     const [product, setProduct] = useState(null);
     const [related, setRelated] = useState([]);
     const [loading, setLoading] = useState(true);

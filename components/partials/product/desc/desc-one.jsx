@@ -1,20 +1,32 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { connect } from 'react-redux';
 import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import LockIcon from '@mui/icons-material/Lock';
+import { UserContext } from '../../../../pages/_app';
 
 import ALink from '~/components/features/custom-link';
-
 import { modalActions } from '~/store/modal';
-
 import { toDecimal } from '~/utils';
 
 function DescOne( props ) {
     const { product, isGuide = true, isDivider = true, openModal } = props;
+    const { user } = useContext(UserContext);
+    
+    // Check if user is Pro (you'll need to add this to your user context)
+    const isProUser = user?.isPro || false;
+    
+    // Virtual Try-On States
+    const [userImage, setUserImage] = useState(null);
+    const [userImagePreview, setUserImagePreview] = useState(null);
+    const [tryOnResult, setTryOnResult] = useState(null);
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [error, setError] = useState(null);
 
     let colors = [], sizes = [];
 
@@ -62,6 +74,81 @@ function DescOne( props ) {
                 ))}
             </div>
         );
+    };
+
+    // Handle user image upload
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                setError('Please upload an image file');
+                return;
+            }
+
+            // Validate file size (max 10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                setError('Image size should be less than 10MB');
+                return;
+            }
+
+            setUserImage(file);
+            setError(null);
+            
+            // Create preview
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setUserImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    // Process Virtual Try-On
+    const handleTryOn = async () => {
+        if (!userImage) {
+            setError('Please upload your photo first');
+            return;
+        }
+
+        setIsProcessing(true);
+        setError(null);
+        setTryOnResult(null);
+
+        try {
+            // Prepare form data
+            const formData = new FormData();
+            formData.append('userImage', userImage);
+            formData.append('productImage', product.pictures[0]?.url || '');
+            formData.append('productId', product.id);
+
+            // Call your API endpoint that communicates with FASHN API
+            const response = await fetch('/api/virtual-tryon', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                setTryOnResult(data.resultImage);
+            } else {
+                throw new Error(data.error || 'Try-on failed');
+            }
+        } catch (err) {
+            console.error('Try-on error:', err);
+            setError(err.message || 'Failed to process try-on. Please try again.');
+        } finally {
+            setIsProcessing(false);
+        }
+    };
+
+    // Reset try-on
+    const handleReset = () => {
+        setUserImage(null);
+        setUserImagePreview(null);
+        setTryOnResult(null);
+        setError(null);
     };
 
     return (
@@ -131,14 +218,159 @@ function DescOne( props ) {
                         </div>
 
                         <div className="col-md-6">
-                            <div className="video-card">
-                                <h5 className="section-title-modern">🎥 Product Video</h5>
-                                <figure className="video-wrapper">
-                                    <img src="./images/product.jpg" alt="Product" className="video-thumbnail" />
-                                    <button className="play-button" onClick={ showVideoModalHandler } data="/uploads/video/video-1.mp4">
-                                        <PlayCircleOutlineIcon sx={{ fontSize: 64, color: 'white' }} />
-                                    </button>
-                                </figure>
+                            {/* AI Virtual Try-On Card */}
+                            <div className="video-card tryon-card">
+                                <h5 className="section-title-modern">
+                                    <AutoAwesomeIcon sx={{ fontSize: 24, marginRight: 1 }} />
+                                    AI Virtual Try-On
+                                </h5>
+                                
+                                {/* Pro User Overlay */}
+                                {!isProUser && (
+                                    <div className="pro-overlay">
+                                        <div className="pro-overlay-content">
+                                            <div className="pro-lock-icon">
+                                                <LockIcon sx={{ fontSize: 64 }} />
+                                            </div>
+                                            <h3>Aurora Pro Exclusive</h3>
+                                            <p>
+                                                Unlock AI Virtual Try-On and see how this product looks on you before buying!
+                                            </p>
+                                            <div className="pro-benefits-list">
+                                                <div className="pro-benefit-item">
+                                                    <AutoAwesomeIcon sx={{ fontSize: 20 }} />
+                                                    <span>Unlimited Virtual Try-Ons</span>
+                                                </div>
+                                                <div className="pro-benefit-item">
+                                                    <StarIcon sx={{ fontSize: 20 }} />
+                                                    <span>AI Fashion Stylist</span>
+                                                </div>
+                                                <div className="pro-benefit-item">
+                                                    <LocalShippingOutlinedIcon sx={{ fontSize: 20 }} />
+                                                    <span>Free Shipping Forever</span>
+                                                </div>
+                                            </div>
+                                            <ALink href="/pages/aurora-pro" className="btn-upgrade-pro">
+                                                <StarIcon sx={{ fontSize: 20 }} />
+                                                Upgrade to Aurora Pro
+                                            </ALink>
+                                            <p className="pro-pricing">
+                                                Just $9.99/month • Cancel anytime
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Try-On Content (blurred if not pro) */}
+                                <div className={!isProUser ? 'tryon-content-locked' : ''}>
+                                    {!tryOnResult ? (
+                                        <div className="tryon-upload-section">
+                                            {/* Upload Area */}
+                                            <div className="upload-area">
+                                                {userImagePreview ? (
+                                                    <div className="image-preview-wrapper">
+                                                        <img 
+                                                            src={userImagePreview} 
+                                                            alt="Your photo" 
+                                                            className="uploaded-preview"
+                                                        />
+                                                        <button 
+                                                            className="btn-remove-image"
+                                                            onClick={handleReset}
+                                                            type="button"
+                                                        >
+                                                            ✕
+                                                        </button>
+                                                    </div>
+                                                ) : (
+                                                    <label htmlFor="photo-upload" className="upload-label">
+                                                        <CloudUploadIcon sx={{ fontSize: 48, color: '#667eea', marginBottom: 2 }} />
+                                                        <h4>Upload Your Photo</h4>
+                                                        <p>Click to select or drag and drop</p>
+                                                        <span className="upload-hint">JPG, PNG (Max 10MB)</span>
+                                                        <input
+                                                            id="photo-upload"
+                                                            type="file"
+                                                            accept="image/*"
+                                                            onChange={handleImageUpload}
+                                                            style={{ display: 'none' }}
+                                                        />
+                                                    </label>
+                                                )}
+                                            </div>
+
+                                            {/* Product Preview */}
+                                            <div className="product-preview-small">
+                                                <img 
+                                                    src={product.pictures[0]?.url || '/images/placeholder.jpg'} 
+                                                    alt={product.name}
+                                                />
+                                                <span className="preview-label">Product</span>
+                                            </div>
+
+                                            {/* Error Message */}
+                                            {error && (
+                                                <div className="error-message">
+                                                    ⚠️ {error}
+                                                </div>
+                                            )}
+
+                                            {/* Try-On Button */}
+                                            <button
+                                                className="btn-tryon"
+                                                onClick={handleTryOn}
+                                                disabled={!userImage || isProcessing}
+                                            >
+                                                {isProcessing ? (
+                                                    <>
+                                                        <span className="spinner"></span>
+                                                        Processing Magic...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <AutoAwesomeIcon sx={{ fontSize: 20 }} />
+                                                        Try It On!
+                                                    </>
+                                                )}
+                                            </button>
+
+                                            {/* Info Box */}
+                                            <div className="tryon-info-box">
+                                                <p><strong>🔒 100% Private:</strong> Your photos are never stored</p>
+                                                <p><strong>⚡ Instant Results:</strong> See yourself in seconds</p>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        // Result Display
+                                        <div className="tryon-result-section">
+                                            <div className="result-comparison">
+                                                <div className="comparison-item">
+                                                    <img src={userImagePreview} alt="Original" />
+                                                    <span className="comparison-label">Original</span>
+                                                </div>
+                                                <div className="comparison-arrow">→</div>
+                                                <div className="comparison-item">
+                                                    <img src={tryOnResult} alt="Try-on result" />
+                                                    <span className="comparison-label">With Product</span>
+                                                </div>
+                                            </div>
+
+                                            <div className="result-actions">
+                                                <button className="btn-download" onClick={() => {
+                                                    const link = document.createElement('a');
+                                                    link.href = tryOnResult;
+                                                    link.download = `tryon-${product.name}.jpg`;
+                                                    link.click();
+                                                }}>
+                                                    📥 Download Result
+                                                </button>
+                                                <button className="btn-retry" onClick={handleReset}>
+                                                    🔄 Try Another Photo
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
 
                             <div className="benefits-grid mt-4">
@@ -355,7 +587,7 @@ function DescOne( props ) {
                             <h3 className="title title-simple text-left text-normal">
                                 {
                                     product.reviews > 0 ? "Add a Review" :
-                                        "Be The First To Review “" + product.name + "”"
+                                        "Be The First To Review " + product.name + ""
                                 }
                             </h3>
                             <p>Your email address will not be published. Required fields are marked *</p>
@@ -1035,6 +1267,409 @@ function DescOne( props ) {
                 margin-left: 4px;
             }
 
+            /* Virtual Try-On Styles */
+            .tryon-card {
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                padding: 30px;
+                border-radius: 20px;
+                border: 2px solid #e0e0e0;
+                position: relative;
+            }
+
+            /* Pro Overlay Styles */
+            .pro-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.95);
+                backdrop-filter: blur(10px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 100;
+                border-radius: 20px;
+                padding: 40px;
+            }
+
+            .pro-overlay-content {
+                text-align: center;
+                max-width: 500px;
+                animation: slideUp 0.5s ease;
+            }
+
+            @keyframes slideUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .pro-lock-icon {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 24px auto;
+                color: white;
+                box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4);
+            }
+
+            .pro-overlay-content h3 {
+                font-size: 28px;
+                font-weight: 800;
+                color: white;
+                margin: 0 0 16px 0;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+
+            .pro-overlay-content > p {
+                font-size: 16px;
+                color: rgba(255, 255, 255, 0.8);
+                line-height: 1.6;
+                margin: 0 0 32px 0;
+            }
+
+            .pro-benefits-list {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+                margin-bottom: 32px;
+                text-align: left;
+            }
+
+            .pro-benefit-item {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px 20px;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 12px;
+                color: white;
+                font-size: 15px;
+                font-weight: 600;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+            }
+
+            .pro-benefit-item :global(svg) {
+                color: #667eea;
+                flex-shrink: 0;
+            }
+
+            .btn-upgrade-pro {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 16px 40px;
+                border-radius: 12px;
+                font-size: 18px;
+                font-weight: 700;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+                margin-bottom: 16px;
+            }
+
+            .btn-upgrade-pro:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 12px 32px rgba(102, 126, 234, 0.5);
+                color: white;
+            }
+
+            .pro-pricing {
+                font-size: 14px;
+                color: rgba(255, 255, 255, 0.7);
+                margin: 0;
+            }
+
+            .tryon-content-locked {
+                filter: blur(8px);
+                pointer-events: none;
+                user-select: none;
+            }
+
+            .tryon-upload-section {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .upload-area {
+                background: white;
+                border: 3px dashed #667eea;
+                border-radius: 16px;
+                padding: 40px;
+                text-align: center;
+                transition: all 0.3s ease;
+                cursor: pointer;
+                min-height: 300px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .upload-area:hover {
+                border-color: #764ba2;
+                background: #f8f9ff;
+            }
+
+            .upload-label {
+                cursor: pointer;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+
+            .upload-label h4 {
+                font-size: 20px;
+                font-weight: 700;
+                color: #333;
+                margin: 0 0 8px 0;
+            }
+
+            .upload-label p {
+                font-size: 15px;
+                color: #666;
+                margin: 0 0 12px 0;
+            }
+
+            .upload-hint {
+                font-size: 13px;
+                color: #999;
+                padding: 6px 16px;
+                background: #f0f0f0;
+                border-radius: 20px;
+            }
+
+            .image-preview-wrapper {
+                position: relative;
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .uploaded-preview {
+                width: 100%;
+                height: auto;
+                border-radius: 12px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .btn-remove-image {
+                position: absolute;
+                top: -10px;
+                right: -10px;
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background: #ff4444;
+                color: white;
+                border: none;
+                cursor: pointer;
+                font-size: 18px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 8px rgba(255, 68, 68, 0.4);
+                transition: all 0.3s ease;
+            }
+
+            .btn-remove-image:hover {
+                background: #cc0000;
+                transform: scale(1.1);
+            }
+
+            .product-preview-small {
+                position: relative;
+                width: 120px;
+                height: 120px;
+                margin: 0 auto;
+                border-radius: 12px;
+                overflow: hidden;
+                border: 3px solid #e0e0e0;
+            }
+
+            .product-preview-small img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .preview-label {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: rgba(0, 0, 0, 0.7);
+                color: white;
+                padding: 4px;
+                font-size: 12px;
+                text-align: center;
+                font-weight: 600;
+            }
+
+            .error-message {
+                background: #ffebee;
+                color: #c62828;
+                padding: 12px 16px;
+                border-radius: 8px;
+                font-size: 14px;
+                text-align: center;
+                border: 1px solid #ef5350;
+            }
+
+            .btn-tryon {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                padding: 16px 32px;
+                border-radius: 12px;
+                font-size: 16px;
+                font-weight: 700;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                width: 100%;
+                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            }
+
+            .btn-tryon:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            }
+
+            .btn-tryon:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+
+            .spinner {
+                width: 20px;
+                height: 20px;
+                border: 3px solid rgba(255, 255, 255, 0.3);
+                border-top-color: white;
+                border-radius: 50%;
+                animation: spin 0.8s linear infinite;
+            }
+
+            @keyframes spin {
+                to { transform: rotate(360deg); }
+            }
+
+            .tryon-info-box {
+                background: white;
+                padding: 16px;
+                border-radius: 12px;
+                border: 2px solid #e0e0e0;
+            }
+
+            .tryon-info-box p {
+                margin: 8px 0;
+                font-size: 14px;
+                color: #666;
+            }
+
+            .tryon-info-box strong {
+                color: #333;
+            }
+
+            .tryon-result-section {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .result-comparison {
+                display: grid;
+                grid-template-columns: 1fr auto 1fr;
+                gap: 16px;
+                align-items: center;
+                background: white;
+                padding: 20px;
+                border-radius: 16px;
+            }
+
+            .comparison-item {
+                position: relative;
+                text-align: center;
+            }
+
+            .comparison-item img {
+                width: 100%;
+                height: auto;
+                border-radius: 12px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .comparison-label {
+                display: block;
+                margin-top: 8px;
+                font-size: 13px;
+                font-weight: 600;
+                color: #667eea;
+            }
+
+            .comparison-arrow {
+                font-size: 32px;
+                color: #667eea;
+                font-weight: bold;
+            }
+
+            .result-actions {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .btn-download,
+            .btn-retry {
+                padding: 14px 24px;
+                border-radius: 12px;
+                font-size: 15px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                border: none;
+            }
+
+            .btn-download {
+                background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+                color: white;
+                box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+            }
+
+            .btn-download:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+            }
+
+            .btn-retry {
+                background: #f0f0f0;
+                color: #333;
+                border: 2px solid #e0e0e0;
+            }
+
+            .btn-retry:hover {
+                background: #e0e0e0;
+                transform: translateY(-2px);
+            }
+
             @media (max-width: 768px) {
                 .tab-panel-modern {
                     padding: 20px;
@@ -1073,10 +1708,45 @@ function DescOne( props ) {
                 .benefits-grid {
                     grid-template-columns: 1fr;
                 }
+
+                .tryon-card {
+                    padding: 20px;
+                }
+
+                .upload-area {
+                    padding: 30px 20px;
+                    min-height: 250px;
+                }
+
+                .result-comparison {
+                    grid-template-columns: 1fr;
+                    gap: 12px;
+                }
+
+                .comparison-arrow {
+                    transform: rotate(90deg);
+                    font-size: 24px;
+                }
+
+                .result-actions {
+                    grid-template-columns: 1fr;
+                }
+
+                .pro-overlay {
+                    padding: 20px;
+                }
+
+                .pro-overlay-content h3 {
+                    font-size: 22px;
+                }
+
+                .btn-upgrade-pro {
+                    padding: 14px 32px;
+                    font-size: 16px;
+                }
             }
         `}</style>
         </>
     )
 }
-
-export default connect( '', { openModal: modalActions.openModal } )( DescOne )
+export default connect( '', { openModal: modalActions.openModal } )( DescOne );
