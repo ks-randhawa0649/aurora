@@ -26,7 +26,12 @@ function MainMenu() {
                 <li id="menu-about" className={ pathname === '/pages/about-us' ? 'active' : '' }>
                     <ALink href="/pages/about-us">About Us</ALink>
                 </li>
-                {user && !user.isPro && (
+                {(user && !user.isPro) ? <li id="menu-aurora-pro" style={{color:'#ff0090ff'}} className={ pathname === '/pages/aurora-pro' ? 'active' : '' }>
+                    <ALink href="/pages/aurora-pro">Join Aurora Pro!</ALink>
+                </li> : <li id="menu-pro-dashboard" style={{color:'#ff0090ff'}} className={ pathname === '/pages/manage-subscription' ? 'active' : '' }>
+                    <ALink href="/pages/manage-subscription">Your Aurora Pro</ALink>
+                </li> }
+                {/* {user && !user.isPro && (
                 <li id="menu-aurora-pro" style={{color:'#ff0090ff'}} className={ pathname === '/pages/aurora-pro' ? 'active' : '' }>
                     <ALink href="/pages/aurora-pro">Join Aurora Pro!</ALink>
                 </li>
@@ -35,7 +40,7 @@ function MainMenu() {
                 <li id="menu-pro-dashboard" style={{color:'#ff0090ff'}} className={ pathname === '/pages/pro-dashboard' ? 'active' : '' }>
                     <ALink href="/pages/aurora-pro">Your Aurora Pro</ALink>
                 </li>
-                )}
+                )} */}
             </ul>
         </nav>
     )

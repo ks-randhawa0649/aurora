@@ -38,7 +38,9 @@ export default function Checkout() {
       },
       body: JSON.stringify({
         amount: amount || orderData.pricing.total,
-        customer: orderData.customer
+        customer: orderData.customer,
+        type: orderData.type,
+        period: orderData.period,
       }),
     });
 

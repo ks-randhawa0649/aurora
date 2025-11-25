@@ -104,6 +104,9 @@ function Checkout( props ) {
     };
 
     const calculateShipping = () => {
+        if(user && user.isPro) {
+            return 0;
+        }
         return 10.00;
     };
 
@@ -422,7 +425,9 @@ function Checkout( props ) {
                                                 <span className="total-value">${toDecimal(calculateSubtotal())}</span>
                                             </div>
                                             <div className="total-row">
-                                                <span className="total-label">Shipping</span>
+                                                {!user.isPro ? 
+                                                <span className="total-label">Shipping (Join Aurora Pro for free shipping!)</span> 
+                                                : <span className="total-label">Shipping (Aurora Pro!)</span> }
                                                 <span className="total-value">${toDecimal(calculateShipping())}</span>
                                             </div>
                                             <div className="total-row">

@@ -209,11 +209,6 @@ function DetailOne( props ) {
                 <span>Free shipping on orders over $50</span>
             </div>
 
-            <div className="shipping-info-box">
-                <LocalShippingOutlinedIcon sx={{ fontSize: 24, color: '#26c' }} />
-                <span>AI Virtual Try-On Coming Soon!</span>
-            </div>
-
             {product.variants && product.variants.length > 0 && (
                 <div className="variants-section">
                     {product.size && product.size.length > 0 && (

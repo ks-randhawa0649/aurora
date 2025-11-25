@@ -7,42 +7,105 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { amount, customer } = req.body
+    console.log('Creating embedded checkout session with body:', req.body)
+    const { amount, customer, type, plan, period } = req.body
 
-    if (!amount || !customer) {
-      return res.status(400).json({ error: 'Amount and customer data are required' })
+    if (!amount) {
+      return res.status(400).json({ error: 'Amount is required' })
     }
 
-    // Create Stripe checkout session
-    const session = await stripe.checkout.sessions.create({
+    // Check if this is a subscription
+    const isSubscription = type === 'subscription'
+
+    // Base session configuration
+    let sessionConfig = {
       ui_mode: 'embedded',
-      line_items: [
+      return_url: (isSubscription)?
+                    `${req.headers.origin}/pages/subscription-success?session_id={CHECKOUT_SESSION_ID}`
+                   :`${req.headers.origin}/pages/return?session_id={CHECKOUT_SESSION_ID}`,
+    }
+
+    // Add customer email if provided
+    if (customer && customer.email) {
+      sessionConfig.customer_email = customer.email
+    }
+
+    // Add metadata if customer data exists
+    if (customer) {
+      sessionConfig.metadata = {
+        customerFirstName: customer.firstName || '',
+        customerLastName: customer.lastName || '',
+        customerPhone: customer.phone || '',
+        shippingAddress: customer.address?.street || '',
+        shippingCity: customer.address?.city || '',
+        shippingState: customer.address?.state || '',
+        shippingZip: customer.address?.zipCode || '',
+        shippingCountry: customer.address?.country || '',
+      }
+    }
+
+    if (isSubscription) {
+      // Subscription mode for Aurora Pro
+      console.log('Creating subscription checkout with plan:', plan, 'period:', period)
+      
+      sessionConfig.mode = 'subscription'
+      sessionConfig.line_items = [
+        {
+          price_data: {
+            currency: 'cad',
+            product_data: {
+              name: plan === 'annual' ? 'Aurora Pro - Annual Plan' : 'Aurora Pro - Monthly Plan',
+              description: plan === 'annual' 
+                ? 'Annual subscription (Save 17%) - Free shipping, AI Virtual Try-On, AI Fashion Chatbot, Priority Support, Early Sale Access' 
+                : 'Monthly subscription - Free shipping, AI Virtual Try-On, AI Fashion Chatbot, Priority Support, Early Sale Access',
+            },
+            unit_amount: Math.round(parseFloat(amount) * 100),
+            recurring: {
+              interval: period === 'year' ? 'year' : 'month',
+              interval_count: 1
+            },
+          },
+          quantity: 1,
+        }
+      ]
+      
+      sessionConfig.subscription_data = {
+        metadata: {
+          subscriptionType: 'aurora_pro',
+          plan: plan || 'monthly',
+          period: period || 'month',
+        },
+      }
+
+      // Add subscription metadata to session metadata
+      if (sessionConfig.metadata) {
+        sessionConfig.metadata.subscriptionType = 'aurora_pro'
+        sessionConfig.metadata.plan = plan || 'monthly'
+        sessionConfig.metadata.period = period || 'month'
+      }
+    } else {
+      // One-time payment mode for regular purchases
+      console.log('Creating one-time payment checkout')
+      
+      sessionConfig.mode = 'payment'
+      sessionConfig.line_items = [
         {
           price_data: {
             currency: 'cad',
             product_data: {
               name: 'Order Total',
             },
-            unit_amount: Math.round(parseFloat(amount) * 100), // Convert to cents
+            unit_amount: Math.round(parseFloat(amount) * 100),
           },
           quantity: 1,
         }
-      ],
-      mode: 'payment',
-      customer_email: customer.email,
-      metadata: {
-        customerFirstName: customer.firstName,
-        customerLastName: customer.lastName,
-        customerPhone: customer.phone,
-        shippingAddress: customer.address.street,
-        shippingCity: customer.address.city,
-        shippingState: customer.address.state,
-        shippingZip: customer.address.zipCode,
-        shippingCountry: customer.address.country,
-      },
-      return_url: `${req.headers.origin}/pages/return?session_id={CHECKOUT_SESSION_ID}`,
-    })
+      ]
+    }
 
+    // Create Stripe checkout session
+    const session = await stripe.checkout.sessions.create(sessionConfig)
+
+    console.log('Checkout session created successfully:', session.id)
     res.status(200).json({ client_secret: session.client_secret })
   } catch (error) {
     console.error('Error creating checkout session:', error)

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import { useRouter } from 'next/router';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import ALink from '~/components/features/custom-link';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -14,6 +15,29 @@ import SmartToyIcon from '@mui/icons-material/SmartToy';
 import ChatIcon from '@mui/icons-material/Chat';
 
 function AuroraPro() {
+    const router = useRouter();
+
+    // Handle subscription click
+const handleSubscribe = (selectedPlan) => {
+  const planDetails = {
+    monthly: { amount: '9.99', period: 'month' },
+    annual: { amount: '99.99', period: 'year' }
+  };
+
+  const details = planDetails[selectedPlan];
+  
+  router.push({
+    pathname: '/pages/payment',
+    query: {
+      type: 'subscription',
+      plan: selectedPlan,
+      amount: details.amount,
+      period: details.period,
+      product: 'Aurora Pro'
+    }
+  });
+};
+
     return (
         <main className="main aurora-pro-page">
             <Helmet>
@@ -57,9 +81,12 @@ function AuroraPro() {
                     </div>
                     
                     <div className="hero-cta">
-                        <ALink href="/pages/login" className="btn btn-primary btn-large">
+                        <button 
+                            onClick={() => handleSubscribe('monthly')} 
+                            className="btn btn-primary btn-large"
+                        >
                             Subscribe Now
-                        </ALink>
+                        </button>
                         <p className="cta-note">Cancel anytime • Money-back guarantee</p>
                     </div>
                 </div>
@@ -346,9 +373,12 @@ function AuroraPro() {
                                 <li><CheckCircleIcon /> Free shipping</li>
                                 <li><CheckCircleIcon /> Cancel anytime</li>
                             </ul>
-                            <ALink href="/pages/login" className="btn btn-outline">
+                            <button 
+                                onClick={() => handleSubscribe('monthly')} 
+                                className="btn btn-outline"
+                            >
                                 Subscribe Monthly
-                            </ALink>
+                            </button>
                         </div>
 
                         {/* Annual Plan (Popular) */}
@@ -372,9 +402,12 @@ function AuroraPro() {
                                 <li><CheckCircleIcon /> 2 months free</li>
                                 <li><CheckCircleIcon /> Exclusive annual perks</li>
                             </ul>
-                            <ALink href="/pages/login" className="btn btn-primary">
+                            <button 
+                                onClick={() => handleSubscribe('annual')} 
+                                className="btn btn-primary"
+                            >
                                 Subscribe Annually
-                            </ALink>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -507,9 +540,12 @@ function AuroraPro() {
                         <h2>Ready to Elevate Your Shopping Experience?</h2>
                         <p>Join Aurora Pro today and start enjoying AI-powered shopping</p>
                         <div className="cta-buttons">
-                            <ALink href="/pages/login" className="btn btn-primary btn-large">
+                            <button 
+                                onClick={() => handleSubscribe('monthly')} 
+                                className="btn btn-primary btn-large"
+                            >
                                 Subscribe Now
-                            </ALink>
+                            </button>
                             <ALink href="/pages/contact-us" className="btn btn-outline btn-large">
                                 Contact Sales
                             </ALink>
@@ -646,6 +682,8 @@ function AuroraPro() {
                     gap: 12px;
                     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
                     transition: all 0.3s ease;
+                    border: none;
+                    cursor: pointer;
                 }
 
                 .btn-large:hover {
@@ -1145,6 +1183,9 @@ function AuroraPro() {
                     padding: 14px 32px;
                     font-size: 16px;
                     font-weight: 600;
+                    border: none;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
                 }
 
                 /* Testimonials */
