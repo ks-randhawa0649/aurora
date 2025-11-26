@@ -4,6 +4,7 @@ import { UserContext } from '~/pages/_app';
 const ChatWidget = () => {
   const { user } = useContext(UserContext);
   const [isOpen, setIsOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const isRestricted = !user?.email || !user.isPro;
   const initContent = () => {
     return (isRestricted) ?
@@ -28,6 +29,20 @@ const ChatWidget = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Show/hide scroll-to-top button based on scroll position
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.pageYOffset > 300);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -89,6 +104,19 @@ const ChatWidget = () => {
 
   return (
     <>
+      {/* Scroll to Top Button */}
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="scroll-top-btn"
+          aria-label="Scroll to top"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+        </button>
+      )}
+
       {/* Floating Chat Button */}
       <button
         onClick={toggleChat}
@@ -194,6 +222,45 @@ const ChatWidget = () => {
       )}
 
       <style jsx>{`
+        .scroll-top-btn {
+          position: fixed;
+          bottom: 92px;
+          right: 24px;
+          width: 48px;
+          height: 48px;
+          background: #fff;
+          border: 2px solid #e4eaec;
+          border-radius: 50%;
+          color: #26c;
+          cursor: pointer;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 999;
+          transition: all 0.3s ease;
+          animation: fadeIn 0.3s ease;
+        }
+
+        .scroll-top-btn:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          border-color: #26c;
+          background: #26c;
+          color: white;
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
         .chat-fab {
           position: fixed;
           bottom: 24px;
@@ -443,6 +510,13 @@ const ChatWidget = () => {
           .chat-fab {
             right: 16px;
             bottom: 16px;
+          }
+
+          .scroll-top-btn {
+            right: 16px;
+            bottom: 84px;
+            width: 44px;
+            height: 44px;
           }
         }
       `}</style>
