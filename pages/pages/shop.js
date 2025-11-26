@@ -198,6 +198,7 @@ function Shop() {
                         #00f2fe 100%);
                     padding: 60px 0;
                     margin-bottom: 40px;
+                    margin-top: 4rem;
                     color: #fff;
                     text-align: center;
                     position: relative;

@@ -754,15 +754,23 @@ function AboutUs() {
 
                 @media (max-width: 768px) {
                     .page-header-modern {
-                        padding: 80px 0 60px;
+                        padding: 60px 0 40px;
                     }
 
                     .page-title-modern {
-                        font-size: 36px;
+                        font-size: 28px;
+                    }
+
+                    .page-subtitle-modern {
+                        font-size: 13px;
+                    }
+
+                    .page-desc-modern {
+                        font-size: 14px;
                     }
 
                     .page-content-modern {
-                        padding: 60px 0 20px;
+                        padding: 40px 0 20px;
                     }
 
                     .about-section-modern,
@@ -770,42 +778,126 @@ function AboutUs() {
                     .store-section-modern,
                     .brand-section-modern,
                     .team-section-modern {
-                        padding: 40px 20px;
-                        margin-bottom: 40px;
-                    }
-
-                    .section-title-modern {
-                        font-size: 24px;
-                    }
-
-                    .counter-card {
-                        padding: 24px 16px;
+                        padding: 20px 10px;
                         margin-bottom: 20px;
                     }
 
+                    .section-header-modern {
+                        margin-bottom: 20px;
+                    }
+
+                    .section-number {
+                        font-size: 32px;
+                        margin-bottom: 8px;
+                    }
+
+                    .section-subtitle-modern {
+                        font-size: 12px;
+                    }
+
+                    .section-title-modern {
+                        font-size: 20px;
+                        margin-bottom: 12px;
+                    }
+
+                    .section-desc-modern {
+                        font-size: 13px;
+                    }
+
+                    .counter-card {
+                        padding: 16px 12px;
+                        margin-bottom: 12px;
+                    }
+
+                    .counter-icon {
+                        font-size: 36px;
+                        margin-bottom: 12px;
+                    }
+
                     .counter-number {
-                        font-size: 40px;
+                        font-size: 32px;
+                    }
+
+                    .counter-title {
+                        font-size: 14px;
+                        margin: 8px 0;
+                    }
+
+                    .counter-desc {
+                        font-size: 12px;
+                    }
+
+                    .image-wrapper-modern {
+                        margin-bottom: 20px;
+                    }
+
+                    .content-card-modern {
+                        padding: 20px 12px;
                     }
 
                     .brands-grid {
                         grid-template-columns: repeat(2, 1fr);
-                        gap: 16px;
+                        gap: 12px;
                     }
                     
                     .brand-card-modern {
-                        padding: 24px;
-                        min-height: 100px;
+                        padding: 16px;
+                        min-height: 80px;
                     }
                     
                     .brand-card-modern img {
-                        max-width: 100px;
-                        max-height: 50px;
+                        max-width: 80px;
+                        max-height: 40px;
+                    }
+
+                    .section-header-center {
+                        margin-bottom: 30px;
+                    }
+
+                    .team-grid-modern {
+                        grid-template-columns: 1fr;
+                        gap: 16px;
+                    }
+
+                    .member-card-modern {
+                        padding: 16px;
+                    }
+
+                    .member-image-modern {
+                        height: 200px;
+                        margin-bottom: 12px;
+                    }
+
+                    .member-name-modern {
+                        font-size: 16px;
+                        margin-bottom: 6px;
+                    }
+
+                    .member-job-modern {
+                        font-size: 12px;
                     }
                 }
 
                 @media (max-width: 480px) {
+                    .page-title-modern {
+                        font-size: 24px;
+                    }
+
+                    .section-title-modern {
+                        font-size: 18px;
+                    }
+
+                    .counter-number {
+                        font-size: 28px;
+                    }
+
                     .brands-grid {
                         grid-template-columns: 1fr;
+                        gap: 10px;
+                    }
+
+                    .brand-card-modern {
+                        padding: 12px;
                     }
                 }
             `}</style>

@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import ALink from '~/components/features/custom-link';
@@ -13,7 +13,9 @@ import { headerBorderRemoveList } from '~/utils/data/menu'
 
 export default function Header( props ) {
     const router = useRouter();
-    const { user, setUser } = useContext(UserContext)
+    const { user, setUser } = useContext(UserContext);
+    const [isVisible, setIsVisible] = useState(true);
+    const [lastScrollY, setLastScrollY] = useState(0);
 
     useEffect( () => {
         let header = document.querySelector( 'header' );
@@ -22,6 +24,28 @@ export default function Header( props ) {
             else if ( !headerBorderRemoveList.includes( router.pathname ) ) document.querySelector( 'header' ).classList.add( 'header-border' );
         }
     }, [ router.pathname ] )
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+            
+            if (currentScrollY < lastScrollY) {
+                // Scrolling up
+                setIsVisible(true);
+            } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                // Scrolling down and past 100px
+                setIsVisible(false);
+            }
+            
+            setLastScrollY(currentScrollY);
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [lastScrollY]);
 
     const showMobileMenu = () => {
         document.querySelector( 'body' ).classList.add( 'mmenu-active' );
@@ -35,7 +59,7 @@ export default function Header( props ) {
     }
 
     return (
-        <header className="header header-border">
+        <header className={`header header-border ${isVisible ? 'header-visible' : 'header-hidden'}`}>
             {/* <div className="header-top">
                 <div className="container">
                     <div className="header-right">
@@ -113,6 +137,36 @@ export default function Header( props ) {
                     </div>
                 </div>
             </div>
+
+            <style jsx>{`
+                :global(body) {
+                    padding-top: 120px;
+                }
+
+                :global(.header) {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    z-index: 1100;
+                    transition: transform 0.3s ease-in-out;
+                    background: #fff;
+                }
+
+                :global(.header-visible) {
+                    transform: translateY(0);
+                }
+
+                :global(.header-hidden) {
+                    transform: translateY(-100%);
+                }
+
+                @media (max-width: 991px) {
+                    :global(body) {
+                        padding-top: 80px;
+                    }
+                }
+            `}</style>
         </header >
     );
 }

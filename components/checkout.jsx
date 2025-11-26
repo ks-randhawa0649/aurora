@@ -347,33 +347,116 @@ export default function Checkout() {
 
         @media (max-width: 768px) {
           .payment-page {
-            padding: 20px 10px 60px;
+            padding: 15px 10px 40px;
+          }
+
+          .payment-header {
+            margin-bottom: 20px;
           }
 
           .header-content {
-            padding: 30px 20px;
+            padding: 20px 16px;
+            border-radius: 16px;
+          }
+
+          .thank-you-section {
+            padding: 10px 0;
           }
 
           .thank-you-title {
-            font-size: 24px;
+            font-size: 20px;
+            margin-bottom: 8px;
           }
 
           .thank-you-subtitle {
-            font-size: 16px;
+            font-size: 14px;
           }
 
           .payment-form-card {
-            padding: 30px 20px;
+            padding: 16px;
+            border-radius: 16px;
           }
 
-          .trust-section {
-            grid-template-columns: 1fr;
-            gap: 15px;
+          .form-header {
+            margin-bottom: 20px;
+          }
+
+          .form-title {
+            font-size: 18px;
+            gap: 8px;
+          }
+
+          .form-subtitle {
+            font-size: 13px;
+          }
+
+          .stripe-checkout {
+            margin-bottom: 20px;
+          }
+
+          .payment-footer {
+            padding-top: 16px;
           }
 
           .payment-methods {
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
+          }
+
+          .methods-label {
+            font-size: 13px;
+          }
+
+          .methods-icons {
+            gap: 12px;
+          }
+
+          .methods-icons i {
+            font-size: 24px;
+          }
+
+          .trust-section {
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 30px;
+          }
+
+          .trust-item {
+            padding: 20px;
+            border-radius: 16px;
+          }
+
+          .trust-item i {
+            font-size: 32px;
+            margin-bottom: 10px;
+          }
+
+          .trust-item h4 {
+            font-size: 16px;
+            margin-bottom: 6px;
+          }
+
+          .trust-item p {
+            font-size: 13px;
+          }
+
+          .loading-container {
+            padding: 40px 24px;
+            border-radius: 16px;
+          }
+
+          .loading-spinner {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+          }
+
+          .loading-text {
+            font-size: 18px;
+          }
+
+          .loading-subtext {
+            font-size: 14px;
           }
         }
       `}</style>
