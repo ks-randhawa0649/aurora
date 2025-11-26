@@ -77,12 +77,14 @@ export default async function handler(req, res) {
         },
       }
 
-      // Add subscription metadata to session metadata
-      if (sessionConfig.metadata) {
-        sessionConfig.metadata.subscriptionType = 'aurora_pro'
-        sessionConfig.metadata.plan = plan || 'monthly'
-        sessionConfig.metadata.period = period || 'month'
+      // Merge subscription metadata into top-level session metadata (Stripe allows both)
+      if (!sessionConfig.metadata) {
+        sessionConfig.metadata = {};
       }
+      sessionConfig.metadata.subscriptionType = 'aurora_pro';
+      sessionConfig.metadata.plan = plan || 'monthly';
+      sessionConfig.metadata.period = period || 'month';
+
     } else {
       // One-time payment mode for regular purchases
       console.log('Creating one-time payment checkout')

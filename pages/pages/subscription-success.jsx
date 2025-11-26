@@ -30,7 +30,8 @@ useEffect(() => {
             
             console.log('Session data:', data);
             
-            const planType = data.metadata?.plan || 'monthly';
+            const planType = data.metadata?.plan || data.subscription_data?.plan || 'monthly';
+            console.log('Determined plan type:', planType);
             const amount = ((data.amount_total || 0) / 100).toFixed(2);
             const period = data.metadata?.period || 'month';
             const customerEmail = user?.email || data.customer_details?.email || null;
