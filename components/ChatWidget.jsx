@@ -1,11 +1,19 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
+import { UserContext } from '~/pages/_app';
 
 const ChatWidget = () => {
+  const { user } = useContext(UserContext);
   const [isOpen, setIsOpen] = useState(false);
+  const isRestricted = !user?.email || !user.isPro;
+  const initContent = () => {
+    return (isRestricted) ?
+    "Hi! 👋 I’m your personal style assistant. Nice to meet you! To access styling suggestions, please upgrade to Aurora Pro." :
+    "Hi! 👋 I’m your personal style assistant. Nice to meet you! Tell me one item you want to style, like “beige pants” or “white sneakers”, and I’ll suggest colours and outfit ideas that would look great with it.";
+    }
  const [messages, setMessages] = useState([
   { 
     role: 'assistant', 
-    content: "Hi! 👋 I’m your personal style assistant. Nice to meet you! Tell me one item you want to style, like “beige pants” or “white sneakers”, and I’ll suggest colours and outfit ideas that would look great with it." 
+    content: initContent()
   }
 ]);
   const [inputValue, setInputValue] = useState('');
@@ -23,6 +31,7 @@ const ChatWidget = () => {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
+    if (isRestricted) return;
     
     if (!inputValue.trim() || isLoading) return;
 
@@ -74,7 +83,7 @@ const ChatWidget = () => {
 
   const clearChat = () => {
     setMessages([
-      { role: 'assistant', content: 'Hi! 👋 Welcome to Aurora! How can I help you find the perfect outfit today?' }
+      { role: 'assistant', content: initContent() }
     ]);
   };
 
@@ -162,14 +171,18 @@ const ChatWidget = () => {
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Ask about products, sizing, or anything..."
+              placeholder={
+                isRestricted
+                  ? "Upgrade to Aurora Pro to chat"
+                  : "Ask about products, sizing, or anything..."
+              }
               className="chat-input"
-              disabled={isLoading}
+              disabled={isLoading || isRestricted}
             />
             <button 
               type="submit" 
               className="chat-send-btn"
-              disabled={isLoading || !inputValue.trim()}
+              disabled={isLoading || !inputValue.trim() || isRestricted}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <line x1="22" y1="2" x2="11" y2="13"></line>

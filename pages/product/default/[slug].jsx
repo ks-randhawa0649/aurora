@@ -84,6 +84,7 @@ function ProductDefault() {
                 id: raw.product_id,
                 slug: slug,
                 name: raw.name,
+                UI_pname: raw.UI_pname,
                 brand: raw.brand || 'SmartStyle',
                 sku: raw.product_id.substring(0, 8).toUpperCase(),
                 category: raw.category,
@@ -144,6 +145,7 @@ function ProductDefault() {
                         id: rel.product_id,
                         slug: generateSlug(rel.name),
                         name: rel.name,
+                        UI_pname: rel.UI_pname,
                         brand: rel.brand || 'SmartStyle',
                         category: rel.category,
                         

@@ -98,7 +98,7 @@ export default function RelatedProducts( props ) {
                                     
                                     <h3 className="product-title">
                                         <ALink href={`/product/default/${product.slug}`}>
-                                            {product.name}
+                                            {product.UI_pname}
                                         </ALink>
                                     </h3>
                                     

@@ -408,7 +408,7 @@ function Checkout( props ) {
                                                     <div key={index} className="order-item">
                                                         <div className="item-info">
                                                             <div className="item-name-qty">
-                                                                <span className="item-name">{item.name}</span>
+                                                                <span className="item-name">{item.UI_pname}</span>
                                                                 {item.variant && <span className="item-variant">({item.variant})</span>}
                                                                 <span className="item-qty">× {item.qty}</span>
                                                             </div>

@@ -206,7 +206,7 @@ const handleSubscribe = (selectedPlan) => {
                                     <span>Accuracy Rate</span>
                                 </div>
                                 <div className="stat-item">
-                                    <strong>20 sec</strong>
+                                    <strong>20s</strong>
                                     <span>Processing Time</span>
                                 </div>
                                 <div className="stat-item">
@@ -233,9 +233,9 @@ const handleSubscribe = (selectedPlan) => {
 
                         <div className="showcase-visual">
                             <div className="tryon-demo">
-                                <img src="/images/demo/tryon-before.jpg" alt="Before AI Try-on" />
+                                <img src="/images/demo/tryon-before.png" alt="Before AI Try-on" />
                                 <div className="demo-arrow">→</div>
-                                <img src="/images/demo/tryon-after.jpg" alt="After AI Try-on" />
+                                <img src="/images/demo/tryon-after.png" alt="After AI Try-on" />
                             </div>
                         </div>
                     </div>

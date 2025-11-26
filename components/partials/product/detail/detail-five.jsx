@@ -284,7 +284,7 @@ function DetailOne( props ) {
                 <label className="d-none">QTY:</label>
                 <div className="product-form-group">
                     <Quantity max={ product.data.stock } product={ product } onChangeQty={ changeQty } />
-                    <button className={ `btn-product btn-cart text-normal ls-normal font-weight-semi-bold ${ cartActive ? '' : 'disabled' }` } onClick={ addToCartHandler } onClick={ addToCartHandler }><i className='d-icon-bag'></i>Add to Cart</button>
+                    <button className={ `btn-product btn-cart text-normal ls-normal font-weight-semi-bold ${ cartActive ? '' : 'disabled' }` } onClick={ addToCartHandler }><i className='d-icon-bag'></i>Add to Cart</button>
                 </div>
             </div>
 

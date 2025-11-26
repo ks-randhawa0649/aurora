@@ -182,7 +182,7 @@ function CartMenu( props ) {
                                                 className="product-name"
                                                 onClick={ closeCartMenu }
                                             >
-                                                { item.name || 'Unnamed Product' }
+                                                { item.UI_pname || 'Unnamed Product' }
                                             </ALink>
                                             
                                             {item.variant && (

@@ -21,7 +21,7 @@ function DetailOne( props ) {
     const { addToCart, toggleWishlist, showQuickview, openLoginModal } = props;
     
     const product = data?.product?.data;
-
+    console.log('DetailOne product data:', product);
     const [curColor, setCurColor] = useState('');
     const [curSize, setSize] = useState('');
     const [qty, setQty] = useState(1);
@@ -151,7 +151,7 @@ function DetailOne( props ) {
     return (
         <>
         <div className={`product-details ${isSticky ? 'sticky' : ''} ${adClass}`}>
-            <h1 className="product-name">{product.name}</h1>
+            <h1 className="product-name">{product.UI_pname}</h1>
 
             <div className="product-meta">
                 <span className="sku-badge">SKU: {product.sku}</span>
@@ -253,7 +253,6 @@ function DetailOne( props ) {
                 <label className="qty-label">Quantity:</label>
                 <div className="qty-controls">
                     <Quantity max={product.stock} value={qty} onChangeQty={changeQty} />
-                    <span className="stock-info">{product.stock} in stock</span>
                 </div>
             </div>
 

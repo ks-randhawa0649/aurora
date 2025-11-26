@@ -225,7 +225,7 @@ useEffect(() => {
                                 Start Shopping
                             </button>
                         </Link>
-                        <Link href="/pages/account">
+                        <Link href="/pages/manage-subscription">
                             <button className="btn-secondary">
                                 Manage Subscription
                             </button>

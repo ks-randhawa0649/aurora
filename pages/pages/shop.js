@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { Helmet } from 'react-helmet';
 import Reveal from 'react-awesome-reveal';
 import ALink from '~/components/features/custom-link';
@@ -56,13 +57,22 @@ function Shop() {
         }
     };
 
+    const router = useRouter();
+    const { search } = router.query;
+
+    // Sync search query from URL safely (avoid setState during render)
+    useEffect(() => {
+        console.log('Search query from URL:', search);  
+        setSearchQuery(typeof search === 'string' ? search : '');
+    }, [router.isReady, search]);
+
     const applyFilters = () => {
         let filtered = [...products];
 
         // Search filter
         if (searchQuery) {
             filtered = filtered.filter(product => 
-                product.name.toLowerCase().includes(searchQuery.toLowerCase())
+                product.UI_pname.toLowerCase().includes(searchQuery.toLowerCase())
             );
         }
 
@@ -1159,7 +1169,7 @@ function Shop() {
 
                                                                 <h3 className="product-name">
                                                                     <ALink href={`/product/default/${product.slug}`}>
-                                                                        {product.name}
+                                                                        {product.UI_pname}
                                                                     </ALink>
                                                                 </h3>
 

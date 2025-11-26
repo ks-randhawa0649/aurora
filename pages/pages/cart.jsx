@@ -196,7 +196,7 @@ function Cart( props ) {
                                                                 <div className="item-info">
                                                                     <h3 className="item-name">
                                                                         <ALink href={ `/product/default/${ item.slug }` }>
-                                                                            { item.name }
+                                                                            { item.UI_pname }
                                                                         </ALink>
                                                                     </h3>
                                                                     {item.variant && (
