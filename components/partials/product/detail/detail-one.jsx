@@ -206,7 +206,7 @@ function DetailOne( props ) {
 
             <div className="shipping-info-box">
                 <LocalShippingOutlinedIcon sx={{ fontSize: 24, color: '#26c' }} />
-                <span>Free shipping on orders over $50</span>
+                <span>Free shipping for Aurora Pro members</span>
             </div>
 
             {product.variants && product.variants.length > 0 && (

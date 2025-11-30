@@ -502,7 +502,7 @@ const handleSubscribe = (selectedPlan) => {
                             <h4>Is the AI virtual try-on really accurate?</h4>
                             <p>
                                 Yes! Our AI technology has a 95% accuracy rate and uses advanced body mapping. 
-                                Your photos are processed securely and never stored on our servers.
+                                Your photos are processed securely and never stored permanently on our servers.
                             </p>
                         </div>
 

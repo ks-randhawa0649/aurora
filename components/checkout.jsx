@@ -189,7 +189,7 @@ export default function Checkout() {
           <div className="trust-item">
             <i className="fas fa-shipping-fast"></i>
             <h4>Fast Shipping</h4>
-            <p>Free delivery on orders over $50</p>
+            <p>Free delivery for Aurora Pro members</p>
           </div>
           <div className="trust-item">
             <i className="fas fa-headset"></i>

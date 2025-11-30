@@ -68,11 +68,10 @@ function Footer() {
                             <div className="widget">
                                 <h4 className="widget-title">Main Features</h4>
                                 <ul className="widget-body">
-                                    <li><ALink href="#">Super Fast React Template</ALink></li>
-                                    <li><ALink href="#">1st Fully Functional React Template</ALink></li>
-                                    <li><ALink href="#">36+ Unique Shop Layouts</ALink></li>
-                                    <li><ALink href="#">Powerful Admin Panel</ALink></li>
-                                    <li><ALink href="#">Mobile &amp; Retina Optimized</ALink></li>
+                                    <li>Super Fast Delivery</li>
+                                    <li>1st AI powered ecom platform</li>
+                                    <li>36+ Unique apparel designs</li>
+                                    <li>Powerful support system</li>
                                 </ul>
                             </div>
                         </div>

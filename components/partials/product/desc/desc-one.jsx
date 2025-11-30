@@ -336,7 +336,7 @@ function DescOne( props ) {
 
                                             {/* Info Box */}
                                             <div className="tryon-info-box">
-                                                <p><strong>🔒 100% Private:</strong> Your photos are never stored</p>
+                                                <p><strong>🔒 100% Private:</strong> Your photos are never stored permanently</p>
                                                 <p><strong>⚡ Instant Results:</strong> See yourself in seconds</p>
                                             </div>
                                         </div>
@@ -389,7 +389,7 @@ function DescOne( props ) {
                                     </div>
                                     <div className="benefit-content">
                                         <h4>Free Shipping</h4>
-                                        <p>On orders over $50.00</p>
+                                        <p>For Aurora Pro members</p>
                                     </div>
                                 </div>
                             </div>
