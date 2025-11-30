@@ -277,33 +277,6 @@ function DetailOne( props ) {
                     )}
                 </button>
             </div>
-
-            <div className="product-footer-modern">
-                <div className="share-text">Share:</div>
-                <div className="social-links-modern">
-                    <ALink
-                        href="#"
-                        className="social-link-modern facebook"
-                        onClick={(e) => e.preventDefault()}
-                    >
-                        <i className="fab fa-facebook-f"></i>
-                    </ALink>
-                    <ALink
-                        href="#"
-                        className="social-link-modern twitter"
-                        onClick={(e) => e.preventDefault()}
-                    >
-                        <i className="fab fa-twitter"></i>
-                    </ALink>
-                    <ALink
-                        href="#"
-                        className="social-link-modern pinterest"
-                        onClick={(e) => e.preventDefault()}
-                    >
-                        <i className="fab fa-pinterest-p"></i>
-                    </ALink>
-                </div>
-            </div>
         </div>
 
         <style jsx>{`

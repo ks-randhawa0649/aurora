@@ -235,15 +235,9 @@ function AboutUs() {
 
                                             <div className="member-overlay">
                                                 <div className="social-links-modern">
-                                                    <ALink href="#" className="social-link-modern">
-                                                        <i className="fab fa-facebook-f"></i>
-                                                    </ALink>
-                                                    <ALink href="#" className="social-link-modern">
-                                                        <i className="fab fa-twitter"></i>
-                                                    </ALink>
-                                                    <ALink href="#" className="social-link-modern">
+                                                    <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/kunwar-randhawa" className="social-link-modern">
                                                         <i className="fab fa-linkedin-in"></i>
-                                                    </ALink>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </figure>
@@ -266,15 +260,9 @@ function AboutUs() {
 
                                             <div className="member-overlay">
                                                 <div className="social-links-modern">
-                                                    <ALink href="#" className="social-link-modern">
-                                                        <i className="fab fa-facebook-f"></i>
-                                                    </ALink>
-                                                    <ALink href="#" className="social-link-modern">
-                                                        <i className="fab fa-twitter"></i>
-                                                    </ALink>
-                                                    <ALink href="#" className="social-link-modern">
+                                                    <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/harmehaks/" className="social-link-modern">
                                                         <i className="fab fa-linkedin-in"></i>
-                                                    </ALink>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </figure>
@@ -298,15 +286,9 @@ function AboutUs() {
 
                                             <div className="member-overlay">
                                                 <div className="social-links-modern">
-                                                    <ALink href="#" className="social-link-modern">
-                                                        <i className="fab fa-facebook-f"></i>
-                                                    </ALink>
-                                                    <ALink href="#" className="social-link-modern">
-                                                        <i className="fab fa-twitter"></i>
-                                                    </ALink>
-                                                    <ALink href="#" className="social-link-modern">
+                                                    <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/khushi-patel02189/" className="social-link-modern">
                                                         <i className="fab fa-linkedin-in"></i>
-                                                    </ALink>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </figure>
@@ -330,15 +312,9 @@ function AboutUs() {
 
                                             <div className="member-overlay">
                                                 <div className="social-links-modern">
-                                                    <ALink href="#" className="social-link-modern">
-                                                        <i className="fab fa-facebook-f"></i>
-                                                    </ALink>
-                                                    <ALink href="#" className="social-link-modern">
-                                                        <i className="fab fa-twitter"></i>
-                                                    </ALink>
-                                                    <ALink href="#" className="social-link-modern">
+                                                    <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/pratham-patel-6978232a6/" className="social-link-modern">
                                                         <i className="fab fa-linkedin-in"></i>
-                                                    </ALink>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </figure>
@@ -362,9 +338,9 @@ function AboutUs() {
 
                                             <div className="member-overlay">
                                                 <div className="social-links-modern">
-                                                    <ALink href="#" className="social-link-modern">
+                                                    <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/prakshal-bhandari-1393b3244/" className="social-link-modern">
                                                         <i className="fab fa-linkedin-in"></i>
-                                                    </ALink>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </figure>

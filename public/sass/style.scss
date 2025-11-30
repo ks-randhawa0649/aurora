@@ -38,21 +38,14 @@
 @import 'components/alerts';
 @import 'components/animation';
 @import 'components/banners';
-@import 'components/blog';
 @import 'components/buttons';
 @import 'components/categories';
-@import 'components/comments';
 @import 'components/counter';
-@import 'components/elements';
 @import 'components/forms';
 @import 'components/grid';
-@import 'components/icon-boxes';
-@import 'components/icons';
 @import 'components/input-range';
-@import 'components/instagram';
 @import 'components/lazy-load-image';
 @import 'components/member';
-@import 'components/minipopup';
 @import 'components/overlay';
 @import 'components/page-header';
 @import 'components/pagination';
@@ -62,16 +55,11 @@
 @import 'components/quickview';
 @import 'components/social-icons';
 @import 'components/sidebar';
-@import 'components/sidebar-shop';
 @import 'components/skeleton';
-@import 'components/store';
 @import 'components/tabs';
-@import 'components/testimonials';
 @import 'components/toast';
 @import 'components/tooltip';
 @import 'components/titles';
-@import 'components/vendor';
-@import 'components/widgets';
 
 /* 6. header */
 @import 'base/header/header';
@@ -84,23 +72,12 @@
 /* 8. Pages */
 @import 'pages/about';  
 @import 'pages/account';   
-@import 'pages/buttons';
-@import 'pages/categories';
-@import 'pages/coming';
 @import 'pages/contact';
-@import 'pages/error';
-@import 'pages/products';
-@import 'pages/cta';
-@import 'pages/instagrams';
-@import 'pages/blog';
 @import 'pages/shop';
 @import 'pages/product-single';
-@import 'pages/post-single';
 @import 'pages/wishlist';
 @import 'pages/cart';
 @import 'pages/checkout';
 @import 'pages/order';
-@import 'pages/icons';
-@import 'pages/faq';
 
 @import 'demo/demo1_custom';

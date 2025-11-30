@@ -110,9 +110,9 @@ function Footer() {
                     </div>
                     <div className="footer-right">
                         <div className="social-links">
-                            <ALink href="#" className="social-link social-facebook fab fa-facebook-f"></ALink>
-                            <ALink href="#" className="social-link social-twitter fab fa-twitter"></ALink>
-                            <ALink href="#" className="social-link social-linkedin fab fa-linkedin-in"></ALink>
+                            <ALink href="https://www.facebook.com" className="social-link social-facebook fab fa-facebook-f"></ALink>
+                            <ALink href="https://www.twitter.com" className="social-link social-twitter fab fa-twitter"></ALink>
+                            <ALink href="https://www.linkedin.com" className="social-link social-linkedin fab fa-linkedin-in"></ALink>
                         </div>
                     </div>
                 </div>
