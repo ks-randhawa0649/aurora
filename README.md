@@ -1,4 +1,4 @@
-Aurora is a full-stack fashion e-commerce web app that lets users browse products, add items to a cart, check out using Stripe, chat with an AI fashion stylist powered by Google Gemini and give users an opportunity to test the look and vibe on themselves before ordering a product.
+Aurora is a full-stack fashion e-commerce web app that lets users browse products, add items to a cart, check out using Stripe, chat with an AI fashion stylist powered by Google Gemini and give users an opportunity to test the look and vibe on themselves using AI virtual try-on before ordering a product.
 
 # Main features 
 •	User registration and secure login.
@@ -6,7 +6,8 @@ Aurora is a full-stack fashion e-commerce web app that lets users browse product
 •	Shopping cart and checkout flow with order creation in a MySQL database.
 •	Stripe Embedded Checkout for payments.
 •	Floating AI stylist chat bot that suggests outfits and colour combinations.
-•	AI – powered try-on.
+•	AI – powered virtual try-on.
+•	Subscription based model (pro/non-pro)
 
 # How to run the project 
 
@@ -28,7 +29,7 @@ Then open: http://localhost:3000
 1.	Go to http://localhost:3000.
 2.	Register a new account and log in #to test the project you can also use these credentials: email : test1@aurora.com , password: test1 .
 3.	Browse products, add items to the cart, and proceed to checkout.
-4.	Enter test card details on the Stripe Embedded Checkout page (using Stripe’s test cards).
+4.	Enter test card details on the Stripe Embedded Checkout page (using Stripe’s test cards, one of them is mentioned below in the document).
 5.	After successful payment, you’ll be redirected back to the site, and an order will be stored in MySQL.
 6.	Click the floating Aurora AI button to open the chat and ask the stylist for outfit ideas and style suggestions.
 
@@ -87,3 +88,8 @@ All runtime dependencies (with versions) used in this project are listed below f
 •	sass - 1.42.1
 •	stripe - 19.2.0
 •	supports-color - 9.0.2
+
+# Test Card for Stripe 
+Card No - 4242 4242 4242 4242
+CVV - any 3 digit no
+Valid till / expiry - any valid future date (e.g 12/26)
