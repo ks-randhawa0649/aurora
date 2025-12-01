@@ -35,10 +35,10 @@ function AboutUs() {
     return (
         <main className="main about-us-modern">
             <Helmet>
-                <title>Riode React eCommerce Template | About Us</title>
+                <title>Aurora | About Us</title>
             </Helmet>
 
-            <h1 className="d-none">Riode React eCommerce Template - About Us</h1>
+            <h1 className="d-none">Aurora - About Us</h1>
 
             <div className="page-header-modern"
                 style={ { backgroundImage: `url( ./images/page-header/about-us.jpg )`, backgroundColor: "#3C63A4" } }>

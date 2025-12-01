@@ -27,12 +27,11 @@ function HomePage() {
     return (
         <div className="main home">
             <Helmet>
-                <title>Riode React eCommerce Template - Home</title>
+                <title>Aurora - Home</title>
             </Helmet>
 
 
-            <h1 className="d-none">Riode React eCommerce Template - Home</h1>
-
+            <h1 className="d-none">Aurora - Home</h1>
             <div className="page-content">
                 <div className="intro-section">
                     <IntroSection />
