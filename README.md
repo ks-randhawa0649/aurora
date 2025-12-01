@@ -89,7 +89,7 @@ All runtime dependencies (with versions) used in this project are listed below f
 •	stripe - 19.2.0
 •	supports-color - 9.0.2
 
-# Test Card for Stripe 
-• Card No - 4242 4242 4242 4242
-• CVV - any 3 digit no
-• Valid till / expiry - any valid future date (e.g 12/26)
+# Test Card for Stripe
+1.	Card No - 4242 4242 4242 4242
+2.	CVV - any 3 digit no
+3.	Valid till / expiry - any valid future date (e.g 12/26)
