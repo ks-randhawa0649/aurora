@@ -9,6 +9,7 @@ import DetailOne from '~/components/partials/product/detail/detail-one';
 import DescOne from '~/components/partials/product/desc/desc-one';
 import RelatedProducts from '~/components/partials/product/related-products';
 import { fadeIn, fadeInUpShorter, fadeInLeftShorter, fadeInRightShorter } from '~/utils/data/keyframes';
+import * as ga from '~/lib/analytics';
 
 const generateSlug = (name) => 
     (name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -133,6 +134,21 @@ function ProductDefault() {
             };
             
             setProduct(formattedProduct);
+            
+            // Track product view
+            if (typeof window !== 'undefined' && window.gtag) {
+                window.gtag('event', 'view_item', {
+                    currency: 'USD',
+                    value: formattedProduct.price[0] || 0,
+                    items: [{
+                        item_id: formattedProduct.id,
+                        item_name: formattedProduct.name,
+                        item_category: getCategoryName(raw.category),
+                        item_brand: raw.brand || 'SmartStyle',
+                        price: formattedProduct.price[0] || 0
+                    }]
+                });
+            }
             
             // Process related products
             if (Array.isArray(data.product.related) && data.product.related.length > 0) {

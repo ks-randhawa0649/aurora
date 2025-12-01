@@ -232,7 +232,7 @@ function CartMenu( props ) {
                                 className="btn btn-dark"
                                 onClick={ closeCartMenu }
                             >
-                                <span>Go To Checkout</span>
+                                <span>Checkout</span>
                             </ALink>
                         </div>
                     </>

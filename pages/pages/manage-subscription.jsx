@@ -9,6 +9,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import InfoIcon from '@mui/icons-material/Info';
+import * as ga from '~/lib/analytics';
 
 export default function ManageSubscription() {
     const router = useRouter();
@@ -70,6 +71,9 @@ export default function ManageSubscription() {
             const result = await response.json();
 
             if (response.ok) {
+                // Track cancellation
+                ga.trackCancelSubscription(getPlanName());
+                
                 setSubscription({
                     ...subscription,
                     cancelAtPeriodEnd: true,
@@ -98,6 +102,9 @@ export default function ManageSubscription() {
             const result = await response.json();
 
             if (response.ok) {
+                // Track reactivation
+                ga.trackReactivateSubscription(getPlanName());
+                
                 setSubscription({
                     ...subscription,
                     cancelAtPeriodEnd: false,
@@ -114,6 +121,10 @@ export default function ManageSubscription() {
     };
 
     const handleUpgrade = () => {
+        // Track upgrade attempt
+        const currentPlan = getPlanName();
+        ga.trackUpgradeSubscription(currentPlan, 'Annual');
+        
         router.push('/pages/subscription?plan=annual');
     };
 

@@ -10,6 +10,7 @@ import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import StarsIcon from '@mui/icons-material/Stars';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import { UserContext } from '../_app';
+import * as ga from '~/lib/analytics';
 export default function SubscriptionSuccess() {
     const router = useRouter();
     const { session_id } = router.query;
@@ -61,12 +62,37 @@ useEffect(() => {
                 }
             }
             
+            const planDisplay = planType.charAt(0).toUpperCase() + planType.slice(1);
+            const periodDisplay = period.charAt(0).toUpperCase() + period.slice(1);
+            
             setSessionData({
-                plan: planType.charAt(0).toUpperCase() + planType.slice(1),
+                plan: planDisplay,
                 amount: amount,
-                period: period.charAt(0).toUpperCase() + period.slice(1),
+                period: periodDisplay,
                 status: data.payment_status,
                 customerEmail: customerEmail
+            });
+            
+            // Track successful subscription
+            ga.trackSubscription({
+                plan: planDisplay,
+                period: periodDisplay,
+                amount: parseFloat(amount),
+                status: 'completed'
+            });
+            
+            // Track purchase event for ecommerce
+            ga.trackPurchase({
+                transactionId: session_id,
+                value: parseFloat(amount),
+                currency: 'USD',
+                items: [{
+                    item_id: planType,
+                    item_name: `Aurora Pro - ${planDisplay}`,
+                    item_category: 'Subscription',
+                    price: parseFloat(amount),
+                    quantity: 1
+                }]
             });
             
             setLoading(false);

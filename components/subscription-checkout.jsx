@@ -5,6 +5,7 @@ import { EmbeddedCheckoutProvider, EmbeddedCheckout } from '@stripe/react-stripe
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import LockIcon from '@mui/icons-material/Lock';
+import * as ga from '~/lib/analytics';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
@@ -34,6 +35,13 @@ export default function SubscriptionCheckout() {
         }
 
         setPlanData({ plan, amount, period });
+        
+        // Track begin checkout
+        ga.trackBeginCheckout({
+            plan: plan,
+            amount: parseFloat(amount),
+            period: period
+        });
 
         const createCheckoutSession = async () => {
             try {

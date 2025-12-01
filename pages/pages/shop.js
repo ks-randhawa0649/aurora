@@ -9,6 +9,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
+import * as ga from '~/lib/analytics';
 
 function Shop() {
     const [products, setProducts] = useState([]);
@@ -122,6 +123,22 @@ function Shop() {
         }
 
         setFilteredProducts(filtered);
+        
+        // Track view_item_list when products are filtered/displayed
+        if (filtered.length > 0 && typeof window !== 'undefined' && window.gtag) {
+            window.gtag('event', 'view_item_list', {
+                item_list_id: selectedCategory !== 'all' ? selectedCategory : 'shop',
+                item_list_name: selectedCategory !== 'all' ? selectedCategory : 'Shop Page',
+                items: filtered.slice(0, 12).map((product, index) => ({
+                    item_id: product.id,
+                    item_name: product.UI_pname,
+                    item_category: product.categories?.[0]?.name || 'Product',
+                    item_brand: product.brand || 'SmartStyle',
+                    price: product.price[1] > 0 ? product.price[1] : product.price[0],
+                    index: index
+                }))
+            });
+        }
     };
 
     const getCategories = () => {

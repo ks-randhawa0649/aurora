@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { loadStripe } from '@stripe/stripe-js';
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from '@stripe/react-stripe-js';
+import * as ga from '~/lib/analytics';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
@@ -17,6 +18,16 @@ export default function Checkout() {
       try {
         const data = JSON.parse(pendingOrder);
         setOrderData(data);
+        
+        // Track add to cart event for items
+        if (data.items && data.items.length > 0) {
+          ga.event({
+            action: 'add_payment_info',
+            category: 'Ecommerce',
+            label: 'Payment Page Loaded',
+            value: data.pricing?.total || 0
+          });
+        }
       } catch (error) {
         console.error('Error parsing order data:', error);
         router.push('/pages/cart');

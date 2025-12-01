@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import ALink from '~/components/features/custom-link';
 import { cartActions } from '~/store/cart';
+import * as ga from '~/lib/analytics';
 
 function ReturnPage({ clearCart }) {
     const router = useRouter();
@@ -68,6 +69,28 @@ function ReturnPage({ clearCart }) {
                         customer: `${orderData.customer.firstName} ${orderData.customer.lastName}`
                     });
                     setStatus('success');
+                    
+                    // Track successful purchase
+                    ga.trackPurchase({
+                        transactionId: orderResult.orderId || session_id,
+                        value: orderData.pricing.total,
+                        currency: 'USD',
+                        items: orderData.items.map(item => ({
+                            item_id: item.product_id || item.slug,
+                            item_name: item.name,
+                            item_category: 'Product',
+                            price: item.price,
+                            quantity: item.quantity
+                        }))
+                    });
+
+                    // Track custom purchase event
+                    ga.event({
+                        action: 'purchase_complete',
+                        category: 'Ecommerce',
+                        label: `Order ${orderResult.orderId}`,
+                        value: orderData.pricing.total
+                    });
                     
                     // Clear cart and session storage
                     clearCart();

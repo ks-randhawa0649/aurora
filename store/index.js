@@ -23,7 +23,11 @@ export const makeStore = (context) => {
     const store = createStore(rootReducers, applyMiddleware(sagaMiddleware));
 
     store.sagaTask = sagaMiddleware.run(rootSaga);
-    store.__persistor = persistStore(store);
+    
+    // Only create persistor on client side
+    if (typeof window !== 'undefined') {
+        store.__persistor = persistStore(store);
+    }
 
     return store;
 };

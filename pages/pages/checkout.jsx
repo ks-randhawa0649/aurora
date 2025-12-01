@@ -9,6 +9,7 @@ import Card from '~/components/features/accordion/card';
 import { cartActions } from '~/store/cart';
 import { toDecimal } from '~/utils';
 import { UserContext } from '../_app';
+import * as ga from '~/lib/analytics';
 
 function Checkout( props ) {
     const router = useRouter();
@@ -164,6 +165,28 @@ function Checkout( props ) {
 
             // Store order data in sessionStorage to retrieve after payment
             sessionStorage.setItem('pendingOrder', JSON.stringify(orderData));
+
+            // Track begin checkout event
+            ga.trackBeginCheckout({
+                plan: 'Product Purchase',
+                amount: calculateTotal(),
+                period: 'one-time'
+            });
+
+            // Track with detailed ecommerce event
+            if (typeof window !== 'undefined' && window.gtag) {
+                window.gtag('event', 'begin_checkout', {
+                    currency: 'USD',
+                    value: calculateTotal(),
+                    items: cartList.map(item => ({
+                        item_id: item.id || item.slug,
+                        item_name: item.name,
+                        item_category: item.category?.[0]?.name || 'Product',
+                        price: getPrice(item),
+                        quantity: item.qty
+                    }))
+                });
+            }
 
             // Redirect to payment page
         router.push({
