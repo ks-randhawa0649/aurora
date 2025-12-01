@@ -22,7 +22,7 @@ Then open: http://localhost:3000
 
 
 #Configuration (.env.local)
-.env.local is to be placed at project root, this file will be shared over email as well as brightspave to ensure apis keys are not compromised and thus dont expire before backend can be tested.
+.env.local is to be placed at project root, this file will be shared over email as well as brightspace to ensure apis keys are not compromised and thus dont expire before backend can be tested.
 
 # Using the system
 1.	Go to http://localhost:3000.
