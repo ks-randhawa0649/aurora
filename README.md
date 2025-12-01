@@ -6,7 +6,7 @@ Aurora is a full-stack fashion e-commerce web app that lets users browse product
 •	Shopping cart and checkout flow with order creation in a MySQL database.
 •	Stripe Embedded Checkout for payments.
 •	Floating AI stylist chat bot that suggests outfits and colour combinations.
-•	AI – powered try-on for our pro users (to be completed before final product presentation)
+•	AI – powered try-on.
 
 # How to run the project 
 
@@ -21,9 +21,8 @@ Start the development server
 Then open: http://localhost:3000
 
 
-
 #Configuration (.env.local)
-.env.local is located at the project root.
+.env.local is to be placed at project root, this file will be shared over email as well as brightspave to ensure apis keys are not compromised and thus dont expire before backend can be tested.
 
 # Using the system
 1.	Go to http://localhost:3000.
