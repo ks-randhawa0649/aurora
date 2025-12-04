@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 import ALink from '~/components/features/custom-link';
 
@@ -120,10 +121,16 @@ function CartMenu( props ) {
                 className="cart-toggle label-block link"
                 onClick={ toggleCartMenu }
             >
-                <span className="cart-label">
+                <span className="cart-label d-lg-show">
                     <span className="cart-name">Shopping Cart:</span>
                     <span className="cart-price">${ toDecimal( getTotalPrice() ) }</span>
                 </span>
+                
+                {/* Mobile Icon */}
+                <span className="cart-icon-mobile d-lg-none">
+                    <ShoppingCartIcon sx={{ fontSize: 28 }} />
+                </span>
+                
                 {cartList && cartList.length > 0 && (
                     <span className="cart-count">{ cartList.length }</span>
                 )}
@@ -182,7 +189,7 @@ function CartMenu( props ) {
                                                 className="product-name"
                                                 onClick={ closeCartMenu }
                                             >
-                                                { item.name || 'Unnamed Product' }
+                                                { item.UI_pname || 'Unnamed Product' }
                                             </ALink>
                                             
                                             {item.variant && (
@@ -225,7 +232,7 @@ function CartMenu( props ) {
                                 className="btn btn-dark"
                                 onClick={ closeCartMenu }
                             >
-                                <span>Go To Checkout</span>
+                                <span>Checkout</span>
                             </ALink>
                         </div>
                     </>
@@ -335,6 +342,22 @@ function CartMenu( props ) {
                 .cart-toggle {
                     position: relative;
                     display: inline-block;
+                }
+
+                .cart-icon-mobile {
+                    display: none;
+                }
+
+                @media (max-width: 991px) {
+                    .cart-icon-mobile {
+                        display: flex;
+                        align-items: center;
+                        color: #333;
+                    }
+                    
+                    .cart-label {
+                        display: none !important;
+                    }
                 }
             `}</style>
         </div>

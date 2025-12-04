@@ -28,7 +28,8 @@ export default async function handler(req, res) {
             p.brand, 
             p.category_code AS category, 
             p.description, 
-            p.created_at
+            p.created_at,
+            p.UI_pname
           FROM products p
           WHERE p.product_id = ?
           LIMIT 1
@@ -49,7 +50,8 @@ export default async function handler(req, res) {
             p.brand, 
             p.category_code AS category, 
             p.description, 
-            p.created_at
+            p.created_at,
+            p.UI_pname
           FROM products p
           WHERE 
             LOWER(REPLACE(REPLACE(REPLACE(p.title, ' ', '-'), '_', '-'), '--', '-')) = LOWER(?)
@@ -111,10 +113,12 @@ export default async function handler(req, res) {
         SELECT 
           p.product_id, 
           p.title AS name, 
+          p.UI_pname,
           p.brand, 
           p.category_code AS category, 
           p.description, 
-          p.created_at
+          p.created_at,
+          p.UI_pname
         FROM products p
         WHERE p.category_code = ? AND p.product_id != ?
         LIMIT 6

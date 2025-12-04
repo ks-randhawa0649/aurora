@@ -35,16 +35,16 @@ function AboutUs() {
     return (
         <main className="main about-us-modern">
             <Helmet>
-                <title>Riode React eCommerce Template | About Us</title>
+                <title>Aurora | About Us</title>
             </Helmet>
 
-            <h1 className="d-none">Riode React eCommerce Template - About Us</h1>
+            <h1 className="d-none">Aurora - About Us</h1>
 
             <div className="page-header-modern"
                 style={ { backgroundImage: `url( ./images/page-header/about-us.jpg )`, backgroundColor: "#3C63A4" } }>
                 <div className="container">
                     <div className="header-content">
-                        <h3 className="page-subtitle-modern">Welcome to Our Store</h3>
+                        <h3 className="page-subtitle-modern">Welcome to Aurora Family</h3>
                         <h1 className="page-title-modern">About Us</h1>
                         <p className="page-desc-modern">Discover our story, values, and the passion that drives us</p>
                     </div>
@@ -69,7 +69,7 @@ function AboutUs() {
                                         <div className="col-md-4 mb-4">
                                             <div className="counter-card">
                                                 <div className="counter-icon">🏆</div>
-                                                <CountUp start={ 0 } end={ 35 } duration={ 4 }>
+                                                <CountUp start={ 0 } end={ 5 } duration={ 4 }>
                                                     { ( { countUpRef, start } ) => (
                                                         <div className="count-to">
                                                             <span ref={ countUpRef } className="counter-number" />
@@ -125,7 +125,7 @@ function AboutUs() {
                                 <div className="col-md-7 mb-4">
                                     <figure className="image-wrapper-modern">
                                         <LazyLoadImage
-                                            src="./images/subpages/customer.jpg"
+                                            src="/images/subpages/happyCustomer.jpg"
                                             alt="Happy Customer"
                                             width="580"
                                             height="507"
@@ -143,10 +143,6 @@ function AboutUs() {
                                             As technology evolves and standards rise, we continuously innovate to 
                                             exceed expectations and deliver excellence in every purchase.
                                         </p>
-                                        <ALink href="/shop" className="btn-modern">
-                                            Visit Our Store
-                                            <i className="fas fa-arrow-right"></i>
-                                        </ALink>
                                     </div>
                                 </div>
                             </div>
@@ -168,19 +164,15 @@ function AboutUs() {
                                             building lasting relationships with our customers through exceptional 
                                             service and unwavering commitment to your satisfaction.
                                         </p>
-                                        <ALink href="/shop" className="btn-modern">
-                                            Explore Store
-                                            <i className="fas fa-arrow-right"></i>
-                                        </ALink>
                                     </div>
                                 </div>
 
                                 <div className="col-md-7 mb-4">
                                     <figure className="image-wrapper-modern">
                                         <LazyLoadImage
-                                            src="./images/subpages/store.jpg"
+                                            src="/images/subpages/support.jpg"
                                             alt="Our Store"
-                                            width="580"
+                                            width="600"
                                             height="507"
                                             effect="opacity"
                                         />
@@ -196,30 +188,27 @@ function AboutUs() {
                         <div className="container">
                             <div className="section-header-center">
                                 <span className="section-number">04</span>
-                                <h5 className="section-subtitle-modern">Our Clients</h5>
+                                <h5 className="section-subtitle-modern">Our Partners</h5>
                                 <h3 className="section-title-modern">Trusted Brands</h3>
                             </div>
 
-                            <OwlCarousel adClass="owl-theme brands-carousel-modern" options={ mainSlider16 }>
-                                <figure className="brand-card-modern">
-                                    <img src="./images/brands/1.png" alt="Brand" width="180" height="100" />
-                                </figure>
-                                <figure className="brand-card-modern">
-                                    <img src="./images/brands/2.png" alt="Brand" width="180" height="100" />
-                                </figure>
-                                <figure className="brand-card-modern">
-                                    <img src="./images/brands/3.png" alt="Brand" width="180" height="100" />
-                                </figure>
-                                <figure className="brand-card-modern">
-                                    <img src="./images/brands/4.png" alt="Brand" width="180" height="100" />
-                                </figure>
-                                <figure className="brand-card-modern">
-                                    <img src="./images/brands/5.png" alt="Brand" width="180" height="100" />
-                                </figure>
-                                <figure className="brand-card-modern">
-                                    <img src="./images/brands/6.png" alt="Brand" width="180" height="100" />
-                                </figure>
-                            </OwlCarousel>
+                            <div className="brands-grid">
+                                <div className="brand-card-modern">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg" alt="Nike" width="180" height="100" />
+                                </div>
+                                <div className="brand-card-modern">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg" alt="Adidas" width="180" height="100" />
+                                </div>
+                                <div className="brand-card-modern">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/H%26M-Logo.svg" alt="H&M" width="180" height="100" />
+                                </div>
+                                <div className="brand-card-modern">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/9/92/UNIQLO_logo.svg" alt="Uniqlo" width="180" height="100" />
+                                </div>
+                                <div className="brand-card-modern">
+                                    <img src="https://logo.clearbit.com/gap.com" alt="Gap" width="180" height="100" />
+                                </div>
+                            </div>
                         </div>
                     </section>
                 </Reveal>
@@ -229,39 +218,57 @@ function AboutUs() {
                         <div className="container">
                             <div className="section-header-center">
                                 <span className="section-number">05</span>
-                                <h5 className="section-subtitle-modern">Our Leaders</h5>
+                                <h5 className="section-subtitle-modern">Aurora Family</h5>
                                 <h3 className="section-title-modern">Meet Our Team</h3>
                             </div>
-                            <div className="row cols-sm-2 cols-md-4">
+                            <div className="row cols-sm-2 cols-md-5">
                                 <Reveal keyframes={ fadeInLeftShorter } delay="20" duration="1000" triggerOnce>
                                     <div className="team-member-modern">
                                         <figure className="member-image-modern">
                                             <LazyLoadImage
-                                                src="./images/subpages/team1.jpg"
+                                                src="/images/subpages/team1.jpg"
                                                 alt="Team member"
                                                 width={ 280 }
-                                                height={ 280 }
+                                                height={ 350 }
                                                 effect="opacity"
                                             />
 
                                             <div className="member-overlay">
                                                 <div className="social-links-modern">
-                                                    <ALink href="#" className="social-link-modern">
-                                                        <i className="fab fa-facebook-f"></i>
-                                                    </ALink>
-                                                    <ALink href="#" className="social-link-modern">
-                                                        <i className="fab fa-twitter"></i>
-                                                    </ALink>
-                                                    <ALink href="#" className="social-link-modern">
+                                                    <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/kunwar-randhawa" className="social-link-modern">
                                                         <i className="fab fa-linkedin-in"></i>
-                                                    </ALink>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </figure>
 
                                         <div className="member-info-modern">
-                                            <h4 className="member-name-modern">Tomasz Treflerzan</h4>
-                                            <h5 className="member-job-modern">CEO / Founder</h5>
+                                            <h4 className="member-name-modern">Kunwarjit Randhawa</h4>
+                                        </div>
+                                    </div>
+                                </Reveal>
+                                <Reveal keyframes={ fadeInLeftShorter } delay="20" duration="1000" triggerOnce>
+                                    <div className="team-member-modern">
+                                        <figure className="member-image-modern">
+                                            <LazyLoadImage
+                                                src="/images/subpages/team2.jpg"
+                                                alt="Team member"
+                                                width={ 280 }
+                                                height={ 350 }
+                                                effect="opacity"
+                                            />
+
+                                            <div className="member-overlay">
+                                                <div className="social-links-modern">
+                                                    <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/harmehaks/" className="social-link-modern">
+                                                        <i className="fab fa-linkedin-in"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </figure>
+
+                                        <div className="member-info-modern">
+                                            <h4 className="member-name-modern">Harmehak Saini</h4>
                                         </div>
                                     </div>
                                 </Reveal>
@@ -270,31 +277,24 @@ function AboutUs() {
                                     <div className="team-member-modern">
                                         <figure className="member-image-modern">
                                             <LazyLoadImage
-                                                src="./images/subpages/team2.jpg"
+                                                src="/images/subpages/team3.jpg"
                                                 alt="Team member"
                                                 width={ 280 }
-                                                height={ 280 }
+                                                height={ 350 }
                                                 effect="opacity"
                                             />
 
                                             <div className="member-overlay">
                                                 <div className="social-links-modern">
-                                                    <ALink href="#" className="social-link-modern">
-                                                        <i className="fab fa-facebook-f"></i>
-                                                    </ALink>
-                                                    <ALink href="#" className="social-link-modern">
-                                                        <i className="fab fa-twitter"></i>
-                                                    </ALink>
-                                                    <ALink href="#" className="social-link-modern">
+                                                    <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/khushi-patel02189/" className="social-link-modern">
                                                         <i className="fab fa-linkedin-in"></i>
-                                                    </ALink>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </figure>
 
                                         <div className="member-info-modern">
-                                            <h4 className="member-name-modern">Dylan Chavez</h4>
-                                            <h5 className="member-job-modern">Support Manager</h5>
+                                            <h4 className="member-name-modern">Khushi Patel</h4>
                                         </div>
                                     </div>
                                 </Reveal>
@@ -303,31 +303,24 @@ function AboutUs() {
                                     <div className="team-member-modern">
                                         <figure className="member-image-modern">
                                             <LazyLoadImage
-                                                src="./images/subpages/team3.jpg"
+                                                src="/images/subpages/team4.jpg"
                                                 alt="Team member"
                                                 width={ 280 }
-                                                height={ 280 }
+                                                height={ 350 }
                                                 effect="opacity"
                                             />
 
                                             <div className="member-overlay">
                                                 <div className="social-links-modern">
-                                                    <ALink href="#" className="social-link-modern">
-                                                        <i className="fab fa-facebook-f"></i>
-                                                    </ALink>
-                                                    <ALink href="#" className="social-link-modern">
-                                                        <i className="fab fa-twitter"></i>
-                                                    </ALink>
-                                                    <ALink href="#" className="social-link-modern">
+                                                    <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/pratham-patel-6978232a6/" className="social-link-modern">
                                                         <i className="fab fa-linkedin-in"></i>
-                                                    </ALink>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </figure>
 
                                         <div className="member-info-modern">
-                                            <h4 className="member-name-modern">Viktoriia Demianenko</h4>
-                                            <h5 className="member-job-modern">Designer</h5>
+                                            <h4 className="member-name-modern">Pratham Patel</h4>
                                         </div>
                                     </div>
                                 </Reveal>
@@ -336,31 +329,24 @@ function AboutUs() {
                                     <div className="team-member-modern">
                                         <figure className="member-image-modern">
                                             <LazyLoadImage
-                                                src="./images/subpages/team4.jpg"
+                                                src="/images/subpages/team5.jpg"
                                                 alt="Team member"
                                                 width={ 280 }
-                                                height={ 280 }
+                                                height={ 350 }
                                                 effect="opacity"
                                             />
 
                                             <div className="member-overlay">
                                                 <div className="social-links-modern">
-                                                    <ALink href="#" className="social-link-modern">
-                                                        <i className="fab fa-facebook-f"></i>
-                                                    </ALink>
-                                                    <ALink href="#" className="social-link-modern">
-                                                        <i className="fab fa-twitter"></i>
-                                                    </ALink>
-                                                    <ALink href="#" className="social-link-modern">
+                                                    <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/prakshal-bhandari-1393b3244/" className="social-link-modern">
                                                         <i className="fab fa-linkedin-in"></i>
-                                                    </ALink>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </figure>
 
                                         <div className="member-info-modern">
-                                            <h4 className="member-name-modern">Mikhail Hnatuk</h4>
-                                            <h5 className="member-job-modern">Support Specialist</h5>
+                                            <h4 className="member-name-modern">Prakshal Bhandari</h4>
                                         </div>
                                     </div>
                                 </Reveal>
@@ -593,14 +579,21 @@ function AboutUs() {
                     margin: 0 auto 20px;
                 }
 
+                .brands-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                    gap: 24px;
+                    margin-top: 40px;
+                }
+
                 .brand-card-modern {
                     background: white;
                     border-radius: 16px;
-                    padding: 32px;
-                    margin: 0 12px;
+                    padding: 40px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    min-height: 140px;
                     transition: all 0.3s ease;
                     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
                 }
@@ -611,16 +604,18 @@ function AboutUs() {
                 }
 
                 .brand-card-modern img {
-                    max-width: 100%;
+                    max-width: 120px;
                     height: auto;
-                    filter: grayscale(100%);
-                    opacity: 0.6;
+                    max-height: 60px;
+                    width: auto;
+                    object-fit: contain;
+                    filter: grayscale(100%) brightness(0.5);
                     transition: all 0.3s ease;
                 }
 
                 .brand-card-modern:hover img {
-                    filter: grayscale(0%);
-                    opacity: 1;
+                    filter: grayscale(0%) brightness(0.4);
+                    transform: scale(1.05);
                 }
 
                 .team-section-modern {
@@ -639,11 +634,15 @@ function AboutUs() {
                     border-radius: 20px;
                     overflow: hidden;
                     margin-bottom: 20px;
+                    width: 100%;
+                    aspect-ratio: 4 / 5; /* This forces 280:350 ratio (4:5) */
                 }
 
                 .member-image-modern img {
                     width: 100%;
-                    height: auto;
+                    height: 100%;
+                    object-fit: cover; /* Crops and fills the container */
+                    object-position: center; /* Centers the image within container */
                     transition: transform 0.5s ease;
                 }
 
@@ -702,7 +701,7 @@ function AboutUs() {
                 .member-name-modern {
                     font-size: 20px;
                     font-weight: 700;
-                    color: #222;
+                    color: #667eea;
                     margin-bottom: 8px;
                 }
 
@@ -731,15 +730,23 @@ function AboutUs() {
 
                 @media (max-width: 768px) {
                     .page-header-modern {
-                        padding: 80px 0 60px;
+                        padding: 60px 0 40px;
                     }
 
                     .page-title-modern {
-                        font-size: 36px;
+                        font-size: 28px;
+                    }
+
+                    .page-subtitle-modern {
+                        font-size: 13px;
+                    }
+
+                    .page-desc-modern {
+                        font-size: 14px;
                     }
 
                     .page-content-modern {
-                        padding: 60px 0 20px;
+                        padding: 40px 0 20px;
                     }
 
                     .about-section-modern,
@@ -747,21 +754,126 @@ function AboutUs() {
                     .store-section-modern,
                     .brand-section-modern,
                     .team-section-modern {
-                        padding: 40px 20px;
-                        margin-bottom: 40px;
-                    }
-
-                    .section-title-modern {
-                        font-size: 24px;
-                    }
-
-                    .counter-card {
-                        padding: 24px 16px;
+                        padding: 20px 10px;
                         margin-bottom: 20px;
                     }
 
+                    .section-header-modern {
+                        margin-bottom: 20px;
+                    }
+
+                    .section-number {
+                        font-size: 32px;
+                        margin-bottom: 8px;
+                    }
+
+                    .section-subtitle-modern {
+                        font-size: 12px;
+                    }
+
+                    .section-title-modern {
+                        font-size: 20px;
+                        margin-bottom: 12px;
+                    }
+
+                    .section-desc-modern {
+                        font-size: 13px;
+                    }
+
+                    .counter-card {
+                        padding: 16px 12px;
+                        margin-bottom: 12px;
+                    }
+
+                    .counter-icon {
+                        font-size: 36px;
+                        margin-bottom: 12px;
+                    }
+
                     .counter-number {
-                        font-size: 40px;
+                        font-size: 32px;
+                    }
+
+                    .counter-title {
+                        font-size: 14px;
+                        margin: 8px 0;
+                    }
+
+                    .counter-desc {
+                        font-size: 12px;
+                    }
+
+                    .image-wrapper-modern {
+                        margin-bottom: 20px;
+                    }
+
+                    .content-card-modern {
+                        padding: 20px 12px;
+                    }
+
+                    .brands-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 12px;
+                    }
+                    
+                    .brand-card-modern {
+                        padding: 16px;
+                        min-height: 80px;
+                    }
+                    
+                    .brand-card-modern img {
+                        max-width: 80px;
+                        max-height: 40px;
+                    }
+
+                    .section-header-center {
+                        margin-bottom: 30px;
+                    }
+
+                    .team-grid-modern {
+                        grid-template-columns: 1fr;
+                        gap: 16px;
+                    }
+
+                    .member-card-modern {
+                        padding: 16px;
+                    }
+
+                    .member-image-modern {
+                        height: 200px;
+                        margin-bottom: 12px;
+                    }
+
+                    .member-name-modern {
+                        font-size: 16px;
+                        margin-bottom: 6px;
+                    }
+
+                    .member-job-modern {
+                        font-size: 12px;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .page-title-modern {
+                        font-size: 24px;
+                    }
+
+                    .section-title-modern {
+                        font-size: 18px;
+                    }
+
+                    .counter-number {
+                        font-size: 28px;
+                    }
+
+                    .brands-grid {
+                        grid-template-columns: 1fr;
+                        gap: 10px;
+                    }
+
+                    .brand-card-modern {
+                        padding: 12px;
                     }
                 }
             `}</style>

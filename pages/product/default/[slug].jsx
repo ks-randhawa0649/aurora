@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
 import Helmet from 'react-helmet';
 import Reveal from 'react-awesome-reveal';
-
+import { UserContext } from '../../_app';
 import ALink from '~/components/features/custom-link';
 import MediaOne from '~/components/partials/product/media/media-one';
 import DetailOne from '~/components/partials/product/detail/detail-one';
 import DescOne from '~/components/partials/product/desc/desc-one';
 import RelatedProducts from '~/components/partials/product/related-products';
 import { fadeIn, fadeInUpShorter, fadeInLeftShorter, fadeInRightShorter } from '~/utils/data/keyframes';
+import * as ga from '~/lib/analytics';
 
 const generateSlug = (name) => 
     (name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -31,6 +32,7 @@ const isNewProduct = (createdAt) => {
 function ProductDefault() {
     const router = useRouter();
     const { slug } = router.query;
+    const { user } = useContext(UserContext);
     const [product, setProduct] = useState(null);
     const [related, setRelated] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -83,6 +85,7 @@ function ProductDefault() {
                 id: raw.product_id,
                 slug: slug,
                 name: raw.name,
+                UI_pname: raw.UI_pname,
                 brand: raw.brand || 'SmartStyle',
                 sku: raw.product_id.substring(0, 8).toUpperCase(),
                 category: raw.category,
@@ -132,6 +135,21 @@ function ProductDefault() {
             
             setProduct(formattedProduct);
             
+            // Track product view
+            if (typeof window !== 'undefined' && window.gtag) {
+                window.gtag('event', 'view_item', {
+                    currency: 'USD',
+                    value: formattedProduct.price[0] || 0,
+                    items: [{
+                        item_id: formattedProduct.id,
+                        item_name: formattedProduct.name,
+                        item_category: getCategoryName(raw.category),
+                        item_brand: raw.brand || 'SmartStyle',
+                        price: formattedProduct.price[0] || 0
+                    }]
+                });
+            }
+            
             // Process related products
             if (Array.isArray(data.product.related) && data.product.related.length > 0) {
                 const formattedRelated = data.product.related.map(rel => {
@@ -143,6 +161,7 @@ function ProductDefault() {
                         id: rel.product_id,
                         slug: generateSlug(rel.name),
                         name: rel.name,
+                        UI_pname: rel.UI_pname,
                         brand: rel.brand || 'SmartStyle',
                         category: rel.category,
                         

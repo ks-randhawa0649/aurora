@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { Helmet } from 'react-helmet';
 import Reveal from 'react-awesome-reveal';
 import ALink from '~/components/features/custom-link';
@@ -8,6 +9,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
+import * as ga from '~/lib/analytics';
 
 function Shop() {
     const [products, setProducts] = useState([]);
@@ -15,6 +17,7 @@ function Shop() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [perPage] = useState(12);
+    const [gridView, setGridView] = useState(4); // Default 4 columns for desktop
     
     // Filter states
     const [selectedCategory, setSelectedCategory] = useState('all');
@@ -55,13 +58,22 @@ function Shop() {
         }
     };
 
+    const router = useRouter();
+    const { search } = router.query;
+
+    // Sync search query from URL safely (avoid setState during render)
+    useEffect(() => {
+        console.log('Search query from URL:', search);  
+        setSearchQuery(typeof search === 'string' ? search : '');
+    }, [router.isReady, search]);
+
     const applyFilters = () => {
         let filtered = [...products];
 
         // Search filter
         if (searchQuery) {
             filtered = filtered.filter(product => 
-                product.name.toLowerCase().includes(searchQuery.toLowerCase())
+                product.UI_pname.toLowerCase().includes(searchQuery.toLowerCase())
             );
         }
 
@@ -111,6 +123,22 @@ function Shop() {
         }
 
         setFilteredProducts(filtered);
+        
+        // Track view_item_list when products are filtered/displayed
+        if (filtered.length > 0 && typeof window !== 'undefined' && window.gtag) {
+            window.gtag('event', 'view_item_list', {
+                item_list_id: selectedCategory !== 'all' ? selectedCategory : 'shop',
+                item_list_name: selectedCategory !== 'all' ? selectedCategory : 'Shop Page',
+                items: filtered.slice(0, 12).map((product, index) => ({
+                    item_id: product.id,
+                    item_name: product.UI_pname,
+                    item_category: product.categories?.[0]?.name || 'Product',
+                    item_brand: product.brand || 'SmartStyle',
+                    price: product.price[1] > 0 ? product.price[1] : product.price[0],
+                    index: index
+                }))
+            });
+        }
     };
 
     const getCategories = () => {
@@ -187,6 +215,7 @@ function Shop() {
                         #00f2fe 100%);
                     padding: 60px 0;
                     margin-bottom: 40px;
+                    margin-top: 4rem;
                     color: #fff;
                     text-align: center;
                     position: relative;
@@ -429,6 +458,47 @@ function Shop() {
                     gap: 16px;
                 }
 
+                .products-controls {
+                    display: flex;
+                    align-items: center;
+                    gap: 16px;
+                    flex-wrap: wrap;
+                }
+
+                .grid-view-toggle {
+                    display: flex;
+                    gap: 8px;
+                    background: #f8f9fa;
+                    padding: 4px;
+                    border-radius: 8px;
+                }
+
+                .grid-btn {
+                    width: 36px;
+                    height: 36px;
+                    border: none;
+                    background: transparent;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #666;
+                    font-weight: 600;
+                    font-size: 12px;
+                }
+
+                .grid-btn:hover {
+                    background: rgba(34, 102, 204, 0.1);
+                    color: #26c;
+                }
+
+                .grid-btn.active {
+                    background: #26c;
+                    color: #fff;
+                }
+
                 .products-count {
                     font-size: 16px;
                     color: #666;
@@ -462,6 +532,22 @@ function Shop() {
                     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
                     gap: 30px;
                     margin-bottom: 40px;
+                }
+
+                .products-grid.grid-1 {
+                    grid-template-columns: 1fr;
+                }
+
+                .products-grid.grid-2 {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+
+                .products-grid.grid-3 {
+                    grid-template-columns: repeat(3, 1fr);
+                }
+
+                .products-grid.grid-4 {
+                    grid-template-columns: repeat(4, 1fr);
                 }
 
                 .product-card {
@@ -713,33 +799,157 @@ function Shop() {
 
                 @media (max-width: 767px) {
                     .shop-header {
-                        padding: 40px 0;
+                        padding: 30px 0;
+                        margin-bottom: 20px;
                     }
 
                     .shop-title {
-                        font-size: 28px;
+                        font-size: 24px;
+                        margin-bottom: 8px;
                     }
 
-                    .products-grid {
-                        grid-template-columns: repeat(2, 1fr);
-                        gap: 16px;
-                    }
-
-                    .product-info {
-                        padding: 16px;
-                    }
-
-                    .product-name {
+                    .shop-subtitle {
                         font-size: 14px;
                     }
 
+                    .shop-page {
+                        padding: 20px 0 30px;
+                    }
+
+                    .products-grid,
+                    .products-grid.grid-1,
+                    .products-grid.grid-2,
+                    .products-grid.grid-3,
+                    .products-grid.grid-4 {
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 8px;
+                    }
+
+                    .products-section {
+                        padding: 15px 10px;
+                        border-radius: 15px;
+                    }
+
+                    .product-card {
+                        border-radius: 10px;
+                    }
+
+                    .product-image-wrapper {
+                        padding-bottom: 140%;
+                    }
+
+                    .product-info {
+                        padding: 10px;
+                    }
+
+                    .product-name {
+                        font-size: 12px;
+                        margin-bottom: 6px;
+                        -webkit-line-clamp: 2;
+                    }
+
+                    .product-category {
+                        font-size: 9px;
+                        margin-bottom: 4px;
+                    }
+
+                    .product-rating {
+                        margin-bottom: 6px;
+                    }
+
+                    .stars svg {
+                        width: 11px !important;
+                        height: 11px !important;
+                    }
+
+                    .reviews-count {
+                        font-size: 9px;
+                    }
+
                     .current-price {
-                        font-size: 18px;
+                        font-size: 14px;
+                    }
+
+                    .original-price {
+                        font-size: 11px;
+                    }
+
+                    .product-badge {
+                        padding: 3px 6px;
+                        font-size: 8px;
+                    }
+
+                    .product-badges {
+                        top: 6px;
+                        left: 6px;
+                        gap: 4px;
+                    }
+
+                    .action-btn {
+                        width: 28px;
+                        height: 28px;
+                    }
+
+                    .action-btn svg {
+                        width: 14px !important;
+                        height: 14px !important;
+                    }
+
+                    .product-actions {
+                        top: 6px;
+                        right: 6px;
+                        gap: 4px;
+                    }
+
+                    .quick-view-btn {
+                        font-size: 11px;
+                        padding: 8px;
+                    }
+
+                    .products-header {
+                        gap: 10px;
+                        margin-bottom: 15px;
+                    }
+
+                    .products-count {
+                        font-size: 12px;
+                        width: 100%;
+                    }
+
+                    .products-controls {
+                        width: 100%;
+                        justify-content: space-between;
+                        gap: 8px;
+                    }
+
+                    .sort-select {
+                        flex: 1;
+                        font-size: 12px;
+                        padding: 7px 28px 7px 10px;
+                        border-radius: 8px;
+                    }
+
+                    .grid-view-toggle {
+                        flex-shrink: 0;
+                        padding: 3px;
+                        gap: 4px;
+                    }
+
+                    .grid-btn {
+                        width: 28px;
+                        height: 28px;
+                        font-size: 10px;
+                    }
+
+                    .filter-toggle-btn {
+                        font-size: 13px;
+                        padding: 10px 16px;
+                        margin-bottom: 15px;
                     }
                 }
 
                 @media (max-width: 575px) {
-                    .products-grid {
+                    .products-grid.grid-1 {
                         grid-template-columns: 1fr;
                     }
                 }
@@ -867,17 +1077,49 @@ function Shop() {
                                         <p className="products-count">
                                             Showing <span>{filteredProducts.length}</span> of <span>{products.length}</span> Products
                                         </p>
-                                        <select 
-                                            className="sort-select"
-                                            value={sortBy}
-                                            onChange={(e) => setSortBy(e.target.value)}
-                                        >
-                                            <option value="default">Sort By: Default</option>
-                                            <option value="price-low">Price: Low to High</option>
-                                            <option value="price-high">Price: High to Low</option>
-                                            <option value="rating">Highest Rated</option>
-                                            <option value="newest">Newest First</option>
-                                        </select>
+                                        <div className="products-controls">
+                                            <div className="grid-view-toggle">
+                                                <button 
+                                                    className={`grid-btn ${gridView === 1 ? 'active' : ''}`}
+                                                    onClick={() => setGridView(1)}
+                                                    title="1 Column"
+                                                >
+                                                    1
+                                                </button>
+                                                <button 
+                                                    className={`grid-btn ${gridView === 2 ? 'active' : ''}`}
+                                                    onClick={() => setGridView(2)}
+                                                    title="2 Columns"
+                                                >
+                                                    2
+                                                </button>
+                                                <button 
+                                                    className={`grid-btn ${gridView === 3 ? 'active' : ''}`}
+                                                    onClick={() => setGridView(3)}
+                                                    title="3 Columns"
+                                                >
+                                                    3
+                                                </button>
+                                                <button 
+                                                    className={`grid-btn ${gridView === 4 ? 'active' : ''}`}
+                                                    onClick={() => setGridView(4)}
+                                                    title="4 Columns"
+                                                >
+                                                    4
+                                                </button>
+                                            </div>
+                                            <select 
+                                                className="sort-select"
+                                                value={sortBy}
+                                                onChange={(e) => setSortBy(e.target.value)}
+                                            >
+                                                <option value="default">Sort By: Default</option>
+                                                <option value="price-low">Price: Low to High</option>
+                                                <option value="price-high">Price: High to Low</option>
+                                                <option value="rating">Highest Rated</option>
+                                                <option value="newest">Newest First</option>
+                                            </select>
+                                        </div>
                                     </div>
 
                                     {filteredProducts.length === 0 ? (
@@ -891,7 +1133,7 @@ function Shop() {
                                         </div>
                                     ) : (
                                         <>
-                                            <div className="products-grid">
+                                            <div className={`products-grid grid-${gridView}`}>
                                                 {filteredProducts.map((product) => {
                                                     const [regularPrice, salePrice] = product.price || [0, 0];
                                                     const hasDiscount = salePrice > 0 && salePrice < regularPrice;
@@ -945,7 +1187,7 @@ function Shop() {
 
                                                                 <h3 className="product-name">
                                                                     <ALink href={`/product/default/${product.slug}`}>
-                                                                        {product.name}
+                                                                        {product.UI_pname}
                                                                     </ALink>
                                                                 </h3>
 

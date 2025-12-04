@@ -21,7 +21,7 @@ function DetailOne( props ) {
     const { addToCart, toggleWishlist, showQuickview, openLoginModal } = props;
     
     const product = data?.product?.data;
-
+    console.log('DetailOne product data:', product);
     const [curColor, setCurColor] = useState('');
     const [curSize, setSize] = useState('');
     const [qty, setQty] = useState(1);
@@ -151,7 +151,7 @@ function DetailOne( props ) {
     return (
         <>
         <div className={`product-details ${isSticky ? 'sticky' : ''} ${adClass}`}>
-            <h1 className="product-name">{product.name}</h1>
+            <h1 className="product-name">{product.UI_pname}</h1>
 
             <div className="product-meta">
                 <span className="sku-badge">SKU: {product.sku}</span>
@@ -206,12 +206,7 @@ function DetailOne( props ) {
 
             <div className="shipping-info-box">
                 <LocalShippingOutlinedIcon sx={{ fontSize: 24, color: '#26c' }} />
-                <span>Free shipping on orders over $50</span>
-            </div>
-
-            <div className="shipping-info-box">
-                <LocalShippingOutlinedIcon sx={{ fontSize: 24, color: '#26c' }} />
-                <span>AI Virtual Try-On Coming Soon!</span>
+                <span>Free shipping for Aurora Pro members</span>
             </div>
 
             {product.variants && product.variants.length > 0 && (
@@ -258,7 +253,6 @@ function DetailOne( props ) {
                 <label className="qty-label">Quantity:</label>
                 <div className="qty-controls">
                     <Quantity max={product.stock} value={qty} onChangeQty={changeQty} />
-                    <span className="stock-info">{product.stock} in stock</span>
                 </div>
             </div>
 
@@ -282,33 +276,6 @@ function DetailOne( props ) {
                         <FavoriteBorderIcon sx={{ fontSize: 24, color: '#666' }} />
                     )}
                 </button>
-            </div>
-
-            <div className="product-footer-modern">
-                <div className="share-text">Share:</div>
-                <div className="social-links-modern">
-                    <ALink
-                        href="#"
-                        className="social-link-modern facebook"
-                        onClick={(e) => e.preventDefault()}
-                    >
-                        <i className="fab fa-facebook-f"></i>
-                    </ALink>
-                    <ALink
-                        href="#"
-                        className="social-link-modern twitter"
-                        onClick={(e) => e.preventDefault()}
-                    >
-                        <i className="fab fa-twitter"></i>
-                    </ALink>
-                    <ALink
-                        href="#"
-                        className="social-link-modern pinterest"
-                        onClick={(e) => e.preventDefault()}
-                    >
-                        <i className="fab fa-pinterest-p"></i>
-                    </ALink>
-                </div>
             </div>
         </div>
 

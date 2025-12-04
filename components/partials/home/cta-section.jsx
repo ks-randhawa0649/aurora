@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Reveal from 'react-awesome-reveal';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
@@ -6,6 +6,8 @@ import { fadeIn, fadeInUpShorter } from '~/utils/data/keyframes';
 
 function CtaSection () {
     const [scrollPosition, setScrollPosition] = useState(0);
+    const [loopWidth, setLoopWidth] = useState(0);
+    const trackRef = useRef(null);
 
     const testimonials = [
         {
@@ -42,21 +44,43 @@ function CtaSection () {
         }
     ];
 
-    // Auto-scroll effect
+    // Measure width of one full testimonials set (we render 3 copies)
     useEffect(() => {
+        if (trackRef.current) {
+            const totalWidth = trackRef.current.scrollWidth;
+            setLoopWidth(totalWidth / 3);
+        }
+    }, []);
+
+    // Auto-scroll effect with looping
+    useEffect(() => {
+        if (!loopWidth) return;
+
         const interval = setInterval(() => {
-            setScrollPosition(prev => prev + 1);
+            setScrollPosition(prev => {
+                const next = prev + 1;
+                // Once we've scrolled through one full set, jump back to start
+                return next >= loopWidth ? 0 : next;
+            });
         }, 30);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [loopWidth]);
 
     const handlePrev = () => {
-        setScrollPosition(prev => prev - 350);
+        setScrollPosition(prev => {
+            if (!loopWidth) return prev;
+            const next = prev - 350;
+            return next < 0 ? loopWidth + next : next;
+        });
     };
 
     const handleNext = () => {
-        setScrollPosition(prev => prev + 350);
+        setScrollPosition(prev => {
+            if (!loopWidth) return prev;
+            const next = prev + 350;
+            return next >= loopWidth ? next - loopWidth : next;
+        });
     };
 
     return (
@@ -84,6 +108,7 @@ function CtaSection () {
 
                         <div className="testimonial-track-wrapper">
                             <div 
+                                ref={trackRef}
                                 className="testimonial-track"
                                 style={{ transform: `translateX(-${scrollPosition}px)` }}
                             >

@@ -1,11 +1,20 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
+import { UserContext } from '~/pages/_app';
 
 const ChatWidget = () => {
+  const { user } = useContext(UserContext);
   const [isOpen, setIsOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const isRestricted = !user?.email || !user.isPro;
+  const initContent = () => {
+    return (isRestricted) ?
+    "Hi! 👋 I’m your personal style assistant. Nice to meet you! To access styling suggestions, please upgrade to Aurora Pro." :
+    "Hi! 👋 I’m your personal style assistant. Nice to meet you! Tell me one item you want to style, like “beige pants” or “white sneakers”, and I’ll suggest colours and outfit ideas that would look great with it.";
+    }
  const [messages, setMessages] = useState([
   { 
     role: 'assistant', 
-    content: "Hi! 👋 I’m your personal style assistant. Nice to meet you! Tell me one item you want to style, like “beige pants” or “white sneakers”, and I’ll suggest colours and outfit ideas that would look great with it." 
+    content: initContent()
   }
 ]);
   const [inputValue, setInputValue] = useState('');
@@ -21,8 +30,23 @@ const ChatWidget = () => {
     scrollToBottom();
   }, [messages]);
 
+  // Show/hide scroll-to-top button based on scroll position
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.pageYOffset > 300);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
+    if (isRestricted) return;
     
     if (!inputValue.trim() || isLoading) return;
 
@@ -74,12 +98,25 @@ const ChatWidget = () => {
 
   const clearChat = () => {
     setMessages([
-      { role: 'assistant', content: 'Hi! 👋 Welcome to Aurora! How can I help you find the perfect outfit today?' }
+      { role: 'assistant', content: initContent() }
     ]);
   };
 
   return (
     <>
+      {/* Scroll to Top Button */}
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="scroll-top-btn"
+          aria-label="Scroll to top"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+        </button>
+      )}
+
       {/* Floating Chat Button */}
       <button
         onClick={toggleChat}
@@ -162,14 +199,18 @@ const ChatWidget = () => {
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Ask about products, sizing, or anything..."
+              placeholder={
+                isRestricted
+                  ? "Upgrade to Aurora Pro to chat"
+                  : "Ask about products, sizing, or anything..."
+              }
               className="chat-input"
-              disabled={isLoading}
+              disabled={isLoading || isRestricted}
             />
             <button 
               type="submit" 
               className="chat-send-btn"
-              disabled={isLoading || !inputValue.trim()}
+              disabled={isLoading || !inputValue.trim() || isRestricted}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -181,6 +222,45 @@ const ChatWidget = () => {
       )}
 
       <style jsx>{`
+        .scroll-top-btn {
+          position: fixed;
+          bottom: 92px;
+          right: 24px;
+          width: 48px;
+          height: 48px;
+          background: #fff;
+          border: 2px solid #e4eaec;
+          border-radius: 50%;
+          color: #26c;
+          cursor: pointer;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 999;
+          transition: all 0.3s ease;
+          animation: fadeIn 0.3s ease;
+        }
+
+        .scroll-top-btn:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          border-color: #26c;
+          background: #26c;
+          color: white;
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
         .chat-fab {
           position: fixed;
           bottom: 24px;
@@ -430,6 +510,13 @@ const ChatWidget = () => {
           .chat-fab {
             right: 16px;
             bottom: 16px;
+          }
+
+          .scroll-top-btn {
+            right: 16px;
+            bottom: 84px;
+            width: 44px;
+            height: 44px;
           }
         }
       `}</style>

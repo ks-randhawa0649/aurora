@@ -147,10 +147,10 @@ function Account() {
     return (
         <main className="main account">
             <Helmet>
-                <title>Riode React eCommerce Template | Account</title>
+                <title>Aurora | Account</title>
             </Helmet>
 
-            <h1 className="d-none">Riode React eCommerce Template - Account</h1>
+            <h1 className="d-none">Aurora - Account</h1>
 
             <nav className="breadcrumb-nav">
                 <div className="container">
@@ -192,7 +192,7 @@ function Account() {
                                     Hello <span>{user.username || user.email}</span> (not <span>{user.username || user.email}</span>? <a href="#" onClick={handleLogout} className="text-primary" style={{ cursor: 'pointer' }}>Log out</a>)
                                 </p>
                                 <p className="mb-8">
-                                    From your account dashboard you can view your <ALink href="#" className="link-to-tab text-primary">recent orders</ALink>, manage your shipping and billing
+                                    From your account dashboard you can manage your shipping and billing
                                     addresses,<br />and edit your password and account details.
                                 </p>
                                 <ALink href="/pages/shop" className="btn btn-dark btn-rounded">Go To Shop<i className="d-icon-arrow-right"></i></ALink>

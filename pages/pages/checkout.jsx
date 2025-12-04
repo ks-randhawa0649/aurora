@@ -9,6 +9,7 @@ import Card from '~/components/features/accordion/card';
 import { cartActions } from '~/store/cart';
 import { toDecimal } from '~/utils';
 import { UserContext } from '../_app';
+import * as ga from '~/lib/analytics';
 
 function Checkout( props ) {
     const router = useRouter();
@@ -104,6 +105,9 @@ function Checkout( props ) {
     };
 
     const calculateShipping = () => {
+        if(user && user.isPro) {
+            return 0;
+        }
         return 10.00;
     };
 
@@ -161,6 +165,28 @@ function Checkout( props ) {
 
             // Store order data in sessionStorage to retrieve after payment
             sessionStorage.setItem('pendingOrder', JSON.stringify(orderData));
+
+            // Track begin checkout event
+            ga.trackBeginCheckout({
+                plan: 'Product Purchase',
+                amount: calculateTotal(),
+                period: 'one-time'
+            });
+
+            // Track with detailed ecommerce event
+            if (typeof window !== 'undefined' && window.gtag) {
+                window.gtag('event', 'begin_checkout', {
+                    currency: 'USD',
+                    value: calculateTotal(),
+                    items: cartList.map(item => ({
+                        item_id: item.id || item.slug,
+                        item_name: item.name,
+                        item_category: item.category?.[0]?.name || 'Product',
+                        price: getPrice(item),
+                        quantity: item.qty
+                    }))
+                });
+            }
 
             // Redirect to payment page
         router.push({
@@ -405,7 +431,7 @@ function Checkout( props ) {
                                                     <div key={index} className="order-item">
                                                         <div className="item-info">
                                                             <div className="item-name-qty">
-                                                                <span className="item-name">{item.name}</span>
+                                                                <span className="item-name">{item.UI_pname}</span>
                                                                 {item.variant && <span className="item-variant">({item.variant})</span>}
                                                                 <span className="item-qty">× {item.qty}</span>
                                                             </div>
@@ -422,7 +448,9 @@ function Checkout( props ) {
                                                 <span className="total-value">${toDecimal(calculateSubtotal())}</span>
                                             </div>
                                             <div className="total-row">
-                                                <span className="total-label">Shipping</span>
+                                                {!user.isPro ? 
+                                                <span className="total-label">Shipping (Join Aurora Pro for free shipping!)</span> 
+                                                : <span className="total-label">Shipping (Aurora Pro!)</span> }
                                                 <span className="total-value">${toDecimal(calculateShipping())}</span>
                                             </div>
                                             <div className="total-row">
@@ -811,45 +839,141 @@ function Checkout( props ) {
                 }
 
                 @media (max-width: 768px) {
+                    .page-content {
+                        padding-top: 20px !important;
+                        padding-bottom: 30px !important;
+                    }
+
+                    .checkout-header {
+                        margin-bottom: 20px;
+                    }
+
                     .checkout-title {
-                        font-size: 32px;
+                        font-size: 24px;
                         flex-direction: column;
-                        gap: 12px;
+                        gap: 8px;
+                        margin-bottom: 20px;
                     }
 
                     .checkout-icon {
-                        font-size: 40px;
+                        font-size: 28px;
                     }
 
                     .breadcrumb-steps {
-                        gap: 12px;
+                        gap: 8px;
                     }
 
                     .step-number {
-                        width: 40px;
-                        height: 40px;
-                        font-size: 16px;
+                        width: 32px;
+                        height: 32px;
+                        font-size: 14px;
                     }
 
                     .step-text {
-                        font-size: 12px;
+                        font-size: 11px;
                     }
 
                     .step-divider {
-                        width: 40px;
+                        width: 30px;
                     }
 
                     .billing-details-card,
                     .order-summary-card {
-                        padding: 24px;
+                        padding: 16px;
+                        margin-bottom: 16px;
                     }
 
                     .section-title {
-                        font-size: 20px;
+                        font-size: 18px;
+                        margin-bottom: 16px;
+                    }
+
+                    .form-group-modern {
+                        margin-bottom: 12px;
+                    }
+
+                    .form-group-modern label {
+                        font-size: 12px;
+                        margin-bottom: 6px;
                     }
 
                     .form-control-modern {
-                        padding: 12px 16px;
+                        padding: 10px 12px;
+                        font-size: 13px;
+                        border-radius: 8px;
+                    }
+
+                    .form-control-modern textarea {
+                        padding: 10px 12px;
+                        min-height: 80px;
+                    }
+
+                    .error-message {
+                        font-size: 11px;
+                        margin-top: 4px;
+                    }
+
+                    .order-items-list {
+                        gap: 12px;
+                    }
+
+                    .order-item {
+                        padding: 10px;
+                    }
+
+                    .order-item-image {
+                        width: 60px;
+                        height: 60px;
+                    }
+
+                    .order-item-details {
+                        gap: 4px;
+                    }
+
+                    .order-item-name {
+                        font-size: 13px;
+                    }
+
+                    .order-item-variant,
+                    .order-item-qty {
+                        font-size: 11px;
+                    }
+
+                    .order-item-price {
+                        font-size: 14px;
+                    }
+
+                    .summary-rows {
+                        gap: 10px;
+                        margin: 16px 0;
+                    }
+
+                    .summary-row {
+                        font-size: 13px;
+                    }
+
+                    .summary-total {
+                        padding: 12px 0;
+                        font-size: 16px;
+                    }
+
+                    .payment-btn {
+                        padding: 12px 20px;
+                        font-size: 14px;
+                        margin-bottom: 16px;
+                    }
+
+                    .security-badges {
+                        gap: 12px;
+                    }
+
+                    .security-badge {
+                        gap: 6px;
+                        font-size: 11px;
+                    }
+
+                    .security-badge i {
+                        font-size: 20px;
                     }
                 }
             `}</style>

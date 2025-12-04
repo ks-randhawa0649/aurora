@@ -1,5 +1,5 @@
 import { persistReducer } from "redux-persist";
-import storage from 'redux-persist/lib/storage';
+import storage from './storage';
 
 export const actionTypes = {
     RefreshStore: "REFRESH_STORE"

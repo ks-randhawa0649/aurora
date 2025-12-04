@@ -114,10 +114,10 @@ function Login() {
     return (
         <main className="main login-page">
             <Helmet>
-                <title>Riode React eCommerce Template | Login</title>
+                <title>Aurora | Login</title>
             </Helmet>
 
-            <h1 className="d-none">Riode React eCommerce Template - Login</h1>
+            <h1 className="d-none">Aurora - Login</h1>
 
             <nav className="breadcrumb-nav">
                 <div className="container">

@@ -68,11 +68,10 @@ function Footer() {
                             <div className="widget">
                                 <h4 className="widget-title">Main Features</h4>
                                 <ul className="widget-body">
-                                    <li><ALink href="#">Super Fast React Template</ALink></li>
-                                    <li><ALink href="#">1st Fully Functional React Template</ALink></li>
-                                    <li><ALink href="#">36+ Unique Shop Layouts</ALink></li>
-                                    <li><ALink href="#">Powerful Admin Panel</ALink></li>
-                                    <li><ALink href="#">Mobile &amp; Retina Optimized</ALink></li>
+                                    <li>Super Fast Delivery</li>
+                                    <li>1st AI powered ecom platform</li>
+                                    <li>36+ Unique apparel designs</li>
+                                    <li>Powerful support system</li>
                                 </ul>
                             </div>
                         </div>
@@ -111,9 +110,9 @@ function Footer() {
                     </div>
                     <div className="footer-right">
                         <div className="social-links">
-                            <ALink href="#" className="social-link social-facebook fab fa-facebook-f"></ALink>
-                            <ALink href="#" className="social-link social-twitter fab fa-twitter"></ALink>
-                            <ALink href="#" className="social-link social-linkedin fab fa-linkedin-in"></ALink>
+                            <ALink href="https://www.facebook.com" className="social-link social-facebook fab fa-facebook-f"></ALink>
+                            <ALink href="https://www.twitter.com" className="social-link social-twitter fab fa-twitter"></ALink>
+                            <ALink href="https://www.linkedin.com" className="social-link social-linkedin fab fa-linkedin-in"></ALink>
                         </div>
                     </div>
                 </div>

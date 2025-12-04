@@ -35,6 +35,12 @@
     transition: color .3s, border-color .3s, background-color .3s, box-shadow .3s;
     white-space: nowrap;
     cursor: pointer;
+    border-radius: 0.3rem;
+    max-width: 30%;
+    
+    @media (max-width: 767px) {
+        max-width: 100%;
+    }
 
     
     &:hover,

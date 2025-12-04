@@ -12,6 +12,7 @@ export default async function handler(req, res) {
         SELECT 
           p.product_id, 
           p.title AS name, 
+          p.UI_pname,
           p.brand, 
           p.category_code AS category, 
           p.description, 
@@ -71,6 +72,7 @@ export default async function handler(req, res) {
             product_id: p.product_id,
             slug: slug,
             name: p.name,
+            UI_pname: p.UI_pname,
             brand: p.brand || 'SmartStyle',
             category: p.category,
             description: p.description || '',

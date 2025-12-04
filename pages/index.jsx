@@ -11,17 +11,10 @@ import { GET_HOME_DATA } from '../server/queries';
 import $ from 'jquery';
 
 // import Home Components
-import NewsletterModal from '~/components/features/modals/newsletter-modal';
 import IntroSection from '~/components/partials/home/intro-section';
 import ServiceBox from '~/components/partials/home/service-section';
-import CategorySection from '~/components/partials/home/category-section';
 import BestCollection from '~/components/partials/home/best-collection';
-import DealSection from '~/components/partials/home/deal-section';
-import FeaturedCollection from '~/components/partials/home/featured-collection';
 import CtaSection from '~/components/partials/home/cta-section';
-import BrandSection from '~/components/partials/home/brand-section';
-import BlogSection from '~/components/partials/home/blog-section';
-import SmallCollection from '~/components/partials/product/small-collection';
 
 function HomePage() {
     const { data, loading, error } = useQuery( GET_HOME_DATA, { variables: { productsCount: 7 } } );
@@ -34,12 +27,11 @@ function HomePage() {
     return (
         <div className="main home">
             <Helmet>
-                <title>Riode React eCommerce Template - Home</title>
+                <title>Aurora - Home</title>
             </Helmet>
 
 
-            <h1 className="d-none">Riode React eCommerce Template - Home</h1>
-
+            <h1 className="d-none">Aurora - Home</h1>
             <div className="page-content">
                 <div className="intro-section">
                     <IntroSection />
@@ -59,12 +51,7 @@ function HomePage() {
 
                 {/* <BlogSection posts={ posts } /> */}
 
-                {/* <BrandSection /> */}
-
-                {/* <SmallCollection featured={ featured } latest={ latest } bestSelling={ bestSelling } onSale={ onSale } loading={ loading } /> */}
             </div>
-
-            <NewsletterModal />
         </div>
     )
 }

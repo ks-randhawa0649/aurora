@@ -11,7 +11,6 @@ import ALink from '~/components/features/custom-link';
 
 import Header from '~/components/common/header';
 import Footer from '~/components/common/footer';
-import StickyFooter from '~/components/common/sticky-footer';
 import Quickview from '~/components/features/product/common/quickview-modal';
 import VideoModal from '~/components/features/modals/video-modal';
 import MobileMenu from '~/components/common/partials/mobile-menu';
@@ -22,7 +21,6 @@ import {
     showScrollTopHandler,
     scrollTopHandler,
     stickyHeaderHandler,
-    stickyFooterHandler,
     resizeHandler
 } from '~/utils';
 
@@ -36,17 +34,13 @@ function Layout( { children, closeQuickview } ) {
     useEffect( () => {
         window.addEventListener( 'scroll', showScrollTopHandler, true );
         window.addEventListener( 'scroll', stickyHeaderHandler, true );
-        window.addEventListener( 'scroll', stickyFooterHandler, true );
         window.addEventListener( 'resize', stickyHeaderHandler );
-        window.addEventListener( 'resize', stickyFooterHandler );
         window.addEventListener( 'resize', resizeHandler );
 
         return () => {
             window.removeEventListener( 'scroll', showScrollTopHandler, true );
             window.removeEventListener( 'scroll', stickyHeaderHandler, true );
-            window.removeEventListener( 'scroll', stickyFooterHandler, true );
             window.removeEventListener( 'resize', stickyHeaderHandler );
-            window.removeEventListener( 'resize', stickyFooterHandler );
             window.removeEventListener( 'resize', resizeHandler );
         }
     }, [] );
@@ -72,8 +66,6 @@ function Layout( { children, closeQuickview } ) {
                 { children }
 
                 <Footer />
-
-                {/* <StickyFooter /> */}
             </div>
 
             <ALink
@@ -81,7 +73,6 @@ function Layout( { children, closeQuickview } ) {
                 href="#"
                 title="Top"
                 role="button"
-                className="scroll-top"
                 onClick={ () => scrollTopHandler( false ) }
             >
                 <i className="d-icon-arrow-up"></i>

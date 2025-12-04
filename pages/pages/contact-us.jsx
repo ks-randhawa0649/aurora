@@ -499,42 +499,146 @@ function ContactUs() {
 
                 @media (max-width: 768px) {
                     .page-content-modern {
-                        padding: 40px 0 60px;
+                        padding: 30px 0 40px;
+                        margin-top: 2rem;
+                    }
+
+                    .contact-header-modern {
+                        margin-bottom: 30px;
+                        padding: 0 10px;
                     }
 
                     .contact-title-modern {
-                        font-size: 32px;
+                        font-size: 24px;
                         flex-direction: column;
-                        gap: 12px;
+                        gap: 8px;
+                        margin-bottom: 12px;
                     }
 
                     .title-icon {
-                        font-size: 44px;
+                        font-size: 32px;
                     }
 
                     .contact-subtitle-modern {
-                        font-size: 16px;
+                        font-size: 14px;
+                    }
+
+                    .contact-info-section-modern {
+                        margin-bottom: 30px;
+                    }
+
+                    .contact-info-section-modern .row {
+                        display: grid;
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 12px;
+                    }
+
+                    .contact-info-section-modern .col-lg-3,
+                    .contact-info-section-modern .col-md-6,
+                    .contact-info-section-modern .col-sm-6 {
+                        max-width: 100%;
+                        margin-bottom: 0 !important;
                     }
 
                     .contact-info-card-modern {
-                        padding: 32px 20px;
+                        padding: 20px 16px;
+                        margin-bottom: 0;
+                    }
+
+                    .info-icon-modern {
+                        font-size: 32px;
+                        margin-bottom: 12px;
+                    }
+
+                    .info-title-modern {
+                        font-size: 16px;
+                        margin-bottom: 8px;
+                    }
+
+                    .info-text-modern {
+                        font-size: 13px;
                     }
 
                     .form-card-modern,
                     .map-card-modern {
-                        padding: 24px 20px;
+                        padding: 16px;
+                        margin-bottom: 16px;
                     }
 
                     .form-title-modern {
-                        font-size: 24px;
+                        font-size: 20px;
+                        margin-bottom: 12px;
+                    }
+
+                    .form-desc-modern {
+                        font-size: 13px;
+                        margin-bottom: 20px;
+                    }
+
+                    .form-control-modern {
+                        padding: 10px 12px;
+                        font-size: 13px;
+                        margin-bottom: 12px;
+                    }
+
+                    .form-control-modern textarea {
+                        padding: 10px 12px;
+                        min-height: 100px;
+                    }
+
+                    .btn-submit-modern {
+                        padding: 12px 24px;
+                        font-size: 14px;
+                    }
+
+                    .map-wrapper-modern {
+                        height: 300px;
                     }
 
                     .features-section-modern {
-                        padding: 40px 24px;
+                        padding: 30px 16px;
                     }
 
                     .features-title-modern {
-                        font-size: 28px;
+                        font-size: 22px;
+                        margin-bottom: 20px;
+                    }
+
+                    .features-subtitle-modern {
+                        font-size: 14px;
+                    }
+
+                    .features-section-modern .row {
+                        display: grid;
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 12px;
+                    }
+
+                    .features-section-modern .col-lg-3,
+                    .features-section-modern .col-md-6,
+                    .features-section-modern .col-sm-6 {
+                        max-width: 100%;
+                        margin-bottom: 0 !important;
+                    }
+
+                    .feature-card-modern {
+                        padding: 20px 16px;
+                    }
+
+                    .feature-icon-modern {
+                        width: 50px;
+                        height: 50px;
+                        font-size: 24px;
+                        margin-bottom: 12px;
+                    }
+
+                    .feature-title-modern {
+                        font-size: 16px;
+                        margin-bottom: 6px;
+                    }
+
+                    .feature-desc-modern {
+                        font-size: 13px;
                     }
                 }
             `}</style>

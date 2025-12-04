@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import ALink from '~/components/features/custom-link';
@@ -13,7 +13,9 @@ import { headerBorderRemoveList } from '~/utils/data/menu'
 
 export default function Header( props ) {
     const router = useRouter();
-    const { user, setUser } = useContext(UserContext)
+    const { user, setUser } = useContext(UserContext);
+    const [isVisible, setIsVisible] = useState(true);
+    const [lastScrollY, setLastScrollY] = useState(0);
 
     useEffect( () => {
         let header = document.querySelector( 'header' );
@@ -22,6 +24,28 @@ export default function Header( props ) {
             else if ( !headerBorderRemoveList.includes( router.pathname ) ) document.querySelector( 'header' ).classList.add( 'header-border' );
         }
     }, [ router.pathname ] )
+
+    // useEffect(() => {
+    //     const handleScroll = () => {
+    //         const currentScrollY = window.scrollY;
+            
+    //         if (currentScrollY < lastScrollY) {
+    //             // Scrolling up
+    //             setIsVisible(true);
+    //         } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+    //             // Scrolling down and past 100px
+    //             setIsVisible(false);
+    //         }
+            
+    //         setLastScrollY(currentScrollY);
+    //     };
+
+    //     window.addEventListener('scroll', handleScroll, { passive: true });
+
+    //     return () => {
+    //         window.removeEventListener('scroll', handleScroll);
+    //     };
+    // }, [lastScrollY]);
 
     const showMobileMenu = () => {
         document.querySelector( 'body' ).classList.add( 'mmenu-active' );

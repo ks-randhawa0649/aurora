@@ -220,13 +220,7 @@ export const parallaxHandler = function () {
  * utils to show scrollTop button
  */
 export const showScrollTopHandler = function () {
-    let scrollTop = document.querySelector( ".scroll-top" );
-
-    if ( window.pageYOffset >= 768 ) {
-        scrollTop.classList.add( "show" );
-    } else {
-        scrollTop.classList.remove( "show" );
-    }
+return;
 }
 
 /**

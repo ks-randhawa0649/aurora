@@ -96,7 +96,7 @@ export default async function handler(req, res) {
       const cartRows = await dbQuery('SELECT cart_id, customer_id, session_token, status, created_at, updated_at FROM carts WHERE cart_id = ? LIMIT 1', [cart_id])
       const cart = cartRows && cartRows[0] ? cartRows[0] : null
 
-      const items = await dbQuery(`SELECT ci.variant_id, ci.qty, v.sku, v.price, v.product_id, p.title as product_title
+      const items = await dbQuery(`SELECT ci.variant_id, ci.qty, v.sku, v.price, v.product_id, p.title as product_title, p.UI_pname
         FROM cart_items ci
         LEFT JOIN variants v ON ci.variant_id = v.variant_id
         LEFT JOIN products p ON v.product_id = p.product_id
